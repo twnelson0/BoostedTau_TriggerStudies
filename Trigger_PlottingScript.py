@@ -174,95 +174,47 @@ class TauPlotting(processor.ProcessorABC):
 		)
 		ditau_mass1_hist = (
 			hist.Hist.new
-			.Reg(50,0,500., name = "mass1", label=r"$m_{\tau \tau} [GeV]$")
+			.Reg(50, 0, 200., name = "mass1", label=r"$m_{\tau \tau} [GeV]$")
 			.Int64()
 		)
 		ditau_mass2_hist = (
 			hist.Hist.new
-			.Reg(50,0,500., name = "mass2", label=r"$m_{\tau \tau} [GeV]$")
+			.Reg(50, 0, 200., name = "mass2", label=r"$m_{\tau \tau} [GeV]$")
 			.Int64()
 		)
 		dimass_all_hist = (
 			hist.Hist.new
 			.StrCat(["Pair 1","Pair 2"], name = "ditau_mass")
-            .Reg(50, 0, 600., name="ditau_mass_all", label=r"$m_{\tau\tau}$ [GeV]") 
+            .Reg(50, 0, 200., name="ditau_mass_all", label=r"$m_{\tau\tau}$ [GeV]") 
             .Int64()
 		)
 			
-		print("Isolation Stuff")
 		#Apply cuts
-		print(tau.charge)
 		tau = tau[tau.iso] #Isolation cut
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
+		tau = tau[ak.num(tau) == 4] #4 tau events (unsure about this)
 		tau_plus = tau[tau.charge > 0]	
 		tau_minus = tau[tau.charge < 0]
 
+		#Construct all possible valid ditau pairs
 		tau_plus1, tau_plus2 = ak.unzip(ak.combinations(tau_plus,2))
 		tau_minus1, tau_minus2 = ak.unzip(ak.combinations(tau_minus,2))
-		
-		#Construct all possible valid ditau pairs
-	
-		
-		#print(ak.all((ak.num(tauplus11) == ak.num(tauplus12)) & (ak.num(tauplus21) == ak.num(tauplus22)) & (ak.num(tauplus11) == ak.num(tauplus22))))
-		#if (ak.all() and ak.all() and ak.all() and ak.all):
-		#	print("All good")
-		#else:
-		#	print("Size mismatch")
-		
-		#Find correct pairings
-		#if ():
-		#else:
 
-		
-		#tau1, tau2 = ak.unzip(ak.cartesian(tau_plus, tau_minus)) #Get doublet pairs	
-	
-		#print(ak.num(isoTau) == 4) #This is not doing what I think it should be doing, I appear to be losing > 100 events when I should only be loosing 2
-		#print(len(isoTau.nBoostedTau))
-		#fourTau = isoTau[ak.num(isoTau) == 4]
-		#print(len(fourTau.nBoostedTau))
-		#print(len(isoTau))
-		#print(len([(len(x.pt) == 4) for x in isoTau]))
-		#fourTau = isoTau[(len(x.pt) == 4) for x in isoTau]
-		#drp_evnt = 0
-		#for x in isoTau:
-		#	if (ak.num(x,axis=0) > 4):
-		#		print(ak.num(x,axis=0))
-		#		print(x.pt)
-		#		drp_evnt+=1
-		#print(len(isoTau) - drp_evnt)
+		deltaR11 = deltaR(tau_plus1, tau_minus1)
+		deltaR12 = deltaR(tau_plus1, tau_minus2)
+		deltaR22 = deltaR(tau_plus2, tau_minus2)
+		deltaR21 = deltaR(tau_plus2, tau_minus1)
 
-		#print(len(tau[iso_cut].nBoostedTau))
-		fourtau_cut = (ak.num(tau)==4) & (ak.all(tau.iso, axis=1)==True) & (ak.sum(tau.charge,axis=1) == 0) #4 tau, charge and isolation cut
-		#print(fourtau_cut)
-
-		#iso_bool = ak.Array(iso_fun(tau, ak.ArrayBuilder()))
-		#print(len(iso_bool))
-		#for x in iso_bool:
-		#	print(x) 
-		#print(len(fourtau_cut) == len(tau))
-		#print(len(tau.eta))
-		min_drArr = min_dR(tau[fourtau_cut])
-		min_drArr = ak.Array([(x < 1) for x in min_drArr])
-		leading_tau = tau[fourtau_cut][:,0]
-		#print(len(min_drArr) == len(leading_tau))
-		#print(min_drArr)
-		#print(fourtau_cut)
-		#leading_tau = (tau[fourtau_cut])[min_drArr][:,0]
-		#subleading_tau = (tau[fourtau_cut])[min_drArr][:,1]
-		#thirdleading_tau = (tau[fourtau_cut])[min_drArr][:,2]
-		#fourthleading_tau = (tau[fourtau_cut])[min_drArr][:,3]
+		pairing_11 = (deltaR11 < deltaR12) & (deltaR11 < deltaR21) & (deltaR11 < deltaR22)
+		pairing_12 = (deltaR12 < deltaR11) & (deltaR12 < deltaR21) & (deltaR12 < deltaR22)
+		pairing_21 = (deltaR21 < deltaR11) & (deltaR21 < deltaR12) & (deltaR21 < deltaR22)
+		pairing_22 = (deltaR22 < deltaR12) & (deltaR22 < deltaR21) & (deltaR22 < deltaR11)
 		
-		leading_tau = fourTau[min_drArr][:,0]
-		subleading_tau = fourTau[min_drArr][:,1]
-		thirdleading_tau = fourTau[min_drArr][:,2]
-		fourthleading_tau = fourTau[min_drArr][:,3]
-		
-		ditau_evnt = doublet_gen(fourTau[min_drArr], ak.ArrayBuilder()).snapshot()
-		#print(ditau_evnt)
-		#print(ditau_evnt[0])
-		#print(ditau_evnt[0][0]["1"])
-		#ditau_evnt = [tau[ditau_evnt[i]] for i in range(4)]
-		#print(ditau_evnt)
+		#Get leading, subleading and fourth leading taus
+		leading_tau = tau[:,0]
+		subleading_tau = tau[:,1]
+		thirdleading_tau = tau[:,2]
+		fourthleading_tau = tau[:,3]
 		
 		#Fill plots
 		pt_hist.fill(leading_tau.pt)
@@ -273,12 +225,15 @@ class TauPlotting(processor.ProcessorABC):
 		pt_all_hist.fill("Third-leading",thirdleading_tau.pt)
 		pt_all_hist.fill("Fourth-leading",fourthleading_tau.pt)
 		pt4_hist.fill(fourthleading_tau.pt)
-		ditau_mass1_hist.fill(mass(tau[fourtau_cut][:,ditau_evnt[0][0]["0"]], tau[fourtau_cut][:,ditau_evnt[0][0]["1"]]))
-		dimass_all_hist.fill("Pair 1", mass(tau[fourtau_cut][:,ditau_evnt[0][0]["0"]], tau[fourtau_cut][:,ditau_evnt[0][0]["1"]]))
-		ditau_mass2_hist.fill(mass(tau[fourtau_cut][:,ditau_evnt[0][0]["2"]], tau[fourtau_cut][:,ditau_evnt[0][0]["3"]]))
-		dimass_all_hist.fill("Pair 2", mass(tau[fourtau_cut][:,ditau_evnt[0][0]["2"]], tau[fourtau_cut][:,ditau_evnt[0][0]["3"]]))
-		#ditau_mass1_hist.fill((tau[fourtau_cut][:,ditau_evnt[0][0]["0"]] + tau[fourtau_cut][:,ditau_evnt[0][0]["1"]]).mass)
-		#ditau_mass1_hist.fill(tau[fourtau_cut][:,ditau_evnt[0]].mass + tau[fourtau_cut][:,ditau_evnt[1]].mass)
+		dimass_all_hist.fill("Pair 1", ak.ravel(mass(tau_plus1[pairing_11], tau_minus1[pairing_11])))
+		dimass_all_hist.fill("Pair 1", ak.ravel(mass(tau_plus2[pairing_22], tau_minus2[pairing_22])))
+		dimass_all_hist.fill("Pair 2", ak.ravel(mass(tau_plus1[pairing_12], tau_minus2[pairing_12])))
+		dimass_all_hist.fill("Pair 2", ak.ravel(mass(tau_plus2[pairing_21], tau_minus1[pairing_21])))
+		
+		#ditau_mass1_hist.fill(mass(tau[fourtau_cut][:,ditau_evnt[0][0]["0"]], tau[fourtau_cut][:,ditau_evnt[0][0]["1"]]))
+		#dimass_all_hist.fill("Pair 1", mass(tau[fourtau_cut][:,ditau_evnt[0][0]["0"]], tau[fourtau_cut][:,ditau_evnt[0][0]["1"]]))
+		#ditau_mass2_hist.fill(mass(tau[fourtau_cut][:,ditau_evnt[0][0]["2"]], tau[fourtau_cut][:,ditau_evnt[0][0]["3"]]))
+		#dimass_all_hist.fill("Pair 2", mass(tau[fourtau_cut][:,ditau_evnt[0][0]["2"]], tau[fourtau_cut][:,ditau_evnt[0][0]["3"]]))
 
 		return{
 			dataset: {
@@ -298,27 +253,6 @@ class TauPlotting(processor.ProcessorABC):
 		pass	
 
 
-#class DoubletPlotting(processor.ProcessorABC):
-#	def __init__(self):
-#		pass
-#	
-#	def process(self, events):
-#		dataset = events.metadata['dataset']
-#		tau_doublet = ak.zip(
-#			{
-#				"mass": , 
-#			}
-#		)
-#
-#		return{
-#			dataset: {
-#				"entries" : len(events),
-#			}
-#		}	
-#	
-#	def postprocess(self, accumulator):
-#		pass	
-
 if __name__ == "__main__":
 	mass_str_arr = ["1000","2000","3000"]
 	#fileName = "GluGluToRadionToHHTo4T_M-1000.root"
@@ -332,14 +266,6 @@ if __name__ == "__main__":
 			schemaclass = BaseSchema,
 			metadata={"dataset": "boosted_tau"},
 		).events()
-		#print(events.boostedTauPt)
-		#print(len(events.boostedTauPt))
-		print("Any test:")
-		print(ak.all(events.boostedTauPt))
-		print((ak.all(events.boostedTauPt, axis = 1) <= 20))
-		#print(events.boostedTauByVLooseIsolationMVArun2v1DBoldDMwLTNew)
-		#print(ak.all(events.boostedTauByVLooseIsolationMVArun2v1DBoldDMwLTNew, axis = 1) == True)
-		print(events.boostedTauPt)
 		
 		#print(len(events.boostedTauPt) == len(ak.any(events.boostedTauPt, axis=1) > 20))
 		#for x in events.boostedTauByVLooseIsolationMVArun2v1DBoldDMwLTNew:
@@ -366,7 +292,6 @@ if __name__ == "__main__":
 		#print(events.boostedTauPt[:, events.leadtauIndex]) #This deosn't work the way I exepcted it to
 		p = TauPlotting()
 		out = p.process(events)
-		break
 		fig, ax = plt.subplots()
 		out["boosted_tau"]["pT"].plot1d(ax=ax)
 		plt.title(r"Leading $\tau$ $p_T$")
@@ -389,14 +314,14 @@ if __name__ == "__main__":
 		plt.title(r"Fourth leading $\tau$ $p_T$")
 		plt.savefig("FourthLeadingPt-" + mass_str)
 		plt.cla()
-		out["boosted_tau"]["mass1"].plot1d(ax=ax)
-		plt.title(r"Di-tau pair 1 mass")
-		plt.savefig("Ditau_Mass1-" + mass_str)
-		plt.cla()
-		out["boosted_tau"]["mass2"].plot1d(ax=ax)
-		plt.title(r"Di-tau pair 2 mass")
-		plt.savefig("Ditau_Mass2-" + mass_str)
-		plt.cla()
+		#out["boosted_tau"]["mass1"].plot1d(ax=ax)
+		#plt.title(r"Di-tau pair 1 mass")
+		#plt.savefig("Ditau_Mass1-" + mass_str)
+		#plt.cla()
+		#out["boosted_tau"]["mass2"].plot1d(ax=ax)
+		#plt.title(r"Di-tau pair 2 mass")
+		#plt.savefig("Ditau_Mass2-" + mass_str)
+		#plt.cla()
 		out["boosted_tau"]["ditau_mass"].plot1d(ax=ax)
 		plt.title(r"Di-$\tau$ pair masses")
 		ax.legend(title=r"Di-$\tau$ Pair")
