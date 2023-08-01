@@ -189,25 +189,47 @@ class TauPlotting(processor.ProcessorABC):
             .Int64()
 		)
 			
-		#fourtau_cut = (ak.num(tau)==4) & (ak.all(tau.iso, axis=1)==True) & (ak.sum(tau.charge,axis=1) == 0) #4 tau, charge and isolation cut (old Cut)
 		print("Isolation Stuff")
 		#Apply cuts
-		isoTau = tau[tau.iso]
-		isoTau = isoTau[(ak.sum(isoTau.charge,axis=1) == 0)]
-		print(ak.num(isoTau) == 4) #This is not doing what I think it should be doing, I appear to be losing > 100 events when I should only be loosing 2
-		print(len(isoTau.nBoostedTau))
-		fourTau = isoTau[ak.num(isoTau) == 4]
-		print(len(fourTau.nBoostedTau))
+		print(tau.charge)
+		tau = tau[tau.iso] #Isolation cut
+		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
+		tau_plus = tau[tau.charge > 0]	
+		tau_minus = tau[tau.charge < 0]
+
+		tau_plus1, tau_plus2 = ak.unzip(ak.combinations(tau_plus,2))
+		tau_minus1, tau_minus2 = ak.unzip(ak.combinations(tau_minus,2))
+		
+		#Construct all possible valid ditau pairs
+	
+		
+		#print(ak.all((ak.num(tauplus11) == ak.num(tauplus12)) & (ak.num(tauplus21) == ak.num(tauplus22)) & (ak.num(tauplus11) == ak.num(tauplus22))))
+		#if (ak.all() and ak.all() and ak.all() and ak.all):
+		#	print("All good")
+		#else:
+		#	print("Size mismatch")
+		
+		#Find correct pairings
+		#if ():
+		#else:
+
+		
+		#tau1, tau2 = ak.unzip(ak.cartesian(tau_plus, tau_minus)) #Get doublet pairs	
+	
+		#print(ak.num(isoTau) == 4) #This is not doing what I think it should be doing, I appear to be losing > 100 events when I should only be loosing 2
+		#print(len(isoTau.nBoostedTau))
+		#fourTau = isoTau[ak.num(isoTau) == 4]
+		#print(len(fourTau.nBoostedTau))
 		#print(len(isoTau))
 		#print(len([(len(x.pt) == 4) for x in isoTau]))
 		#fourTau = isoTau[(len(x.pt) == 4) for x in isoTau]
-		drp_evnt = 0
-		for x in isoTau:
-			if (ak.num(x,axis=0) > 4):
-				print(ak.num(x,axis=0))
-				print(x.pt)
-				drp_evnt+=1
-		print(len(isoTau) - drp_evnt)
+		#drp_evnt = 0
+		#for x in isoTau:
+		#	if (ak.num(x,axis=0) > 4):
+		#		print(ak.num(x,axis=0))
+		#		print(x.pt)
+		#		drp_evnt+=1
+		#print(len(isoTau) - drp_evnt)
 
 		#print(len(tau[iso_cut].nBoostedTau))
 		fourtau_cut = (ak.num(tau)==4) & (ak.all(tau.iso, axis=1)==True) & (ak.sum(tau.charge,axis=1) == 0) #4 tau, charge and isolation cut
