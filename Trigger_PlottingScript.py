@@ -15,6 +15,16 @@ def deltaR(tau1, tau2):
 def mass(tau1,tau2):
 	return np.sqrt((tau1.E + tau2.E)**2 - (tau1.Px + tau2.Px)**2 - (tau1.Py + tau2.Py)**2 - (tau1.Pz + tau2.Pz)**2)
 
+class TriggerStudies(processor.ProcessorABC):
+	def __init__(self):
+		pass
+	
+	def process(self, events):
+		dataset = events.metadata['dataset']
+	
+	def postprocess(self, accumulator):
+		pass	
+
 class TauPlotting(processor.ProcessorABC):
 	def __init__(self):
 		pass
@@ -34,7 +44,9 @@ class TauPlotting(processor.ProcessorABC):
 				"leadingIndx": events.leadtauIndex,
 				"nBoostedTau": events.nBoostedTau,
 				"charge": events.boostedTauCharge,
-				"iso": events.boostedTauByVLooseIsolationMVArun2v1DBoldDMwLTNew,
+				#"iso": events.boostedTauByVLooseIsolationMVArun2v1DBoldDMwLTNew,
+				"iso1": events.boostedTauByIsolationMVArun2v1DBoldDMwLTrawNew,
+				"iso2": events.boostedTaupfTausDiscriminationByDecayModeFinding,
 			},
 			with_name="TauArray",
 			behavior=candidate.behavior,
@@ -88,8 +100,15 @@ class TauPlotting(processor.ProcessorABC):
             .Int64()
 		)
 			
-		#Apply cuts
-		tau = tau[tau.iso] #Isolation cut
+		#Apply cuts/selection
+		tau = tau[tau.pt > 30] #pT
+		tau = tau[tau.eta < 2.3] #eta
+		
+		#Loose isolation
+		tau = tau[tau.iso1 >= 0.5]
+		tau = tau[tau.iso2 >= 0.5]		
+
+		#tau = tau[tau.iso] #Isolation cut
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		tau = tau[ak.num(tau) == 4] #4 tau events (unsure about this)
 		tau_plus = tau[tau.charge > 0]	
@@ -155,8 +174,10 @@ class TauPlotting(processor.ProcessorABC):
 
 
 if __name__ == "__main__":
-	mass_str_arr = ["1000","2000","3000"]
-	filebase = "GluGluToRadionToHHTo4T_M-"
+	#mass_str_arr = ["1000","2000","3000"]
+	mass_str_arr = ["2000"]
+	#filebase_arr = [""]
+	filebase = "~/Analysis/BoostedTau/TriggerEff/2018_Samples/GluGluToRadionToHHTo4T_M-"
 	
 	for mass_str in mass_str_arr:
 		fileName = filebase + mass_str + ".root"
