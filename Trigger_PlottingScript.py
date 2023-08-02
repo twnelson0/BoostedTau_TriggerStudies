@@ -21,6 +21,55 @@ class TriggerStudies(processor.ProcessorABC):
 	
 	def process(self, events):
 		dataset = events.metadata['dataset']
+		tau = ak.zip( 
+			{
+				"pt": events.boostedTauPt,
+				"E": events.boostedTauEnergy,
+				"Px": events.boostedTauPx,
+				"Py": events.boostedTauPy,
+				"Pz": events.boostedTauPz,
+				"mass": events.boostedTauMass,
+				"eta": events.boostedTauEta,
+				"phi": events.boostedTauPhi,
+				"leadingIndx": events.leadtauIndex,
+				"nBoostedTau": events.nBoostedTau,
+				"charge": events.boostedTauCharge,
+				"iso1": events.boostedTauByIsolationMVArun2v1DBoldDMwLTrawNew,
+				"iso2": events.boostedTaupfTausDiscriminationByDecayModeFinding,
+				"trigger": events.HLTJet,
+			},
+			with_name="TauArray",
+			behavior=candidate.behavior,
+		)
+
+		#Tau Selection
+		tau = tau[tau.pt > 30] #pT
+		tau = tau[tau.eta < 2.3] #eta
+		
+		#Loose isolation cuts
+		tau = tau[tau.iso1 >= 0.5]
+		tau = tau[tau.iso2 >= 0.5]		
+
+		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
+		tau = tau[ak.num(tau) == 4] #4 tau events (unsure about this)
+		tau = tau[np.log2(tau.trigger) == 39]	
+		
+		#Construct all possible valid ditau pairs
+		tau_plus = tau[tau.charge > 0]	
+		tau_minus = tau[tau.charge < 0]
+		tau_plus1, tau_plus2 = ak.unzip(ak.combinations(tau_plus,2))
+		tau_minus1, tau_minus2 = ak.unzip(ak.combinations(tau_minus,2))
+
+		deltaR11 = deltaR(tau_plus1, tau_minus1)
+		deltaR12 = deltaR(tau_plus1, tau_minus2)
+		deltaR22 = deltaR(tau_plus2, tau_minus2)
+		deltaR21 = deltaR(tau_plus2, tau_minus1)
+
+		pairing_11 = (deltaR11 < deltaR12) & (deltaR11 < deltaR21) & (deltaR11 < deltaR22)
+		pairing_12 = (deltaR12 < deltaR11) & (deltaR12 < deltaR21) & (deltaR12 < deltaR22)
+		pairing_21 = (deltaR21 < deltaR11) & (deltaR21 < deltaR12) & (deltaR21 < deltaR22)
+		pairing_22 = (deltaR22 < deltaR12) & (deltaR22 < deltaR21) & (deltaR22 < deltaR11)
+		
 	
 	def postprocess(self, accumulator):
 		pass	
