@@ -9,112 +9,11 @@ from coffea.nanoevents import NanoEventsFactory, NanoAODSchema, BaseSchema
 from coffea.nanoevents.methods import candidate
 from math import pi
 
-
 def deltaR(tau1, tau2):
 	return np.sqrt((tau2.eta - tau1.eta)**2 + (tau2.phi - tau1.phi)**2)
 
 def mass(tau1,tau2):
 	return np.sqrt((tau1.E + tau2.E)**2 - (tau1.Px + tau2.Px)**2 - (tau1.Py + tau2.Py)**2 - (tau1.Pz + tau2.Pz)**2)
-
-def doublet_gen(events, builder): #This needs to be completely reworked, no loops!!
-	for tau in events: 
-		builder.begin_list()
-		ntau = len(tau)
-		#print(ntau)
-		#Set up set of tau indicies
-		temp_arr = []
-		for i in range(ntau):
-			temp_arr.append(i)
-		indx_set = set(temp_arr)
-	
-		test_pairs = []
-		for i in range(1,ntau):
-			if (tau[0].charge + tau[i].charge == 0):
-				test_pairs.append([0,i])
-		#Obtain tau pairings based on minimum Delta R
-		first_pair = test_pairs[0]
-		second_pair = []
-		min_dR = -1
-		for pair in test_pairs:
-			if (pair == test_pairs[0]):
-				min_dR = deltaR(tau[pair[0]],tau[pair[1]])
-			else:
-				if (deltaR(tau[pair[0]],tau[pair[1]]) < min_dR):
-					min_dR = deltaR(tau[pair[0]],tau[pair[1]])
-					first_pair = pair
-		
-		#Obtain other pairirng
-		for indx in first_pair:
-			indx_set.remove(indx)
-		for j in indx_set:
-			second_pair.append(j)
-		
-		#Store taus ordered by pairing
-		builder.begin_tuple(4)
-		builder.index(0).integer(first_pair[0])
-		builder.index(1).integer(first_pair[1])
-		builder.index(2).integer(second_pair[0])
-		builder.index(3).integer(second_pair[1])
-		builder.end_tuple()		
-		builder.end_list()
-	
-	return builder	
-
-def min_dR(events):
-	outArr = []
-	for tau in events:
-		ntau = len(tau)
-		
-		#Set up set of tau indicies
-		temp_arr = []
-		for i in range(ntau):
-			temp_arr.append(i)
-		indx_set = set(temp_arr)
-	
-		test_pairs = []
-		for i in range(1,ntau):
-			if (tau[0].charge + tau[i].charge == 0):
-				test_pairs.append([0,i])
-		#Obtain tau pairings based on minimum Delta R
-		first_pair = test_pairs[0]
-		min_dR = -1
-		for pair in test_pairs:
-			if (pair == test_pairs[0]):
-				min_dR = deltaR(tau[pair[0]],tau[pair[1]])
-			else:
-				if (deltaR(tau[pair[0]],tau[pair[1]]) < min_dR):
-					min_dR = deltaR(tau[pair[0]],tau[pair[1]])
-		
-		#print(min_dR)	
-		outArr.append(min_dR)
-		#print(len(aout_Arr))
-	return outArr	
-
-def iso_fun(tau, iso_arr, iso_lim = 0.4):
-	#iso_arr = np.array([])
-	iso_arr.begin_list()
-	for evnt in range(len(tau.eta)):
-		#evnt_arr = np.array([])
-		N = len(tau.eta[evnt]) 
-		if (N%2 == 1):
-			tup_size = N*(N-1)/2
-		else:
-			tup_size = (N-1)*N/2
-		iso_arr.begin_tuple(tup_size)
-		tpl_idx = 0
-		for i in range(len(tau.eta[evnt])):
-			for j in range(i + 1, len(tau.eta[evnt])):
-				#evnt_arr = np.append(evnt_arr,(deltaR(tau[evnt],tau[evnt]) < iso_lim))
-				#iso_arr.boolean((deltaR(tau[evnt][i],tau[evnt][j]) < iso_lim))
-				iso_arr.index(tpl_idx).boolean((deltaR(tau[evnt][i],tau[evnt][j]) < iso_lim))
-				tpl_idx += 1
-		#iso_arr = np.append(iso_arr,evnt_arr)
-		iso_arr.end_tuple()
-	
-	iso_arr.end_list()
-
-	return iso_arr
-
 
 class TauPlotting(processor.ProcessorABC):
 	def __init__(self):
@@ -174,18 +73,18 @@ class TauPlotting(processor.ProcessorABC):
 		)
 		ditau_mass1_hist = (
 			hist.Hist.new
-			.Reg(50, 0, 200., name = "mass1", label=r"$m_{\tau \tau} [GeV]$")
+			.Reg(50, 0, 150., name = "mass1", label=r"$m_{\tau \tau} [GeV]$")
 			.Int64()
 		)
 		ditau_mass2_hist = (
 			hist.Hist.new
-			.Reg(50, 0, 200., name = "mass2", label=r"$m_{\tau \tau} [GeV]$")
+			.Reg(50, 0, 150., name = "mass2", label=r"$m_{\tau \tau} [GeV]$")
 			.Int64()
 		)
 		dimass_all_hist = (
 			hist.Hist.new
 			.StrCat(["Pair 1","Pair 2"], name = "ditau_mass")
-            .Reg(50, 0, 200., name="ditau_mass_all", label=r"$m_{\tau\tau}$ [GeV]") 
+            .Reg(50, 0, 150., name="ditau_mass_all", label=r"$m_{\tau\tau}$ [GeV]") 
             .Int64()
 		)
 			
@@ -225,15 +124,17 @@ class TauPlotting(processor.ProcessorABC):
 		pt_all_hist.fill("Third-leading",thirdleading_tau.pt)
 		pt_all_hist.fill("Fourth-leading",fourthleading_tau.pt)
 		pt4_hist.fill(fourthleading_tau.pt)
+		
+		#Ditau mass plots
 		dimass_all_hist.fill("Pair 1", ak.ravel(mass(tau_plus1[pairing_11], tau_minus1[pairing_11])))
 		dimass_all_hist.fill("Pair 1", ak.ravel(mass(tau_plus2[pairing_22], tau_minus2[pairing_22])))
 		dimass_all_hist.fill("Pair 2", ak.ravel(mass(tau_plus1[pairing_12], tau_minus2[pairing_12])))
 		dimass_all_hist.fill("Pair 2", ak.ravel(mass(tau_plus2[pairing_21], tau_minus1[pairing_21])))
 		
-		#ditau_mass1_hist.fill(mass(tau[fourtau_cut][:,ditau_evnt[0][0]["0"]], tau[fourtau_cut][:,ditau_evnt[0][0]["1"]]))
-		#dimass_all_hist.fill("Pair 1", mass(tau[fourtau_cut][:,ditau_evnt[0][0]["0"]], tau[fourtau_cut][:,ditau_evnt[0][0]["1"]]))
-		#ditau_mass2_hist.fill(mass(tau[fourtau_cut][:,ditau_evnt[0][0]["2"]], tau[fourtau_cut][:,ditau_evnt[0][0]["3"]]))
-		#dimass_all_hist.fill("Pair 2", mass(tau[fourtau_cut][:,ditau_evnt[0][0]["2"]], tau[fourtau_cut][:,ditau_evnt[0][0]["3"]]))
+		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[pairing_11], tau_minus1[pairing_11])))	
+		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus2[pairing_22], tau_minus2[pairing_22])))	
+		ditau_mass2_hist.fill(ak.ravel(mass(tau_plus1[pairing_12], tau_minus2[pairing_12])))	
+		ditau_mass2_hist.fill(ak.ravel(mass(tau_plus2[pairing_21], tau_minus1[pairing_21])))	
 
 		return{
 			dataset: {
@@ -255,7 +156,6 @@ class TauPlotting(processor.ProcessorABC):
 
 if __name__ == "__main__":
 	mass_str_arr = ["1000","2000","3000"]
-	#fileName = "GluGluToRadionToHHTo4T_M-1000.root"
 	filebase = "GluGluToRadionToHHTo4T_M-"
 	
 	for mass_str in mass_str_arr:
@@ -267,29 +167,6 @@ if __name__ == "__main__":
 			metadata={"dataset": "boosted_tau"},
 		).events()
 		
-		#print(len(events.boostedTauPt) == len(ak.any(events.boostedTauPt, axis=1) > 20))
-		#for x in events.boostedTauByVLooseIsolationMVArun2v1DBoldDMwLTNew:
-		#	if (len(x) == 4):
-		#		print(x)		
-		
-		#for x in events.boostedTauCharge:
-		#	if (len(x) == 4 and sum(x) != 0):
-		#		print(x)		
-		
-		#print(events.boostedTauEta[1])
-		#print(events.boostedTauPt[1])
-		#print(events.boostedTauPt[:, events.leadtauIndex][0])
-		#cut = (ak.num(events.boostedTauPt) == 4)
-		#print(cut)
-		#for x in events.boostedTauPt:
-		#	if (x[0] != max(x)):
-		#		print(x)
-		#for x in events.boostedTauEta:
-		#	if (len(x) == 3):
-		#		print(x)
-#		print(events.leadtauIndex)
-#		print(events.nBoostedTau)
-		#print(events.boostedTauPt[:, events.leadtauIndex]) #This deosn't work the way I exepcted it to
 		p = TauPlotting()
 		out = p.process(events)
 		fig, ax = plt.subplots()
@@ -314,37 +191,17 @@ if __name__ == "__main__":
 		plt.title(r"Fourth leading $\tau$ $p_T$")
 		plt.savefig("FourthLeadingPt-" + mass_str)
 		plt.cla()
-		#out["boosted_tau"]["mass1"].plot1d(ax=ax)
-		#plt.title(r"Di-tau pair 1 mass")
-		#plt.savefig("Ditau_Mass1-" + mass_str)
-		#plt.cla()
-		#out["boosted_tau"]["mass2"].plot1d(ax=ax)
-		#plt.title(r"Di-tau pair 2 mass")
-		#plt.savefig("Ditau_Mass2-" + mass_str)
-		#plt.cla()
+		out["boosted_tau"]["mass1"].plot1d(ax=ax)
+		plt.title(r"Di-tau pair 1 mass")
+		plt.savefig("Ditau_Mass1-" + mass_str)
+		plt.cla()
+		out["boosted_tau"]["mass2"].plot1d(ax=ax)
+		plt.title(r"Di-tau pair 2 mass")
+		plt.savefig("Ditau_Mass2-" + mass_str)
+		plt.cla()
 		out["boosted_tau"]["ditau_mass"].plot1d(ax=ax)
 		plt.title(r"Di-$\tau$ pair masses")
 		ax.legend(title=r"Di-$\tau$ Pair")
 		plt.savefig("AllDitauMass_Plot-" + mass_str)
-
-	#print(max(events.leadtauIndex))
-	
-	#testArr = []
-	#for i in range(events.nBoostedTau):
-	#	if (i == 0):
-	#		indx = 0 + events.leadtauIndex[i]
-	#	else:
-	#		indx = events.nBoostedTau[i - 1] + events.leadtauIndex[i]
-	#	for j in range()
-	#for i in range(len(events.nBoostedTau)):
-	#	for j in range(events.nBoostedTau[i]):
-	#		if (j == events.leadtauIndex[i]):
-	#			testArr.append(True)
-	#		else:
-	#			testArr.append(False)
-	#print(testArr) 
-		
-		
-	#pT_plot("GluGluToRadionToHHTo4T_M-1000.root")
 
 
