@@ -134,18 +134,18 @@ class TauPlotting(processor.ProcessorABC):
 		)
 		ditau_mass1_hist = (
 			hist.Hist.new
-			.Reg(50, 0, 150., name = "mass1", label=r"$m_{\tau \tau} [GeV]$")
+			.Reg(50, 0, 200., name = "mass1", label=r"$m_{\tau \tau} [GeV]$")
 			.Int64()
 		)
 		ditau_mass2_hist = (
 			hist.Hist.new
-			.Reg(50, 0, 150., name = "mass2", label=r"$m_{\tau \tau} [GeV]$")
+			.Reg(50, 0, 200., name = "mass2", label=r"$m_{\tau \tau} [GeV]$")
 			.Int64()
 		)
 		dimass_all_hist = (
 			hist.Hist.new
 			.StrCat(["Leading pair","Subleading pair"], name = "ditau_mass")
-            .Reg(50, 0, 150., name="ditau_mass_all", label=r"$m_{\tau\tau}$ [GeV]") 
+            .Reg(50, 0, 200., name="ditau_mass_all", label=r"$m_{\tau\tau}$ [GeV]") 
             .Int64()
 		)
 			
@@ -175,8 +175,8 @@ class TauPlotting(processor.ProcessorABC):
 		print("Before 4 tau cut length is: %d" % len(tau))
 		tau = tau[ak.num(tau) == 4] #4 tau events (unsure about this)	
 		print("After 4 tau cut length is: %d" % len(tau))
-		for i in range(10):
-			print(tau[i].pt)
+		#for i in range(10):
+		#	print(tau[i].pt)
 		tau_plus = tau[tau.charge > 0]	
 		tau_minus = tau[tau.charge < 0]
 
@@ -192,13 +192,6 @@ class TauPlotting(processor.ProcessorABC):
 		#	if (tau1.pt < tau2.pt):
 		#		print("Things don't work the way I think they do!!")
 		
-		#Look at momenta
-		#for i in range(10):
-		print(tau_plus1.pt)
-		print(tau_plus2.pt)
-		print(tau_minus1.pt)
-		print(tau_minus2.pt)
-
 		deltaR11 = deltaR(tau_plus1, tau_minus1)
 		deltaR12 = deltaR(tau_plus1, tau_minus2)
 		deltaR22 = deltaR(tau_plus2, tau_minus2)
@@ -209,14 +202,6 @@ class TauPlotting(processor.ProcessorABC):
 		#pairing_12 = (deltaR12 < deltaR11) & (deltaR12 < deltaR21) & (deltaR12 < deltaR22)
 		#pairing_21 = (deltaR21 < deltaR11) & (deltaR21 < deltaR12) & (deltaR21 < deltaR22)
 		#pairing_22 = (deltaR22 < deltaR12) & (deltaR22 < deltaR21) & (deltaR22 < deltaR11)
-		
-		#New Pairing
-		#pairing_11 = (deltaR11 < deltaR12) & (deltaR11 < deltaR21) 
-		#pairing_12 = (deltaR12 < deltaR11) & (deltaR12 < deltaR22)
-		#pairing_21 = (deltaR21 < deltaR11) & (deltaR21 < deltaR22)
-		#pairing_22 = (deltaR22 < deltaR12) & (deltaR22 < deltaR21) 
-		leading_pair = (deltaR11 < deltaR21) ^ (deltaR21 < deltaR11)
-		subleading_pair = (deltaR22 < deltaR12) ^ (deltaR12 < deltaR22)
 		
 		#Get leading, subleading and fourth leading taus
 		leading_tau = tau[:,0]
@@ -246,10 +231,10 @@ class TauPlotting(processor.ProcessorABC):
 		dimass_all_hist.fill("Subleading pair", ak.ravel(mass(tau_plus1[(deltaR12 < deltaR22)], tau_minus2[(deltaR12 < deltaR22)])))
 		dimass_all_hist.fill("Subleading pair", ak.ravel(mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))
 		
-		#ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[pairing_11], tau_minus1[pairing_11])))	
-		#ditau_mass1_hist.fill(ak.ravel(mass(tau_plus2[pairing_22], tau_minus2[pairing_22])))	
-		#ditau_mass2_hist.fill(ak.ravel(mass(tau_plus1[pairing_12], tau_minus2[pairing_12])))	
-		#ditau_mass2_hist.fill(ak.ravel(mass(tau_plus2[pairing_21], tau_minus1[pairing_21])))	
+		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))	
+		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[(deltaR21 < deltaR11)], tau_minus2[(deltaR21 < deltaR11)])))	
+		ditau_mass2_hist.fill(ak.ravel(mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))	
+		ditau_mass2_hist.fill(ak.ravel(mass(tau_plus2[(deltaR12 < deltaR22)], tau_minus1[(deltaR12 < deltaR22)])))	
 
 		return{
 			dataset: {
@@ -308,14 +293,14 @@ if __name__ == "__main__":
 		plt.title(r"Fourth leading $\tau$ $p_T$")
 		plt.savefig("FourthLeadingPt-" + mass_str)
 		plt.cla()
-		#out["boosted_tau"]["mass1"].plot1d(ax=ax)
-		#plt.title(r"Di-tau pair 1 mass")
-		#plt.savefig("Ditau_Mass1-" + mass_str)
-		#plt.cla()
-		#out["boosted_tau"]["mass2"].plot1d(ax=ax)
-		#plt.title(r"Di-tau pair 2 mass")
-		#plt.savefig("Ditau_Mass2-" + mass_str)
-		#plt.cla()
+		out["boosted_tau"]["mass1"].plot1d(ax=ax)
+		plt.title(r"Leading Di-$\tau$ pair mass")
+		plt.savefig("Ditau_Mass1-" + mass_str)
+		plt.cla()
+		out["boosted_tau"]["mass2"].plot1d(ax=ax)
+		plt.title(r"Subleading Di-$\tau$ pair mass")
+		plt.savefig("Ditau_Mass2-" + mass_str)
+		plt.cla()
 		out["boosted_tau"]["ditau_mass"].plot1d(ax=ax)
 		plt.title(r"Di-$\tau$ pair masses")
 		ax.legend(title=r"Di-$\tau$ Pair")
