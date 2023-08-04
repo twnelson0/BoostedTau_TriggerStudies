@@ -37,39 +37,70 @@ class TriggerStudies(processor.ProcessorABC):
 				"iso1": events.boostedTauByIsolationMVArun2v1DBoldDMwLTrawNew,
 				"iso2": events.boostedTaupfTausDiscriminationByDecayModeFinding,
 				"trigger": events.HLTJet,
+				"MET": events.pfMET,
 			},
 			with_name="TauArray",
 			behavior=candidate.behavior,
 		)
-
+		
+		#Histograms
+		MET_hist = (
+			hist.Hist.new
+            .Reg(50, 0, 1500., name="p_T", label="$\slashed{E}$ [GeV]") 
+            .Int64()
+		)
+	
 		#Tau Selection
+		print("================No cuts================")
+		for x in tau:
+			print(np.log2(x.trigger))
 		tau = tau[tau.pt > 30] #pT
 		tau = tau[tau.eta < 2.3] #eta
+		#print("================pT and eta cuts================")
+		#for x in tau:
+		#	print(x.MET)
 		
-		#Loose isolation cuts
+		#Loose isolation
 		tau = tau[tau.iso1 >= 0.5]
 		tau = tau[tau.iso2 >= 0.5]		
-
-		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
-		tau = tau[ak.num(tau) == 4] #4 tau events (unsure about this)
-		tau = tau[np.log2(tau.trigger) == 39]	
+		#print("================Isolation cuts================")
+		#for x in tau:
+		#	print(x.MET)
 		
-		#Construct all possible valid ditau pairs
+		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
+		tau = tau[ak.num(tau) == 4] #4 tau events 	
+		print("================4 tau and charge conservation cuts================")
+		#for x in tau:
+		#	print(x.MET)
+		#	print(np.log2(x.trigger))
+		tau = tau[np.log2(tau.trigger) == 40] #Trigger selection
+		#print("================Trigger cut================")
+		#for x in tau:
+		#	print(x.MET)
+		#	print(x.trigger)
 		tau_plus = tau[tau.charge > 0]	
 		tau_minus = tau[tau.charge < 0]
+
+		#Construct all possible valid ditau pairs
 		tau_plus1, tau_plus2 = ak.unzip(ak.combinations(tau_plus,2))
 		tau_minus1, tau_minus2 = ak.unzip(ak.combinations(tau_minus,2))
-
+		
 		deltaR11 = deltaR(tau_plus1, tau_minus1)
 		deltaR12 = deltaR(tau_plus1, tau_minus2)
 		deltaR22 = deltaR(tau_plus2, tau_minus2)
 		deltaR21 = deltaR(tau_plus2, tau_minus1)
 
-		pairing_11 = (deltaR11 < deltaR12) & (deltaR11 < deltaR21) & (deltaR11 < deltaR22)
-		pairing_12 = (deltaR12 < deltaR11) & (deltaR12 < deltaR21) & (deltaR12 < deltaR22)
-		pairing_21 = (deltaR21 < deltaR11) & (deltaR21 < deltaR12) & (deltaR21 < deltaR22)
-		pairing_22 = (deltaR22 < deltaR12) & (deltaR22 < deltaR21) & (deltaR22 < deltaR11)
-		
+		#Fill Histograms
+		#print(tau.MET)
+		for x in tau:
+			print(x.MET)
+		MET_hist.fill(tau.MET)
+
+		return{
+			 dataset: {
+				"MET": MET_hist,
+			}
+		}
 	
 	def postprocess(self, accumulator):
 		pass	
@@ -305,5 +336,12 @@ if __name__ == "__main__":
 		plt.title(r"Di-$\tau$ pair masses")
 		ax.legend(title=r"Di-$\tau$ Pair")
 		plt.savefig("AllDitauMass_Plot-" + mass_str)
+		plt.cla()		
+
+		#p2 = TriggerStudies()
+		#trigger_out = p2.process(events)
+		#trigger_out["boosted_tau"]["MET"].plot1d(ax=ax)
+		#plt.title(r"$\slashed{E}$ after trigger cut")
+		#plt.savefig("MET_Trigger_Plot-" + mass_str)
 
 
