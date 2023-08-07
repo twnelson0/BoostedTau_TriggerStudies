@@ -51,9 +51,26 @@ class TriggerStudies(processor.ProcessorABC):
 		)
 	
 		#Tau Selection
-		print("================No cuts================")
+		print("================No Cuts================")
+		#for x in tau:
+		#	print(np.log2(x.trigger))
+		foo_arr = ak.sum(np.log2(tau.trigger), axis=1)/ak.num(tau)
+		print(ak.sum(np.log2(tau.trigger), axis=1)/ak.num(tau) == np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)))
+		num_evnt = 0
+		for x in foo_arr:
+			if (x == 39):
+				num_evnt += 1
+		for x,y in zip(np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)),tau):
+			print(np.log2(y.trigger))
+			print(x)		
+
+		print(num_evnt)
+		tau = tau[np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)) == 39] #Trigger selection
+		print("================Trigger Selection================")
 		for x in tau:
 			print(np.log2(x.trigger))
+			print("MET:")
+			print(x.MET)
 		tau = tau[tau.pt > 30] #pT
 		tau = tau[tau.eta < 2.3] #eta
 		#print("================pT and eta cuts================")
@@ -69,11 +86,11 @@ class TriggerStudies(processor.ProcessorABC):
 		
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		tau = tau[ak.num(tau) == 4] #4 tau events 	
-		print("================4 tau and charge conservation cuts================")
+		#print("================4 tau and charge conservation cuts================")
 		#for x in tau:
 		#	print(x.MET)
 		#	print(np.log2(x.trigger))
-		tau = tau[np.log2(tau.trigger) == 40] #Trigger selection
+
 		#print("================Trigger cut================")
 		#for x in tau:
 		#	print(x.MET)
@@ -166,18 +183,19 @@ class TauPlotting(processor.ProcessorABC):
 		ditau_mass1_hist = (
 			hist.Hist.new
 			.Reg(50, 0, 200., name = "mass1", label=r"$m_{\tau \tau} [GeV]$")
-			.Int64()
+			.Double()
 		)
 		ditau_mass2_hist = (
 			hist.Hist.new
 			.Reg(50, 0, 200., name = "mass2", label=r"$m_{\tau \tau} [GeV]$")
-			.Int64()
+			.Double()
 		)
 		dimass_all_hist = (
 			hist.Hist.new
 			.StrCat(["Leading pair","Subleading pair"], name = "ditau_mass")
-            .Reg(50, 0, 200., name="ditau_mass_all", label=r"$m_{\tau\tau}$ [GeV]") 
-            .Int64()
+			.Reg(50, 0, 200., name="ditau_mass_all", label=r"$m_{\tau\tau}$ [GeV]") 
+            .Double()
+			#.Int64()
 		)
 			
 		#Apply cuts/selection
@@ -256,16 +274,23 @@ class TauPlotting(processor.ProcessorABC):
 		#dimass_all_hist.fill("Pair 2", ak.ravel(mass(tau_plus1[pairing_22], tau_minus2[pairing_22])))
 		#dimass_all_hist.fill("Pair 2", ak.ravel(mass(tau_plus2[pairing_12], tau_minus1[pairing_12])))
 		
-		#Ditau mass plots (I think all my cuts are fine, maybe with the exception of the pairing indicies and the indifference of pT)
+		#Ditau mass plots 
 		dimass_all_hist.fill("Leading pair", ak.ravel(mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))
 		dimass_all_hist.fill("Leading pair", ak.ravel(mass(tau_plus2[(deltaR21 < deltaR11)], tau_minus1[(deltaR21 < deltaR11)])))
 		dimass_all_hist.fill("Subleading pair", ak.ravel(mass(tau_plus1[(deltaR12 < deltaR22)], tau_minus2[(deltaR12 < deltaR22)])))
 		dimass_all_hist.fill("Subleading pair", ak.ravel(mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))
-		
+		dimass_all_hist *= 1/(dimass_all_hist.sum())		
+	
+		#Normalization scales (currently broken/wrong)		
+		#scale_leading = ak.sum(ak.ravel(mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)]))) + ak.sum(ak.ravel(mass(tau_plus1[(deltaR21 < deltaR11)], tau_minus2[(deltaR21 < deltaR11)])))
+		#scale_subleading = ak.sum(ak.ravel(mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)]))) + ak.sum(ak.ravel(mass(tau_plus2[(deltaR12 < deltaR22)], tau_minus1[(deltaR12 < deltaR22)])))		
+
 		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))	
-		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[(deltaR21 < deltaR11)], tau_minus2[(deltaR21 < deltaR11)])))	
+		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[(deltaR21 < deltaR11)], tau_minus2[(deltaR21 < deltaR11)])))
+		ditau_mass1_hist *= (1/ditau_mass1_hist.sum())
 		ditau_mass2_hist.fill(ak.ravel(mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))	
-		ditau_mass2_hist.fill(ak.ravel(mass(tau_plus2[(deltaR12 < deltaR22)], tau_minus1[(deltaR12 < deltaR22)])))	
+		ditau_mass2_hist.fill(ak.ravel(mass(tau_plus2[(deltaR12 < deltaR22)], tau_minus1[(deltaR12 < deltaR22)])))
+		ditau_mass2_hist *= (1/ditau_mass2_hist.sum())	
 
 		return{
 			dataset: {
@@ -338,10 +363,10 @@ if __name__ == "__main__":
 		plt.savefig("AllDitauMass_Plot-" + mass_str)
 		plt.cla()		
 
-		#p2 = TriggerStudies()
-		#trigger_out = p2.process(events)
-		#trigger_out["boosted_tau"]["MET"].plot1d(ax=ax)
-		#plt.title(r"$\slashed{E}$ after trigger cut")
-		#plt.savefig("MET_Trigger_Plot-" + mass_str)
+		p2 = TriggerStudies()
+		trigger_out = p2.process(events)
+		trigger_out["boosted_tau"]["MET"].plot1d(ax=ax)
+		plt.title(r"$\slashed{E}$ after trigger cut")
+		plt.savefig("MET_Trigger_Plot-" + mass_str)
 
 
