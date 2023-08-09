@@ -15,6 +15,25 @@ def deltaR(tau1, tau2):
 def mass(tau1,tau2):
 	return np.sqrt((tau1.E + tau2.E)**2 - (tau1.Px + tau2.Px)**2 - (tau1.Py + tau2.Py)**2 - (tau1.Pz + tau2.Pz)**2)
 
+#Evaluate trigger selection
+def trigger_selector(trigger_bit_list, input_trigger):
+	trigger_bin = bin(input_trigger)[2:] #Get binary rerpresntation of trigger
+	max_bits = len(trigger_bin) - 1 #Get largest trigger bit
+	pass_selection = True
+	
+	for search_bit in trigger_bit_list:
+		if (max_bits < search_bit):
+			pass_selection = False
+			break
+		else:
+			if (trigger_bin[max_bits - search_bit] == '1'):
+				continue
+			if (trigger_bin[max_bits - search_bit] == '0'):
+				pass_selection = False
+				break
+	
+	return pass_selection
+
 class TriggerStudies(processor.ProcessorABC):
 	def __init__(self):
 		pass
@@ -67,7 +86,7 @@ class TriggerStudies(processor.ProcessorABC):
 		#	print(x)		
 
 		#tau = tau[np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)) == 39] #Trigger selection
-		tau = tau[tau.trigger[0] == 6049664990432] #Trigger selection
+		tau = tau[trigger_selector([39],tau.trigger[0])] #Trigger selection
 		#print("================Trigger Selection================")
 		#for x in tau:
 		#	print(np.log2(x.trigger))
