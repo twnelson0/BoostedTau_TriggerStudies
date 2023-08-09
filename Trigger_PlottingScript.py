@@ -54,25 +54,27 @@ class TriggerStudies(processor.ProcessorABC):
 		print("================No Cuts================")
 		#for x in tau:
 		#	print(np.log2(x.trigger))
-		foo_arr = ak.sum(np.log2(tau.trigger), axis=1)/ak.num(tau)
-		print(ak.sum(np.log2(tau.trigger), axis=1)/ak.num(tau) == np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)))
-		num_evnt = 0
-		for x in foo_arr:
-			if (x == 39):
-				num_evnt += 1
-		for x,y in zip(np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)),tau):
-			print(np.log2(y.trigger))
-			print(x)		
+		#foo_arr = ak.sum(np.log2(tau.trigger), axis=1)/ak.num(tau)
+		#print(ak.sum(np.log2(tau.trigger), axis=1)/ak.num(tau) == np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)))
+		#num_evnt = 0
+		#for x in foo_arr:
+		#	if (x == 39):
+		#		num_evnt += 1
+		#for x,y in zip(np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)),tau):
+		#	print(np.log2(y.trigger))
+		#	print("Raw Trigger:")
+		#	print(y.trigger)
+		#	print(x)		
 
-		print(num_evnt)
-		tau = tau[np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)) == 39] #Trigger selection
-		print("================Trigger Selection================")
-		for x in tau:
-			print(np.log2(x.trigger))
-			print("MET:")
-			print(x.MET)
-		tau = tau[tau.pt > 30] #pT
-		tau = tau[tau.eta < 2.3] #eta
+		#tau = tau[np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)) == 39] #Trigger selection
+		tau = tau[tau.trigger[0] == 6049664990432] #Trigger selection
+		#print("================Trigger Selection================")
+		#for x in tau:
+		#	print(np.log2(x.trigger))
+		#	print("MET:")
+		#	print(x.MET)
+		#tau = tau[tau.pt > 30] #pT
+		#tau = tau[tau.eta < 2.3] #eta
 		#print("================pT and eta cuts================")
 		#for x in tau:
 		#	print(x.MET)
