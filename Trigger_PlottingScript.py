@@ -34,11 +34,25 @@ def trigger_selector(trigger_bit_list, input_trigger):
 	
 	return pass_selection
 
+def trigger_selec_array(trigger_bit_list, events):
+	builder = ak.ArrayBuilder()
+	builder.begin_list()
+	for x in events:
+		builder.begin_list()
+		for i in range(4):
+			builder.append(trigger_selector(trigger_bit_list,x.trigger[i]))
+		builder.end_list()
+	
+	builder.end_list()
+	
+	return builder
+
+
 class TriggerStudies(processor.ProcessorABC):
 	def __init__(self):
 		pass
 	
-	def process(self, events):
+	def process(self, events, signal = True):
 		dataset = events.metadata['dataset']
 		tau = ak.zip( 
 			{
@@ -56,7 +70,8 @@ class TriggerStudies(processor.ProcessorABC):
 				"iso1": events.boostedTauByIsolationMVArun2v1DBoldDMwLTrawNew,
 				"iso2": events.boostedTaupfTausDiscriminationByDecayModeFinding,
 				"trigger": events.HLTJet,
-				"MET": events.pfMET,
+				"MET": events.genMET,
+				"HT": events.genHT,
 			},
 			with_name="TauArray",
 			behavior=candidate.behavior,
@@ -65,38 +80,27 @@ class TriggerStudies(processor.ProcessorABC):
 		#Histograms
 		MET_hist = (
 			hist.Hist.new
-            .Reg(50, 0, 1500., name="p_T", label="$\slashed{E}$ [GeV]") 
-            .Int64()
+            .Reg(50, 0, 1500., name="MET", label="MET [GeV]") 
+            .Double()
+            #.Int64()
 		)
+		
+		MET_all = (
+			hist.Hist.new
+			.StrCat(["No Trigger Applied","Trigger Applied"], name = "MET_hist")
+            .Reg(50, 0, 1500., name="MET", label="MET [GeV]") 
+            .Double()
+        )
+        
+		HT_all = (
+			hist.Hist.new
+			.StrCat(["No Trigger Applied","Trigger Applied"], name = "HT_hist")
+            .Reg(50, 0, 1000., name="HT", label="HT [GeV]") 
+            .Double()
+        )
 	
-		#Tau Selection
-		print("================No Cuts================")
-		#for x in tau:
-		#	print(np.log2(x.trigger))
-		#foo_arr = ak.sum(np.log2(tau.trigger), axis=1)/ak.num(tau)
-		#print(ak.sum(np.log2(tau.trigger), axis=1)/ak.num(tau) == np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)))
-		#num_evnt = 0
-		#for x in foo_arr:
-		#	if (x == 39):
-		#		num_evnt += 1
-		#for x,y in zip(np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)),tau):
-		#	print(np.log2(y.trigger))
-		#	print("Raw Trigger:")
-		#	print(y.trigger)
-		#	print(x)		
-
-		#tau = tau[np.log2(ak.sum(tau.trigger, axis=1)/ak.num(tau)) == 39] #Trigger selection
-		tau = tau[trigger_selector([39],tau.trigger[0])] #Trigger selection
-		#print("================Trigger Selection================")
-		#for x in tau:
-		#	print(np.log2(x.trigger))
-		#	print("MET:")
-		#	print(x.MET)
-		#tau = tau[tau.pt > 30] #pT
-		#tau = tau[tau.eta < 2.3] #eta
-		#print("================pT and eta cuts================")
-		#for x in tau:
-		#	print(x.MET)
+		tau = tau[tau.pt > 30] #pT
+		tau = tau[tau.eta < 2.3] #eta
 		
 		#Loose isolation
 		tau = tau[tau.iso1 >= 0.5]
@@ -106,16 +110,16 @@ class TriggerStudies(processor.ProcessorABC):
 		#	print(x.MET)
 		
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
-		tau = tau[ak.num(tau) == 4] #4 tau events 	
-		#print("================4 tau and charge conservation cuts================")
-		#for x in tau:
-		#	print(x.MET)
-		#	print(np.log2(x.trigger))
+		tau = tau[ak.num(tau) == 4] #4 tau events 
+		print(ak.num(tau) == 4)	
 
 		#print("================Trigger cut================")
-		#for x in tau:
-		#	print(x.MET)
-		#	print(x.trigger)
+		MET_all.fill("No Trigger Applied",ak.ravel(tau.MET))
+		if (not(signal)):
+			HT_all.fill("No Trigger Applied",ak.ravel(tau.HT))
+		trigger_cut = trigger_selec_array([39],tau).snapshot()
+		print(trigger_cut)
+		tau = tau[trigger_cut[0]]
 		tau_plus = tau[tau.charge > 0]	
 		tau_minus = tau[tau.charge < 0]
 
@@ -128,17 +132,25 @@ class TriggerStudies(processor.ProcessorABC):
 		deltaR22 = deltaR(tau_plus2, tau_minus2)
 		deltaR21 = deltaR(tau_plus2, tau_minus1)
 
-		#Fill Histograms
-		#print(tau.MET)
-		for x in tau:
-			print(x.MET)
-		MET_hist.fill(tau.MET)
-
-		return{
-			 dataset: {
-				"MET": MET_hist,
+		MET_all.fill("Trigger Applied",ak.ravel(tau.MET))
+		if (not(signal)):
+			HT_all.fill("Trigger Applied",ak.ravel(tau.HT))
+		MET_all *= (1/4) #Account for each entry having 4 elements but only 1 MET value per event
+	
+		if (signal):
+			return{
+				 dataset: {
+					"MET": MET_all,
+				}
 			}
-		}
+		else:
+			return{
+				 dataset: {
+					"MET": MET_all,
+					"HT": HT_all,
+				}
+			}
+
 	
 	def postprocess(self, accumulator):
 		pass	
@@ -387,7 +399,29 @@ if __name__ == "__main__":
 		p2 = TriggerStudies()
 		trigger_out = p2.process(events)
 		trigger_out["boosted_tau"]["MET"].plot1d(ax=ax)
-		plt.title(r"$\slashed{E}$ after trigger cut")
+		ax.legend(title="")
+		plt.title(r"MET Distribution 2 TeV Sample")
 		plt.savefig("MET_Trigger_Plot-" + mass_str)
+
+	#Obtain background information
+	events = NanoEventsFactory.from_root(
+		"~/Analysis/BoostedTau/TriggerEff/2018_Background/ZZ4l.root",
+		treepath="/4tau_tree",
+		schemaclass = BaseSchema,
+		metadata={"dataset": "boosted_tau"},
+	).events()
+	
+	p2 = TriggerStudies()
+	trigger_out = p2.process(events, False)
+	fig, ax = plt.subplots()
+	trigger_out["boosted_tau"]["MET"].plot1d(ax=ax)
+	ax.legend(title="")
+	plt.title(r"MET Distribution $ZZ \rightarrow 4l$ Background")
+	plt.savefig("MET_Trigger_ZZ4l")
+	plt.cla()
+	trigger_out["boosted_tau"]["HT"].plot1d(ax=ax)
+	ax.legend(title="")
+	plt.title(r"HT Distribution $ZZ \rightarrow 4l$ Background")
+	plt.savefig("HT_Trigger_ZZ4l")
 
 
