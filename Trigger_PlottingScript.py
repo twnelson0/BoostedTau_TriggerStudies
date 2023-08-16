@@ -7,7 +7,9 @@ import mplhep as hep
 from coffea import processor, nanoevents
 from coffea.nanoevents import NanoEventsFactory, NanoAODSchema, BaseSchema
 from coffea.nanoevents.methods import candidate
-from math import pi
+from math import pi	
+
+trigger_bit_list = [39]
 
 def deltaR(tau1, tau2):
 	return np.sqrt((tau2.eta - tau1.eta)**2 + (tau2.phi - tau1.phi)**2)
@@ -15,8 +17,15 @@ def deltaR(tau1, tau2):
 def mass(tau1,tau2):
 	return np.sqrt((tau1.E + tau2.E)**2 - (tau1.Px + tau2.Px)**2 - (tau1.Py + tau2.Py)**2 - (tau1.Pz + tau2.Pz)**2)
 
+def bit_mask(in_bits):
+	mask = 0
+	for bit in in_bits:
+		mask += (1 << bit)
+	return mask
+
 #Evaluate trigger selection
-def trigger_selector(trigger_bit_list, input_trigger):
+#def trigger_selector(trigger_bit_list, input_trigger):
+def trigger_selector(input_trigger):
 	trigger_bin = bin(input_trigger)[2:] #Get binary rerpresntation of trigger
 	max_bits = len(trigger_bin) - 1 #Get largest trigger bit
 	pass_selection = True
@@ -34,13 +43,16 @@ def trigger_selector(trigger_bit_list, input_trigger):
 	
 	return pass_selection
 
-def trigger_selec_array(trigger_bit_list, events):
+vec_trigger_selector = np.vectorize(trigger_selector) # excluded=['trigger_bit_list'])
+trigg_selec = lambda x : ak.from_numpy(vec_trigger_selector(x)) 
+
+def trigger_selec_array(events):
 	builder = ak.ArrayBuilder()
 	builder.begin_list()
 	for x in events:
 		builder.begin_list()
 		for i in range(4):
-			builder.append(trigger_selector(trigger_bit_list,x.trigger[i]))
+			builder.append(trigger_selector(x.trigger[i]))
 		builder.end_list()
 	
 	builder.end_list()
@@ -78,32 +90,22 @@ class TriggerStudies(processor.ProcessorABC):
 		)
 		
 		#Histograms
-		MET_hist = (
-			hist.Hist.new
-            .Reg(50, 0, 1500., name="MET", label="MET [GeV]") 
-            .Double()
-            #.Int64()
-		)
+		MET_hist = (hist.Hist.new.Reg(50, 0, 1500., name="MET", label="MET [GeV]").Double())
 		
-		MET_all = (
-			hist.Hist.new
-			.StrCat(["No Trigger Applied","Trigger Applied"], name = "MET_hist")
-            .Reg(50, 0, 1500., name="MET", label="MET [GeV]") 
-            .Double()
-        )
+		MET_all = (hist.Hist.new.StrCat(["No Trigger Applied","Trigger Applied"], name = "MET_hist").Reg(50, 0, 1500., name="MET", label="MET [GeV]").Double())
         
-		HT_all = (
-			hist.Hist.new
-			.StrCat(["No Trigger Applied","Trigger Applied"], name = "HT_hist")
-            .Reg(50, 0, 1000., name="HT", label="HT [GeV]") 
-            .Double()
-        )
+		HT_all = (hist.Hist.new.StrCat(["No Trigger Applied","Trigger Applied"], name = "HT_hist").Reg(50, 0, 1000., name="HT", label="HT [GeV]").Double())
+		trigger_mask = bit_mask(trigger_bit_list)		
 	
 		tau = tau[tau.pt > 30] #pT
 		tau = tau[tau.eta < 2.3] #eta
 		
 		#Loose isolation
 		tau = tau[tau.iso1 >= 0.5]
+		print("=======Iso========")
+		print(tau.iso2 >= 0.5)
+		print(len(tau.iso2 >= 0.5))
+		print(len(tau))
 		tau = tau[tau.iso2 >= 0.5]		
 		#print("================Isolation cuts================")
 		#for x in tau:
@@ -111,15 +113,14 @@ class TriggerStudies(processor.ProcessorABC):
 		
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		tau = tau[ak.num(tau) == 4] #4 tau events 
-		print(ak.num(tau) == 4)	
+		#print(ak.num(tau) == 4)	
 
-		#print("================Trigger cut================")
 		MET_all.fill("No Trigger Applied",ak.ravel(tau.MET))
 		if (not(signal)):
 			HT_all.fill("No Trigger Applied",ak.ravel(tau.HT))
-		trigger_cut = trigger_selec_array([39],tau).snapshot()
-		print(trigger_cut)
-		tau = tau[trigger_cut[0]]
+
+		tau = tau[np.bitwise_and(tau.trigger,trigger_mask) == trigger_mask]
+		print(len(tau))
 		tau_plus = tau[tau.charge > 0]	
 		tau_minus = tau[tau.charge < 0]
 
@@ -134,7 +135,8 @@ class TriggerStudies(processor.ProcessorABC):
 
 		MET_all.fill("Trigger Applied",ak.ravel(tau.MET))
 		if (not(signal)):
-			HT_all.fill("Trigger Applied",ak.ravel(tau.HT))
+			HT_all.fill("Trigger Applied",ak.ravel(tau.HT)) #Should this be rescaled???
+			HT_all *= (1/4)
 		MET_all *= (1/4) #Account for each entry having 4 elements but only 1 MET value per event
 	
 		if (signal):
