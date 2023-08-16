@@ -9,7 +9,7 @@ from coffea.nanoevents import NanoEventsFactory, NanoAODSchema, BaseSchema
 from coffea.nanoevents.methods import candidate
 from math import pi	
 
-trigger_bit_list = [39]
+
 
 def deltaR(tau1, tau2):
 	return np.sqrt((tau2.eta - tau1.eta)**2 + (tau2.phi - tau1.phi)**2)
@@ -64,7 +64,7 @@ class TriggerStudies(processor.ProcessorABC):
 	def __init__(self):
 		pass
 	
-	def process(self, events, signal = True):
+	def process(self, events, trigger_list, signal = True):
 		dataset = events.metadata['dataset']
 		tau = ak.zip( 
 			{
@@ -95,17 +95,13 @@ class TriggerStudies(processor.ProcessorABC):
 		MET_all = (hist.Hist.new.StrCat(["No Trigger Applied","Trigger Applied"], name = "MET_hist").Reg(50, 0, 1500., name="MET", label="MET [GeV]").Double())
         
 		HT_all = (hist.Hist.new.StrCat(["No Trigger Applied","Trigger Applied"], name = "HT_hist").Reg(50, 0, 1000., name="HT", label="HT [GeV]").Double())
-		trigger_mask = bit_mask(trigger_bit_list)		
+		trigger_mask = bit_mask(trigger_list)		
 	
 		tau = tau[tau.pt > 30] #pT
 		tau = tau[tau.eta < 2.3] #eta
 		
 		#Loose isolation
 		tau = tau[tau.iso1 >= 0.5]
-		print("=======Iso========")
-		print(tau.iso2 >= 0.5)
-		print(len(tau.iso2 >= 0.5))
-		print(len(tau))
 		tau = tau[tau.iso2 >= 0.5]		
 		#print("================Isolation cuts================")
 		#for x in tau:
@@ -136,8 +132,8 @@ class TriggerStudies(processor.ProcessorABC):
 		MET_all.fill("Trigger Applied",ak.ravel(tau.MET))
 		if (not(signal)):
 			HT_all.fill("Trigger Applied",ak.ravel(tau.HT)) #Should this be rescaled???
-			HT_all *= (1/4)
-		MET_all *= (1/4) #Account for each entry having 4 elements but only 1 MET value per event
+			HT_all *= (1/HT_all.sum())
+		MET_all *= (1/MET_all.sum()) #Normalize Histogram
 	
 		if (signal):
 			return{
@@ -348,6 +344,9 @@ class TauPlotting(processor.ProcessorABC):
 if __name__ == "__main__":
 	#mass_str_arr = ["1000","2000","3000"]
 	mass_str_arr = ["2000"]
+	trigger_bit_list = [39]
+	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": [39], "AK8PFJet400_TrimMass30": [40], "Both": [39,40]}
+
 	#filebase_arr = [""]
 	filebase = "~/Analysis/BoostedTau/TriggerEff/2018_Samples/GluGluToRadionToHHTo4T_M-"
 	
@@ -399,11 +398,13 @@ if __name__ == "__main__":
 		plt.cla()		
 
 		p2 = TriggerStudies()
-		trigger_out = p2.process(events)
-		trigger_out["boosted_tau"]["MET"].plot1d(ax=ax)
-		ax.legend(title="")
-		plt.title(r"MET Distribution 2 TeV Sample")
-		plt.savefig("MET_Trigger_Plot-" + mass_str)
+		for trigger_name, trigger_bits in trigger_dict.items():
+			trigger_out = p2.process(events, trigger_bits)
+			trigger_out["boosted_tau"]["MET"].plot1d(ax=ax)
+			ax.legend(title="")
+			plt.title(r"MET Distribution 2 TeV Sample Trigger(" + trigger_name + ")", wrap=True)
+			plt.savefig("MET_Trigger_Plot-" + mass_str + "-" + trigger_name)
+			plt.cla()
 
 	#Obtain background information
 	events = NanoEventsFactory.from_root(
@@ -414,16 +415,19 @@ if __name__ == "__main__":
 	).events()
 	
 	p2 = TriggerStudies()
-	trigger_out = p2.process(events, False)
-	fig, ax = plt.subplots()
-	trigger_out["boosted_tau"]["MET"].plot1d(ax=ax)
-	ax.legend(title="")
-	plt.title(r"MET Distribution $ZZ \rightarrow 4l$ Background")
-	plt.savefig("MET_Trigger_ZZ4l")
-	plt.cla()
-	trigger_out["boosted_tau"]["HT"].plot1d(ax=ax)
-	ax.legend(title="")
-	plt.title(r"HT Distribution $ZZ \rightarrow 4l$ Background")
-	plt.savefig("HT_Trigger_ZZ4l")
+	
+	for trigger_name, trigger_bits in trigger_dict.items():
+		trigger_out = p2.process(events, trigger_bits, False)
+		fig, ax = plt.subplots()
+		trigger_out["boosted_tau"]["MET"].plot1d(ax=ax)
+		ax.legend(title="")
+		plt.title(r"MET Distribution $ZZ \rightarrow 4l$ Background Trigger(" + trigger_name + ")", wrap=True)
+		plt.savefig("MET_Trigger_ZZ4l-" + trigger_name)
+		plt.cla()
+		trigger_out["boosted_tau"]["HT"].plot1d(ax=ax)
+		ax.legend(title="")
+		plt.title(r"HT Distribution $ZZ \rightarrow 4l$ Background Trigger(" + trigger_name + ")", wrap=True)
+		plt.savefig("HT_Trigger_ZZ4l-" + trigger_name)
+		plt.cla()
 
 
