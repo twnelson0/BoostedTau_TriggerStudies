@@ -112,9 +112,17 @@ class TriggerStudies(processor.ProcessorABC):
 		AK8SoftMass_Trigg = hist.Hist.new.Reg(40, -700, 700, name = "SoftMass_Trigg", label = "AK8JetSoftMass").Double()		
 	
 		#Efficiency Histograms
+		AK8Jet_PreTrigger = hist.Hist(
+						hist.axis.Regular(40, 0, 1500, name="JetPt", label="AK8JetPt", flow=False),
+						hist.axis.Regular(40, -800, 400, name="SoftMass", label="Ak8JetSoftMass", flow=False)
+					)		
+		AK8Jet_Trigger = hist.Hist(
+						hist.axis.Regular(40, 0, 1500, name="JetPt", label="AK8JetPt", flow=False),
+						hist.axis.Regular(40, -800, 400, name="SoftMass", label="Ak8JetSoftMass", flow=False)
+					)		
 		eff_AK8Jet = hist.Hist(
 						hist.axis.Regular(40, 0, 1500, name="JetPt", label="AK8JetPt", flow=False),
-						hist.axis.Regular(40, -700, 700, name="SoftMass", label="Ak8JetSoftMass", flow=False)
+						hist.axis.Regular(40, -800, 400, name="SoftMass", label="Ak8JetSoftMass", flow=False)
 					)		
 
 		trigger_mask = bit_mask(trigger_list)		
@@ -199,7 +207,10 @@ class TriggerStudies(processor.ProcessorABC):
 		#eff_AK8Pt = hist.intervals.ratio_uncertainty(AK8Pt_all["Trigger"], AK8Pt_all["No Trigger"], "efficiency")  	
 		eff_AK8Pt = AK8Pt_Trigg/AK8Pt_PreTrigg
 		eff_AK8SoftMass = AK8SoftMass_Trigg/AK8SoftMass_PreTrigg
-		eff_AK8Jet.fill(eff_AK8Pt,eff_AK8SoftMass)
+		AK8Jet_PreTrigger.fill(AK8Pt_PreTrigg, AK8SoftMass_PreTrigg)
+		AK8Jet_Trigger.fill(AK8Pt_Trigg, AK8SoftMass_Trigg)
+		eff_AK8Jet = AK8Jet_Trigger/AK8Jet_PreTrigger
+		#eff_AK8Jet.fill(eff_AK8Pt,eff_AK8SoftMass) #This is wrong
 		#eff_AK8Pt = hist()
 		
 		if (not(signal)):
@@ -489,7 +500,7 @@ if __name__ == "__main__":
 			plt.savefig("MET_Trigger_Plot-" + mass_str + "-" + trigger_name)
 			plt.cla()
 			trigger_out["boosted_tau"]["AK8Jet_Eff"].plot2d(ax=ax)
-			plt.title("AK8Jet Efficiency Plot (Trigger(" + trigger_name + ")", wrap=True)
+			plt.title("AK8Jet Efficiency Plot Trigger(" + trigger_name + ")", wrap=True)
 			ax.set_xlabel(r"AK8 Jet $p_T$")
 			ax.set_ylabel(r"AK8 Jet Soft Mass Dropped")
 			plt.savefig("AK8Jet_Eff_Plot-" + mass_str + "-" + trigger_name)
@@ -519,7 +530,7 @@ if __name__ == "__main__":
 		plt.savefig("HT_Trigger_ZZ4l-" + trigger_name)
 		plt.cla()
 		trigger_out["boosted_tau"]["AK8Jet_Eff"].plot2d(ax=ax)
-		plt.title("AK8Jet Efficiency Plot (Trigger(" + trigger_name + ")", wrap=True)
+		plt.title("AK8Jet Efficiency Plot Trigger(" + trigger_name + ")", wrap=True)
 		ax.set_xlabel(r"AK8 Jet $p_T$")
 		ax.set_ylabel(r"AK8 Jet Soft Mass Dropped")
 		plt.savefig("AK8Jet_Eff_Plot_ZZ4l-" + trigger_name)
