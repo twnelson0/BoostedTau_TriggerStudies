@@ -106,23 +106,23 @@ class TriggerStudies(processor.ProcessorABC):
 		AK8Pt_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8Pt_hist").Reg(40,0,1100, name="AK8Pt", label = "AK8 Jet r$p_T$ [GeV]").Double()	
 		AK8SoftMass_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8SoftMass_hist").Reg(40,0,400, name="AK8SoftMass", label = "AK8 Jet Soft Drop Mass [GeV]").Double()
 
-		AK8Pt_PreTrigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = "AK8JetPt_Trigg").Double()
-		AK8Pt_Trigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = "AK8JetPt_Trigg").Double()
-		AK8SoftMass_PreTrigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8JetSoftMass").Double()
-		AK8SoftMass_Trigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8JetSoftMass").Double()		
+		AK8Pt_PreTrigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
+		AK8Pt_Trigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
+		AK8SoftMass_PreTrigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()
+		AK8SoftMass_Trigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()		
 	
 		#Efficiency Histograms
 		AK8Jet_PreTrigger = hist.Hist(
-						hist.axis.Regular(30, 0, 1100, name="JetPt", label="AK8JetPt", flow=False),
-						hist.axis.Regular(30, 0, 300, name="SoftMass", label="Ak8JetSoftMass", flow=False)
+						hist.axis.Regular(20, 0, 1100, name="JetPt", label=r"AK8Jet $p_T$ [GeV]", flow=False),
+						hist.axis.Regular(10, 0, 300, name="SoftMass", label=r"AK8Jet Soft Mass [GeV]", flow=False)
 					)		
 		AK8Jet_Trigger = hist.Hist(
-						hist.axis.Regular(30, 0, 1100, name="JetPt", label="AK8JetPt", flow=False),
-						hist.axis.Regular(30, 00, 300, name="SoftMass", label="Ak8JetSoftMass", flow=False)
+						hist.axis.Regular(20, 0, 1100, name="JetPt", label=r"AK8Jet $p_T$ [GeV]", flow=False),
+						hist.axis.Regular(10, 0, 300, name="SoftMass", label="AK8Jet Soft Mass [GeV]", flow=False)
 					)		
 		eff_AK8Jet = hist.Hist(
-						hist.axis.Regular(30, 0, 1100, name="JetPt", label="AK8JetPt", flow=False),
-						hist.axis.Regular(30, 0, 300, name="SoftMass", label="Ak8JetSoftMass", flow=False)
+						hist.axis.Regular(20, 0, 1100, name="JetPt", label=r"AK8Jet $p_T$ [GeV]", flow=False),
+						hist.axis.Regular(10, 0, 300, name="SoftMass", label="AK8Jet Soft Mass [GeV]", flow=False)
 					)		
 
 		trigger_mask = bit_mask(trigger_list)		
@@ -186,7 +186,6 @@ class TriggerStudies(processor.ProcessorABC):
 		deltaR21 = deltaR(tau_plus2, tau_minus1)
 		
 		AK8Pt_Trigg.fill(ak.ravel(AK8Jet.AK8JetPt))
-		#AK8Pt_Trigg *= (1/AK8Pt_Trigg.sum())
 		AK8SoftMass_Trigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
 		#AK8SoftMass_Trigg *= (1/AK8SoftMass_Trigg.sum())
 		
@@ -197,21 +196,14 @@ class TriggerStudies(processor.ProcessorABC):
 
 		#Efficiency Histograms (How do I do these??)
 		print("Efficiency: %f"%(ak.num(AK8PT_Trigg_Arr,axis=0)/ak.num(AK8PT_NoTrigg_Arr,axis=0)))
-		#eff_AK8Pt = hist.intervals.ratio_uncertainty(AK8PT_Trigg_Arr,AK8PT_NoTrigg_Arr,"efficiency") #AK8Pt_Trigg/AK8Pt_PreTrigg 
 		#for ibin in range(40):
-		#	print("Bin test = %f"% AK8Pt_Trigg[ibin])
-			#effArr = np.append(effArr, AK8Pt_Trigg[ibin]/AK8Pt_PreTrigg[ibin])
 			#print("Pre-Trigger bin " + str(ibin) + " : %f"%AK8Pt_all["No Trigger"][ibin])
 			#print("Post-Trigger bin " + str(ibin) + ": %f"%AK8Pt_all["Trigger"][ibin])
 		
-		#eff_AK8Pt = hist.intervals.ratio_uncertainty(AK8Pt_all["Trigger"], AK8Pt_all["No Trigger"], "efficiency")  	
-		eff_AK8Pt = AK8Pt_Trigg/AK8Pt_PreTrigg
 		eff_AK8SoftMass = AK8SoftMass_Trigg/AK8SoftMass_PreTrigg
 		AK8Jet_PreTrigger.fill(AK8Pt_PreTrigg, AK8SoftMass_PreTrigg)
 		AK8Jet_Trigger.fill(AK8Pt_Trigg, AK8SoftMass_Trigg)
 		eff_AK8Jet = AK8Jet_Trigger/AK8Jet_PreTrigger
-		#eff_AK8Jet.fill(eff_AK8Pt,eff_AK8SoftMass) #This is wrong
-		#eff_AK8Pt = hist()
 		
 		if (not(signal)):
 			HT_all.fill("Trigger Applied",ak.ravel(tau.HT)) #Should this be rescaled???
@@ -408,10 +400,6 @@ class TauPlotting(processor.ProcessorABC):
 		dimass_all_hist.fill("Subleading pair", ak.ravel(mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))
 		dimass_all_hist *= 1/(dimass_all_hist.sum())		
 	
-		#Normalization scales (currently broken/wrong)		
-		#scale_leading = ak.sum(ak.ravel(mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)]))) + ak.sum(ak.ravel(mass(tau_plus1[(deltaR21 < deltaR11)], tau_minus2[(deltaR21 < deltaR11)])))
-		#scale_subleading = ak.sum(ak.ravel(mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)]))) + ak.sum(ak.ravel(mass(tau_plus2[(deltaR12 < deltaR22)], tau_minus1[(deltaR12 < deltaR22)])))		
-
 		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))	
 		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[(deltaR21 < deltaR11)], tau_minus2[(deltaR21 < deltaR11)])))
 		ditau_mass1_hist *= (1/ditau_mass1_hist.sum())
@@ -443,8 +431,22 @@ if __name__ == "__main__":
 	trigger_bit_list = [40]
 	#trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": [39], "AK8PFJet400_TrimMass30": [40]}
 	trigger_dict = {"AK8PFJet400_TrimMass30": [40]}
+	tau_hist_dict = {
+		"pT" :["leading_PtPlot", r"Leading $\tau$ $p_T$"], "eta": ["leading_etaPlot", r"Leading $\tau$ $\eta$"], "phi": ["leading_phiPlot", r"Leading $\tau$ $\phi$"], 
+		"pT_all": ["AllPt_Plot",r"$4-\tau$ event transverse momenta"], "mass1":  ["Ditau_Mass1",r"Leading Di-$\tau$ pair mass"], "mass2": ["Ditau_Mass2",r"Subleading Di-$\tau$ pair mass"], 
+		"ditau_mass": ["AllDitauMass_Plot",r"Di-$\tau$ pair masses"]
+	}
+	
+	trigger_hist_dict_1d = {
+		"AK8JetSoftMass_Trigg" : ["AK8SoftMass_Trigger_Plot","AK8SoftDrop Mass Trigger("] , "AK8JetSoftMass_PreTrigg" : ["AK8SoftMass_NoTrigger_Plot","AK8SoftDrop Mass No Trigger"], 
+		"AK8JetPt_Trigg" : ["AK8Pt_Trigger_Plot",r"AK8Jet $p_T$ Trigger("], "AK8JetPt_PreTrigg" : ["AK8Pt_NoTrigger_Plot",r"AK8Jet $p_T$ No Trigger("]
+	}
+	
+	trigger_hist_dict_2d = {
+		"AK8Jet_PreTrigg" : ["AK8Jet_PreTriggerHist_Plot", "AK8Jet 2D Histogram No Trigger"], "AK8Jet_Trigg" : ["AK8Jet_TriggerHist_Plot", "AK8Jet 2D Histogram Trigger("]
+	}
 
-	#filebase_arr = [""]
+
 	filebase = "~/Analysis/BoostedTau/TriggerEff/2018_Samples/GluGluToRadionToHHTo4T_M-"
 
 	for mass_str in mass_str_arr:
@@ -457,74 +459,37 @@ if __name__ == "__main__":
 		).events()
 		p = TauPlotting()
 		out = p.process(events)
-		fig, ax = plt.subplots()
-		out["boosted_tau"]["pT"].plot1d(ax=ax)
-		plt.title(r"Leading $\tau$ $p_T$")
-		plt.savefig("leading_PtPlot-" + mass_str)
-		plt.cla()
-		out["boosted_tau"]["eta"].plot1d(ax=ax)
-		plt.title(r"Leading $\tau$ $\eta$")
-		plt.savefig("leading_etaPlot-" + mass_str)
-		plt.cla()
-		out["boosted_tau"]["phi"].plot1d(ax=ax)
-		plt.title(r"Leading $\tau$ $\phi$")
-		plt.savefig("leading_phiPlot-" + mass_str)
-		plt.cla()
-		out["boosted_tau"]["pT_all"].plot1d(ax=ax)
-		plt.title(r"$4-\tau$ event transverse momenta")
-		ax.legend(title=r"$\tau$")
-		plt.savefig("AllPt_Plot-" + mass_str)
-		plt.cla()
-		out["boosted_tau"]["pT_4"].plot1d(ax=ax)
-		plt.title(r"Fourth leading $\tau$ $p_T$")
-		plt.savefig("FourthLeadingPt-" + mass_str)
-		plt.cla()
-		out["boosted_tau"]["mass1"].plot1d(ax=ax)
-		plt.title(r"Leading Di-$\tau$ pair mass")
-		plt.savefig("Ditau_Mass1-" + mass_str)
-		plt.cla()
-		out["boosted_tau"]["mass2"].plot1d(ax=ax)
-		plt.title(r"Subleading Di-$\tau$ pair mass")
-		plt.savefig("Ditau_Mass2-" + mass_str)
-		plt.cla()
-		out["boosted_tau"]["ditau_mass"].plot1d(ax=ax)
-		plt.title(r"Di-$\tau$ pair masses")
-		ax.legend(title=r"Di-$\tau$ Pair")
-		plt.savefig("AllDitauMass_Plot-" + mass_str)
-		plt.cla()		
-
+		for var_name, hist_name_arr in tau_hist_dict.items():
+			fig, ax = plt.subplots()
+			out["boosted_tau"][var_name].plot1d(ax=ax)
+			plt.title(hist_name_arr[1], wrap=True)
+			if (hist_name_arr[0] == "AllDitauMass_Plot"):
+				ax.legend(title=r"Di-$\tau$ Pair")
+			plt.savefig(hist_name_arr[0] + "-" + mass_str)
+		
 		p2 = TriggerStudies()
 		for trigger_name, trigger_bits in trigger_dict.items():
 			trigger_out = p2.process(events, trigger_bits)
-			trigger_out["boosted_tau"]["AK8JetSoftMass_Trigg"].plot1d(ax=ax)
-			plt.title(r"AK8SoftDrop Mass 2 TeV Sample Trigger(" + trigger_name + ")", wrap=True)
-			plt.savefig("AK8SoftMass_Trigger_Plot-" + mass_str + "-" + trigger_name)
-			plt.cla()
-			trigger_out["boosted_tau"]["AK8JetSoftMass_PreTrigg"].plot1d(ax=ax)
-			plt.title(r"AK8SoftDrop Mass 2 TeV Sample No Trigger", wrap=True)
-			plt.savefig("AK8SoftMass_NoTrigger_Plot-" + mass_str + "-" + trigger_name)
-			plt.cla()
-			trigger_out["boosted_tau"]["AK8JetPt_Trigg"].plot1d(ax=ax)
-			plt.title(r"AK8SoftDrop Mass 2 TeV Sample Trigger(" + trigger_name + ")", wrap=True)
-			plt.savefig("AK8Pt_Trigger_Plot-" + mass_str + "-" + trigger_name)
-			plt.cla()
-			trigger_out["boosted_tau"]["AK8JetPt_PreTrigg"].plot1d(ax=ax)
-			plt.title(r"AK8SoftDrop Mass 2 TeV Sample Trigger(" + trigger_name + ")", wrap=True)
-			plt.savefig("AK8Pt_PreTrigger_Plot-" + mass_str + "-" + trigger_name)
-			plt.cla()
-			trigger_out["boosted_tau"]["AK8Jet_PreTrigg"].plot2d(ax=ax)
-			plt.title("AK8Jet 2D Histogram No Trigger", wrap=True)
-			ax.set_xlabel(r"AK8 Jet $p_T$")
-			ax.set_ylabel(r"AK8 Jet Soft Mass Dropped")
-			plt.savefig("AK8Jet_PreTriggerHist_Plot-" + mass_str + "-" + trigger_name)
-			plt.cla()
-			trigger_out["boosted_tau"]["AK8Jet_Trigg"].plot2d(ax=ax)
-			plt.title("AK8Jet 2D Histogram Trigger(" + trigger_name + ")", wrap=True)
-			ax.set_xlabel(r"AK8 Jet $p_T$")
-			ax.set_ylabel(r"AK8 Jet Soft Mass Dropped")
-			plt.savefig("AK8Jet_TriggerHist_Plot-" + mass_str + "-" + trigger_name)
-			plt.cla()
+			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
+				fig, ax = plt.subplots()
+				trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 
+				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
+					plt.title(hist_name_arr[1] + "mass : " + mass_str[0] + " TeV", wrap=True)
+				else:
+					plt.title(hist_name_arr[1] + trigger_name + "), mass : " + mass_str[0] + " TeV", wrap=True)
+				plt.savefig(hist_name_arr[0] + mass_str + "-" + trigger_name)
+				  
+			for var_name, hist_name_arr in trigger_hist_dict_2d.items():
+				fig, ax = plt.subplots()
+				trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
+
+				if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
+					plt.title(hist_name_arr[1] + "mass : " + mass_str[0] + " TeV", wrap=True)
+				else:
+					plt.title(hist_name_arr[1] + trigger_name + "), mass : " + mass_str[0] + " TeV", wrap=True)
+				plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
+			
 	#Obtain background information
 	events = NanoEventsFactory.from_root(
 		"~/Analysis/BoostedTau/TriggerEff/2018_Background/ZZ4l.root",
@@ -537,53 +502,25 @@ if __name__ == "__main__":
 	
 	for trigger_name, trigger_bits in trigger_dict.items():
 		trigger_out = p2.process(events, trigger_bits, False)
-		fig, ax = plt.subplots()
-		trigger_out["boosted_tau"]["AK8JetSoftMass_Trigg"].plot1d(ax=ax)
-		plt.title(r"AK8SoftDrop Mass 2 TeV Sample Trigger(" + trigger_name + ")", wrap=True)
-		plt.savefig("AK8SoftMass_Trigger_Plot-ZZ4l-" + trigger_name)
-		plt.cla()
-		trigger_out["boosted_tau"]["AK8JetSoftMass_PreTrigg"].plot1d(ax=ax)
-		plt.title(r"AK8SoftDrop Mass 2 TeV Sample No Trigger", wrap=True)
-		plt.savefig("AK8SoftMass_NoTrigger_Plot-ZZ4l-" + trigger_name)
-		plt.cla()
-		trigger_out["boosted_tau"]["AK8JetPt_Trigg"].plot1d(ax=ax)
-		plt.title(r"AK8SoftDrop Mass 2 TeV Sample Trigger(" + trigger_name + ")", wrap=True)
-		plt.savefig("AK8Pt_Trigger_Plot-ZZ4l-" + trigger_name)
-		plt.cla()
-		trigger_out["boosted_tau"]["AK8JetPt_PreTrigg"].plot1d(ax=ax)
-		plt.title(r"AK8SoftDrop Mass 2 TeV Sample Trigger(" + trigger_name + ")", wrap=True)
-		plt.savefig("AK8Pt_PreTrigger_Plot-ZZ4l-" + trigger_name)
-		plt.cla()
+		for trigger_name, trigger_bits in trigger_dict.items():
+			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
+				fig, ax = plt.subplots()
+				trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
+
+				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
+					plt.title(hist_name_arr[1] + "mass : " + mass_str[0] + " TeV", wrap=True)
+				else:
+					plt.title(hist_name_arr[1] + trigger_name + "), mass : " + mass_str[0] + " TeV", wrap=True)
+				plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
+				  
+			for var_name, hist_name_arr in trigger_hist_dict_2d.items():
+				fig, ax = plt.subplots()
+				trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
+
+				if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
+					plt.title(hist_name_arr[1] + r" $ZZ \rightarrow 4l$", wrap=True)
+				else:
+					plt.title(hist_name_arr[1] + trigger_name + "), " + r"$ZZ \rightarrow 4l$", wrap=True)
+				plt.savefig(hist_name_arr[0] + "ZZ4l-" + trigger_name)
 		
-		#trigger_out["boosted_tau"]["AK8Jet_PreTrigg"].plot2d(ax=ax)
-		plt.title("AK8Jet 2D Histogram No Trigger", wrap=True)
-		ax.set_xlabel(r"AK8 Jet $p_T$")
-		ax.set_ylabel(r"AK8 Jet Soft Mass Dropped")
-		plt.savefig("AK8Jet_PreTriggerHist_Plot-ZZ4l-" + trigger_name)
-		plt.cla()
-		trigger_out["boosted_tau"]["AK8Jet_Trigg"].plot2d(ax=ax)
-		plt.title("AK8Jet 2D Histogram Trigger(" + trigger_name + ")", wrap=True)
-		ax.set_xlabel(r"AK8 Jet $p_T$")
-		ax.set_ylabel(r"AK8 Jet Soft Mass Dropped")
-		plt.savefig("AK8Jet_TriggerHist_Plot-ZZ4l-" + trigger_name)
-		plt.cla()
-
-	
-		#trigger_out["boosted_tau"]["MET"].plot1d(ax=ax)
-		#ax.legend(title="")
-		#plt.title(r"MET Distribution $ZZ \rightarrow 4l$ Background Trigger(" + trigger_name + ")", wrap=True)
-		#plt.savefig("MET_Trigger_ZZ4l-" + trigger_name)
-		#plt.cla()
-		#trigger_out["boosted_tau"]["HT"].plot1d(ax=ax)
-		#ax.legend(title="")
-		#plt.title(r"HT Distribution $ZZ \rightarrow 4l$ Background Trigger(" + trigger_name + ")", wrap=True)
-		#plt.savefig("HT_Trigger_ZZ4l-" + trigger_name)
-		#plt.cla()
-		#trigger_out["boosted_tau"]["AK8Jet_Eff"].plot2d(ax=ax)
-		#plt.title("AK8Jet Efficiency Plot Trigger(" + trigger_name + ")", wrap=True)
-		#ax.set_xlabel(r"AK8 Jet $p_T$")
-		#ax.set_ylabel(r"AK8 Jet Soft Mass Dropped")
-		#plt.savefig("AK8Jet_Eff_Plot_ZZ4l-" + trigger_name)
-		#plt.cla()
-
 
