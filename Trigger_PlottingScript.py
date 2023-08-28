@@ -160,12 +160,10 @@ class TriggerStudies(processor.ProcessorABC):
 		#print(tau.pt)
 		
 		AK8Pt_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetPt))
-		AK8PT_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
-		#AK8Pt_PreTrigg *= (1/AK8Pt_PreTrigg.sum()) 
+		AK8Pt_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
 		AK8SoftMass_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
-		#AK8SoftMass_PreTrigg *= (1/AK8SoftMass_PreTrigg.sum())
+		AK8SoftMass_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
 		AK8Pt_all.fill("No Trigger",ak.ravel(AK8Jet.AK8JetPt))	
-		#AK8SoftMass_all.fill("No Trigger",ak.ravel(AK8Jet.AK8JetDropMass))	
 
 		MET_all.fill("No Trigger Applied",ak.ravel(tau.MET))
 		if (not(signal)):
@@ -187,22 +185,23 @@ class TriggerStudies(processor.ProcessorABC):
 		
 		AK8Pt_Trigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 		AK8SoftMass_Trigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
-		#AK8SoftMass_Trigg *= (1/AK8SoftMass_Trigg.sum())
 		
 		AK8Pt_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetPt))	
-		AK8PT_Trigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
+		AK8Pt_Trigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
 		AK8SoftMass_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetDropMass))	
+		AK8SoftMass_Trigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
 		MET_all.fill("Trigger Applied",ak.ravel(tau.MET))
 
 		#Efficiency Histograms (How do I do these??)
-		print("Efficiency: %f"%(ak.num(AK8PT_Trigg_Arr,axis=0)/ak.num(AK8PT_NoTrigg_Arr,axis=0)))
+		print("Efficiency: %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
 		#for ibin in range(40):
 			#print("Pre-Trigger bin " + str(ibin) + " : %f"%AK8Pt_all["No Trigger"][ibin])
 			#print("Post-Trigger bin " + str(ibin) + ": %f"%AK8Pt_all["Trigger"][ibin])
 		
-		eff_AK8SoftMass = AK8SoftMass_Trigg/AK8SoftMass_PreTrigg
-		AK8Jet_PreTrigger.fill(AK8Pt_PreTrigg, AK8SoftMass_PreTrigg)
-		AK8Jet_Trigger.fill(AK8Pt_Trigg, AK8SoftMass_Trigg)
+		#AK8Jet_PreTrigger.fill(AK8Pt_PreTrigg, AK8SoftMass_PreTrigg)
+		AK8Jet_PreTrigger.fill(AK8Pt_NoTrigg_Arr, AK8SoftMass_NoTrigg_Arr)
+		#AK8Jet_Trigger.fill(AK8Pt_Trigg, AK8SoftMass_Trigg)
+		AK8Jet_Trigger.fill(AK8Pt_Trigg_Arr, AK8SoftMass_Trigg_Arr)
 		eff_AK8Jet = AK8Jet_Trigger/AK8Jet_PreTrigger
 		
 		if (not(signal)):
@@ -215,7 +214,7 @@ class TriggerStudies(processor.ProcessorABC):
 				 dataset: {
 					"MET": MET_all,
 					"AK8JetPt_PreTrigg": AK8Pt_PreTrigg,
-					"AK8JetPt_Trigg": AK8Pt_PreTrigg,
+					"AK8JetPt_Trigg": AK8Pt_Trigg,
 					"AK8JetSoftMass_PreTrigg": AK8SoftMass_PreTrigg,
 					"AK8JetSoftMass_Trigg": AK8SoftMass_Trigg,
 					"AK8Jet_PreTrigg": AK8Jet_PreTrigger,
@@ -229,7 +228,7 @@ class TriggerStudies(processor.ProcessorABC):
 					"MET": MET_all,
 					"HT": HT_all,
 					"AK8JetPt_PreTrigg": AK8Pt_PreTrigg,
-					"AK8JetPt_Trigg": AK8Pt_PreTrigg,
+					"AK8JetPt_Trigg": AK8Pt_Trigg,
 					"AK8JetSoftMass_PreTrigg": AK8SoftMass_PreTrigg,
 					"AK8JetSoftMass_Trigg": AK8SoftMass_Trigg,
 					"AK8Jet_PreTrigg": AK8Jet_PreTrigger,
@@ -438,12 +437,12 @@ if __name__ == "__main__":
 	}
 	
 	trigger_hist_dict_1d = {
-		"AK8JetSoftMass_Trigg" : ["AK8SoftMass_Trigger_Plot","AK8SoftDrop Mass Trigger("] , "AK8JetSoftMass_PreTrigg" : ["AK8SoftMass_NoTrigger_Plot","AK8SoftDrop Mass No Trigger"], 
-		"AK8JetPt_Trigg" : ["AK8Pt_Trigger_Plot",r"AK8Jet $p_T$ Trigger("], "AK8JetPt_PreTrigg" : ["AK8Pt_NoTrigger_Plot",r"AK8Jet $p_T$ No Trigger("]
+		"AK8JetSoftMass_Trigg" : ["AK8SoftMass_Trigger_Plot","AK8SoftDrop Mass Trigger"] , "AK8JetSoftMass_PreTrigg" : ["AK8SoftMass_NoTrigger_Plot","AK8SoftDrop Mass No Trigger"], 
+		"AK8JetPt_Trigg" : ["AK8Pt_Trigger_Plot",r"AK8Jet $p_T$ Trigger"], "AK8JetPt_PreTrigg" : ["AK8Pt_NoTrigger_Plot",r"AK8Jet $p_T$ No Trigger"]
 	}
 	
 	trigger_hist_dict_2d = {
-		"AK8Jet_PreTrigg" : ["AK8Jet_PreTriggerHist_Plot", "AK8Jet 2D Histogram No Trigger"], "AK8Jet_Trigg" : ["AK8Jet_TriggerHist_Plot", "AK8Jet 2D Histogram Trigger("]
+		"AK8Jet_PreTrigg" : ["AK8Jet_PreTriggerHist_Plot", "AK8Jet 2D Histogram No Trigger"], "AK8Jet_Trigg" : ["AK8Jet_TriggerHist_Plot", "AK8Jet 2D Histogram Trigger"]
 	}
 
 
@@ -475,19 +474,21 @@ if __name__ == "__main__":
 				trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 
 				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
-					plt.title(hist_name_arr[1] + "mass : " + mass_str[0] + " TeV", wrap=True)
+					print("No Trigger")
+					plt.title(hist_name_arr[1] + " mass : " + mass_str[0] + " TeV", wrap=True)
 				else:
-					plt.title(hist_name_arr[1] + trigger_name + "), mass : " + mass_str[0] + " TeV", wrap=True)
-				plt.savefig(hist_name_arr[0] + mass_str + "-" + trigger_name)
+					print("Trigger")
+					plt.title(hist_name_arr[1] + " (" + trigger_name + ") , mass : " + mass_str[0] + " TeV", wrap=True)
+				plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
 				  
 			for var_name, hist_name_arr in trigger_hist_dict_2d.items():
 				fig, ax = plt.subplots()
 				trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
 
 				if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
-					plt.title(hist_name_arr[1] + "mass : " + mass_str[0] + " TeV", wrap=True)
+					plt.title(hist_name_arr[1] + " mass : " + mass_str[0] + " TeV", wrap=True)
 				else:
-					plt.title(hist_name_arr[1] + trigger_name + "), mass : " + mass_str[0] + " TeV", wrap=True)
+					plt.title(hist_name_arr[1] + " (" +  trigger_name + "), mass : " + mass_str[0] + " TeV", wrap=True)
 				plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
 			
 	#Obtain background information
@@ -508,19 +509,23 @@ if __name__ == "__main__":
 				trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 
 				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
-					plt.title(hist_name_arr[1] + "mass : " + mass_str[0] + " TeV", wrap=True)
+					plt.title(hist_name_arr[1] + r" $ZZ \rightarrow 4l$", wrap=True)
 				else:
-					plt.title(hist_name_arr[1] + trigger_name + "), mass : " + mass_str[0] + " TeV", wrap=True)
-				plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
+					plt.title(hist_name_arr[1] + " (" + trigger_name + r"), $ZZ \rightarrow 4l$", wrap=True)
+				plt.savefig(hist_name_arr[0] + "-ZZ4l-" + trigger_name)
 				  
 			for var_name, hist_name_arr in trigger_hist_dict_2d.items():
 				fig, ax = plt.subplots()
 				trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
+				#w,x,y = trigger_out["boosted_tau"][var_name].to_numpy
+				#mesh = ax.pcolormesh(x,y,w.T)	
+				#ax.set_xlabel(r"AK8Jet $p_T$ [GeV]")
+				#ax.set_ylabel(r"AK8Jet Dropped Soft Mass [GeV]")
 
 				if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
 					plt.title(hist_name_arr[1] + r" $ZZ \rightarrow 4l$", wrap=True)
 				else:
 					plt.title(hist_name_arr[1] + trigger_name + "), " + r"$ZZ \rightarrow 4l$", wrap=True)
-				plt.savefig(hist_name_arr[0] + "ZZ4l-" + trigger_name)
+				plt.savefig(hist_name_arr[0] + "-ZZ4l-" + trigger_name)
 		
 
