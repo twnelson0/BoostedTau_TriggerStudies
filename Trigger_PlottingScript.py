@@ -63,7 +63,7 @@ class TriggerStudies(processor.ProcessorABC):
 	def __init__(self):
 		pass
 	
-	def process(self, events, trigger_list, signal = True):
+	def process(self, events, trigger_bit, signal = True):
 		dataset = events.metadata['dataset']
 		tau = ak.zip( 
 			{
@@ -101,7 +101,8 @@ class TriggerStudies(processor.ProcessorABC):
 			{
 				"JetPt": events.jetPt,
 				"pfMET": events.pfMET,
-				"JetHT": ak.sum(events.jetPt, axis=1),
+				"HT": ak.sum(events.jetPt, axis=1),
+				"eta": events.jetEta,
 				"trigger": events.HLTJet,
 			},
 			with_name="PFJetArray",
@@ -131,27 +132,27 @@ class TriggerStudies(processor.ProcessorABC):
 					)		
 
 		#Histograms (MET and HT) (Trigger bit = 39)
-		HT_PreTrigg = hist.Hist.new.Reg(40, 0, 1500., label = r"Jet $p_T$ [GeV]").Double()
-		HT_Trigg = hist.Hist.new.Reg(40, 0, 1500., label = r"Jet $p_T$ [GeV]").Double()
+		HT_PreTrigg = hist.Hist.new.Reg(40, 0, 1500., label = "Jet HT [GeV]").Double()
+		HT_Trigg = hist.Hist.new.Reg(40, 0, 1500., label = "Jet HT [GeV]").Double()
 		MET_PreTrigg = hist.Hist.new.Reg(50, 0, 1500., name="MET", label="MET [GeV]").Double()
 		MET_Trigg = hist.Hist.new.Reg(50, 0, 1500., name="MET", label="MET [GeV]").Double()
 
 		#2D Histograms
-		METHT_PreTrigger = hist.Hist(
-			hist.axis.Regular(20, 0, 1500., name = "pfMET" , label = r"MET [GeV]")
-			hist.axis.Regular(20, 0, 1500., name = "HT", label = r"Jet $p_T$ [GeV]")
+		Jet_PreTrigger = hist.Hist(
+			hist.axis.Regular(20, 0, 1500., name = "pfMET" , label = r"MET [GeV]"),
+			hist.axis.Regular(20, 0, 1500., name = "HT", label = r"Jet HT [GeV]")
 		)
-		METHT_Trigger = hist.Hist(
-			hist.axis.Regular(20, 0, 1500., name = "pfMET" , label = r"MET [GeV]")
-			hist.axis.Regular(20, 0, 1500., name = "HT", label = r"Jet $p_T$ [GeV]")
+		Jet_Trigger = hist.Hist(
+			hist.axis.Regular(20, 0, 1500., name = "pfMET" , label = r"MET [GeV]"),
+			hist.axis.Regular(20, 0, 1500., name = "HT", label = r"Jet HT [GeV]")
 		)
-		eff_METHT = hist.Hist(
-			hist.axis.Regular(20, 0, 1500., name = "pfMET" , label = r"MET [GeV]")
-			hist.axis.Regular(20, 0, 1500., name = "HT", label = r"Jet $p_T$ [GeV]")
+		eff_Jet = hist.Hist(
+			hist.axis.Regular(20, 0, 1500., name = "pfMET" , label = r"MET [GeV]"),
+			hist.axis.Regular(20, 0, 1500., name = "HT", label = r"Jet HT [GeV]")
 		)
 	
 
-		trigger_mask = bit_mask(trigger_list)		
+		trigger_mask = bit_mask([trigger_bit])		
 		tau = tau[tau.pt > 30] #pT
 		tau = tau[tau.eta < 2.3] #eta
 		
@@ -166,14 +167,14 @@ class TriggerStudies(processor.ProcessorABC):
 		AK8Jet = AK8Jet[ak.num(tau) == 4]
 		tau = tau[ak.num(tau) == 4] #4 tau events
 
-		if (40 in trigger_list):	
+		if (trigger_bit == 40):	
 			AK8Pt_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 			AK8Pt_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
 			AK8SoftMass_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
 			AK8SoftMass_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
 			AK8Pt_all.fill("No Trigger",ak.ravel(AK8Jet.AK8JetPt))
 		
-		if (39 in trigger_list):
+		if (trigger_bit == 39):
 			#Apply Jet Cuts
 			Jet = Jet[Jet.eta <= 3]	
 			Jet = Jet[Jet.HT > 30]
@@ -181,8 +182,8 @@ class TriggerStudies(processor.ProcessorABC):
 			#Fill Histograms
 			HT_PreTrigg.fill(ak.ravel(Jet.HT))
 			HT_NoTrigg_Arr = ak.ravel(Jet.HT)
-			MET_PreTrigg.fill(ak.reavel(Jet.MET))
-			MET_NoTrigg_Arr = ak.ravel(Jet.MET)	
+			MET_PreTrigg.fill(ak.ravel(Jet.pfMET))
+			MET_NoTrigg_Arr = ak.ravel(Jet.pfMET)	
 
 
 		tau = tau[np.bitwise_and(tau.trigger,trigger_mask) == trigger_mask]
@@ -200,7 +201,7 @@ class TriggerStudies(processor.ProcessorABC):
 		deltaR21 = deltaR(tau_plus2, tau_minus1)
 		
 		#Efficiency Histograms (How do I do these??)
-		if (40 in trigger_list):	
+		if (trigger_bit == 40):	
 			AK8Pt_Trigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 			AK8SoftMass_Trigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
 			AK8Pt_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetPt))	
@@ -213,18 +214,18 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8Jet_Trigger.fill(AK8Pt_Trigg_Arr, AK8SoftMass_Trigg_Arr)
 			eff_AK8Jet = AK8Jet_Trigger/AK8Jet_PreTrigger
 		
-		if (39 in trigger_list):
+		if (trigger_bit == 39):
 			HT_Trigg.fill(ak.ravel(Jet.HT))
 			HT_Trigg_Arr = ak.ravel(Jet.HT)
-			MET_Trigg.fill(ak.reavel(Jet.MET))
-			MET_Trigg_Arr = ak.ravel(Jet.MET)	
+			MET_Trigg.fill(ak.ravel(Jet.pfMET))
+			MET_Trigg_Arr = ak.ravel(Jet.pfMET)	
 			
 			print("Efficiency: %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
 			Jet_PreTrigger.fill(MET_NoTrigg_Arr, HT_NoTrigg_Arr)
 			Jet_Trigger.fill(MET_Trigg_Arr, HT_Trigg_Arr)
-			eff_AK8Jet = Jet_Trigger/Jet_PreTrigger
+			eff_Jet = Jet_Trigger/Jet_PreTrigger
 		
-		if (40 in trigger_list):
+		if (trigger_bit == 40):
 			return{
 				 dataset: {
 					"AK8JetPt_PreTrigg": AK8Pt_PreTrigg,
@@ -235,7 +236,7 @@ class TriggerStudies(processor.ProcessorABC):
 					"AK8Jet_Trigg": AK8Jet_Trigger,
 				}
 			}
-		if (39 in trigger_list):
+		if (trigger_bit == 39):
 			return{
 				 dataset: {
 					"MET_PreTrigg": MET_PreTrigg,
@@ -456,19 +457,20 @@ if __name__ == "__main__":
 		"AK8Jet_PreTrigg" : ["AK8Jet_PreTriggerHist_Plot", "AK8Jet 2D Histogram No Trigger"], "AK8Jet_Trigg" : ["AK8Jet_TriggerHist_Plot", "AK8Jet 2D Histogram Trigger"]
 	}
 
-	trigger_METHT_hist_dict_1d = {
-		"AK8JetSoftMass_Trigg" : ["AK8SoftMass_Trigger_Plot","AK8SoftDrop Mass Trigger"] , "AK8JetSoftMass_PreTrigg" : ["AK8SoftMass_NoTrigger_Plot","AK8SoftDrop Mass No Trigger"], 
-		"AK8JetPt_Trigg" : ["AK8Pt_Trigger_Plot",r"AK8Jet $p_T$ Trigger"], "AK8JetPt_PreTrigg" : ["AK8Pt_NoTrigger_Plot",r"AK8Jet $p_T$ No Trigger"]
+	trigger_MTHTJet_hist_dict_1d = {
+		"MET_Trigg" : ["MET_Trigger_Plot","pfMET Trigger"] , "MET_PreTrigg" : ["MET_NoTrigger_Plot","pfMET No Trigger"], 
+		"HT_Trigg" : ["HT_Trigger_Plot",r"HT Trigger"], "HT_PreTrigg" : ["HT_NoTrigger_Plot", r"HT No Trigger"]
 	}
 	
-	trigger_METHT_hist_dict_2d = {
-		"AK8Jet_PreTrigg" : ["AK8Jet_PreTriggerHist_Plot", "AK8Jet 2D Histogram No Trigger"], "AK8Jet_Trigg" : ["AK8Jet_TriggerHist_Plot", "AK8Jet 2D Histogram Trigger"]
+	trigger_MTHTJet_hist_dict_2d = {
+		"Jet_PreTrigg" : ["Jet_PreTriggerHist_Plot", "MET and HT 2D Histogram No Trigger"], "Jet_Trigg" : ["Jet_TriggerHist_Plot", "MET and HT 2D Histogram Trigger"]
 	}
 	
-	trigger_dict = {"AK8PFJet400_TrimMass30": [40]}
+	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": 39, "AK8PFJet400_TrimMass30": 40}
 
 	filebase = "~/Analysis/BoostedTau/TriggerEff/2018_Samples/GluGluToRadionToHHTo4T_M-"
-
+	
+	#Signal
 	for mass_str in mass_str_arr:
 		fileName = filebase + mass_str + ".root"
 		events = NanoEventsFactory.from_root(
@@ -486,10 +488,18 @@ if __name__ == "__main__":
 			if (hist_name_arr[0] == "AllDitauMass_Plot"):
 				ax.legend(title=r"Di-$\tau$ Pair")
 			plt.savefig(hist_name_arr[0] + "-" + mass_str)
+			plt.close()
 		
 		p2 = TriggerStudies()
-		for trigger_name, trigger_bits in trigger_dict.items():
-			trigger_out = p2.process(events, trigger_bits)
+		for trigger_name, trigger_bit in trigger_dict.items():
+			trigger_out = p2.process(events, trigger_bit)
+			if (trigger_bit == 40):
+				trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
+				trigger_hist_dict_2d = trigger_AK8Jet_hist_dict_2d 
+			if (trigger_bit == 39):
+				trigger_hist_dict_1d = trigger_MTHTJet_hist_dict_1d  
+				trigger_hist_dict_2d = trigger_MTHTJet_hist_dict_2d 
+			
 			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
 				fig, ax = plt.subplots()
 				trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
@@ -501,6 +511,7 @@ if __name__ == "__main__":
 					print("Trigger")
 					plt.title(hist_name_arr[1] + " (" + trigger_name + ") , mass : " + mass_str[0] + " TeV", wrap=True)
 				plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
+				plt.close()
 				  
 			for var_name, hist_name_arr in trigger_hist_dict_2d.items():
 				fig, ax = plt.subplots()
@@ -511,6 +522,7 @@ if __name__ == "__main__":
 				else:
 					plt.title(hist_name_arr[1] + " (" +  trigger_name + "), mass : " + mass_str[0] + " TeV", wrap=True)
 				plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
+				plt.close()
 			
 	#Obtain background information
 	events = NanoEventsFactory.from_root(
@@ -522,9 +534,17 @@ if __name__ == "__main__":
 	
 	p2 = TriggerStudies()
 	
-	for trigger_name, trigger_bits in trigger_dict.items():
-		trigger_out = p2.process(events, trigger_bits, False)
-		for trigger_name, trigger_bits in trigger_dict.items():
+	for trigger_name, trigger_bit in trigger_dict.items():
+		for trigger_name, trigger_bit in trigger_dict.items():
+			trigger_out = p2.process(events, trigger_bit, False)
+			if (trigger_bit == 40):
+				trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
+				trigger_hist_dict_2d = trigger_AK8Jet_hist_dict_2d 
+			
+			if (trigger_bit == 39):
+				trigger_hist_dict_1d = trigger_MTHTJet_hist_dict_1d  
+				trigger_hist_dict_2d = trigger_MTHTJet_hist_dict_2d 
+			
 			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
 				fig, ax = plt.subplots()
 				trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
@@ -534,19 +554,16 @@ if __name__ == "__main__":
 				else:
 					plt.title(hist_name_arr[1] + " (" + trigger_name + r"), $ZZ \rightarrow 4l$", wrap=True)
 				plt.savefig(hist_name_arr[0] + "-ZZ4l-" + trigger_name)
+				plt.close()
 				  
 			for var_name, hist_name_arr in trigger_hist_dict_2d.items():
 				fig, ax = plt.subplots()
 				trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
-				#w,x,y = trigger_out["boosted_tau"][var_name].to_numpy
-				#mesh = ax.pcolormesh(x,y,w.T)	
-				#ax.set_xlabel(r"AK8Jet $p_T$ [GeV]")
-				#ax.set_ylabel(r"AK8Jet Dropped Soft Mass [GeV]")
 
 				if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
 					plt.title(hist_name_arr[1] + r" $ZZ \rightarrow 4l$", wrap=True)
 				else:
 					plt.title(hist_name_arr[1] + trigger_name + "), " + r"$ZZ \rightarrow 4l$", wrap=True)
 				plt.savefig(hist_name_arr[0] + "-ZZ4l-" + trigger_name)
+				plt.close()
 		
-
