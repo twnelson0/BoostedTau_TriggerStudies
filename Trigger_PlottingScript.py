@@ -132,23 +132,23 @@ class TriggerStudies(processor.ProcessorABC):
 					)		
 
 		#Histograms (MET and HT) (Trigger bit = 39)
-		HT_PreTrigg = hist.Hist.new.Reg(40, 0, 1500., label = "Jet HT [GeV]").Double()
-		HT_Trigg = hist.Hist.new.Reg(40, 0, 1500., label = "Jet HT [GeV]").Double()
-		MET_PreTrigg = hist.Hist.new.Reg(50, 0, 1500., name="MET", label="MET [GeV]").Double()
-		MET_Trigg = hist.Hist.new.Reg(50, 0, 1500., name="MET", label="MET [GeV]").Double()
+		HT_PreTrigg = hist.Hist.new.Reg(40, 0, 2000., label = "HT [GeV]").Double()
+		HT_Trigg = hist.Hist.new.Reg(40, 0, 2000., label = "HT [GeV]").Double()
+		MET_PreTrigg = hist.Hist.new.Reg(30, 0, 1000., name="MET", label="MET [GeV]").Double()
+		MET_Trigg = hist.Hist.new.Reg(30, 0, 1000., name="MET", label="MET [GeV]").Double()
 
 		#2D Histograms
 		Jet_PreTrigger = hist.Hist(
-			hist.axis.Regular(20, 0, 1500., name = "pfMET" , label = r"MET [GeV]"),
-			hist.axis.Regular(20, 0, 1500., name = "HT", label = r"Jet HT [GeV]")
+			hist.axis.Regular(20, 0, 1000., name = "pfMET" , label = r"MET [GeV]"),
+			hist.axis.Regular(20, 0, 2000., name = "HT", label = r"HT [GeV]")
 		)
 		Jet_Trigger = hist.Hist(
-			hist.axis.Regular(20, 0, 1500., name = "pfMET" , label = r"MET [GeV]"),
-			hist.axis.Regular(20, 0, 1500., name = "HT", label = r"Jet HT [GeV]")
+			hist.axis.Regular(20, 0, 1000., name = "pfMET" , label = r"MET [GeV]"),
+			hist.axis.Regular(20, 0, 2000., name = "HT", label = r"HT [GeV]")
 		)
 		eff_Jet = hist.Hist(
-			hist.axis.Regular(20, 0, 1500., name = "pfMET" , label = r"MET [GeV]"),
-			hist.axis.Regular(20, 0, 1500., name = "HT", label = r"Jet HT [GeV]")
+			hist.axis.Regular(20, 0, 1000., name = "pfMET" , label = r"MET [GeV]"),
+			hist.axis.Regular(20, 0, 2000., name = "HT", label = r"HT [GeV]")
 		)
 	
 
@@ -163,7 +163,6 @@ class TriggerStudies(processor.ProcessorABC):
 		AK8Jet = AK8Jet[(ak.sum(tau.charge,axis=1) == 0)] #Apply charge conservation cut to AK8Jets
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 
-		print(ak.num(tau) == 4)
 		AK8Jet = AK8Jet[ak.num(tau) == 4]
 		tau = tau[ak.num(tau) == 4] #4 tau events
 
@@ -188,6 +187,7 @@ class TriggerStudies(processor.ProcessorABC):
 
 		tau = tau[np.bitwise_and(tau.trigger,trigger_mask) == trigger_mask]
 		AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,trigger_mask) == trigger_mask]
+		Jet = Jet[np.bitwise_and(Jet.trigger,trigger_mask) == trigger_mask]
 		tau_plus = tau[tau.charge > 0]	
 		tau_minus = tau[tau.charge < 0]
 
@@ -234,6 +234,7 @@ class TriggerStudies(processor.ProcessorABC):
 					"AK8JetSoftMass_Trigg": AK8SoftMass_Trigg,
 					"AK8Jet_PreTrigg": AK8Jet_PreTrigger,
 					"AK8Jet_Trigg": AK8Jet_Trigger,
+					"AK8Jet_eff": eff_AK8Jet,
 				}
 			}
 		if (trigger_bit == 39):
@@ -245,6 +246,7 @@ class TriggerStudies(processor.ProcessorABC):
 					"HT_Trigg": HT_Trigg,
 					"Jet_PreTrigg": Jet_PreTrigger,
 					"Jet_Trigg": Jet_Trigger,
+					"Jet_eff": eff_Jet,
 				}
 			}
 
@@ -330,20 +332,7 @@ class TauPlotting(processor.ProcessorABC):
 			
 		#Apply cuts/selection
 		tau = tau[tau.pt > 30] #pT
-		#print("=====================Pre-Eta Cut=====================")
-		#for test in tau:
-		#	if (len(test.pt) > 4 and sum(test.charge) == 0):
-		#		print("Event should be counted?")
-		#		print(test.eta)
-		#		print(test.charge)
 		tau = tau[tau.eta < 2.3] #eta
-		#print("=====================Post-Eta Cut=====================")
-		#for test in tau:
-		#	if (len(test.pt) > 4 and sum(test.charge) != 0):
-		#		print("Event should be counted?")
-		#		print(test.eta)
-		#		print(test.charge)
-
 		
 		#Loose isolation
 		tau = tau[tau.iso1 >= 0.5]
@@ -351,11 +340,9 @@ class TauPlotting(processor.ProcessorABC):
 		
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		
-		print("Before 4 tau cut length is: %d" % len(tau))
+		#print("Before 4 tau cut length is: %d" % len(tau))
 		tau = tau[ak.num(tau) == 4] #4 tau events (unsure about this)	
-		print("After 4 tau cut length is: %d" % len(tau))
-		#for i in range(10):
-		#	print(tau[i].pt)
+		#print("After 4 tau cut length is: %d" % len(tau))
 		tau_plus = tau[tau.charge > 0]	
 		tau_minus = tau[tau.charge < 0]
 
@@ -363,24 +350,10 @@ class TauPlotting(processor.ProcessorABC):
 		tau_plus1, tau_plus2 = ak.unzip(ak.combinations(tau_plus,2))
 		tau_minus1, tau_minus2 = ak.unzip(ak.combinations(tau_minus,2))
 		
-		#Sanity check on how events are unpacked
-		#for tau1, tau2 in zip(tau_plus1, tau_plus2):
-		#	if (tau1.pt < tau2.pt):
-		#		print("Things don't work the way I think they do!!")
-		#for tau1, tau2 in zip(tau_minus1, tau_minus2):
-		#	if (tau1.pt < tau2.pt):
-		#		print("Things don't work the way I think they do!!")
-		
 		deltaR11 = deltaR(tau_plus1, tau_minus1)
 		deltaR12 = deltaR(tau_plus1, tau_minus2)
 		deltaR22 = deltaR(tau_plus2, tau_minus2)
 		deltaR21 = deltaR(tau_plus2, tau_minus1)
-	
-		#Old Pairing
-		#pairing_11 = (deltaR11 < deltaR12) & (deltaR11 < deltaR21) & (deltaR11 < deltaR22)
-		#pairing_12 = (deltaR12 < deltaR11) & (deltaR12 < deltaR21) & (deltaR12 < deltaR22)
-		#pairing_21 = (deltaR21 < deltaR11) & (deltaR21 < deltaR12) & (deltaR21 < deltaR22)
-		#pairing_22 = (deltaR22 < deltaR12) & (deltaR22 < deltaR21) & (deltaR22 < deltaR11)
 		
 		#Get leading, subleading and fourth leading taus
 		leading_tau = tau[:,0]
@@ -397,12 +370,6 @@ class TauPlotting(processor.ProcessorABC):
 		pt_all_hist.fill("Third-leading",thirdleading_tau.pt)
 		pt_all_hist.fill("Fourth-leading",fourthleading_tau.pt)
 		pt4_hist.fill(fourthleading_tau.pt)
-		
-		#Ditau mass plots (I think all my cuts are fine, maybe with the exception of the pairing indicies and the indifference of pT)
-		#dimass_all_hist.fill("Pair 1", ak.ravel(mass(tau_plus1[pairing_11], tau_minus1[pairing_11])))
-		#dimass_all_hist.fill("Pair 1", ak.ravel(mass(tau_plus2[pairing_21], tau_minus2[pairing_21])))
-		#dimass_all_hist.fill("Pair 2", ak.ravel(mass(tau_plus1[pairing_22], tau_minus2[pairing_22])))
-		#dimass_all_hist.fill("Pair 2", ak.ravel(mass(tau_plus2[pairing_12], tau_minus1[pairing_12])))
 		
 		#Ditau mass plots 
 		dimass_all_hist.fill("Leading pair", ak.ravel(mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))
@@ -454,7 +421,8 @@ if __name__ == "__main__":
 	}
 	
 	trigger_AK8Jet_hist_dict_2d = {
-		"AK8Jet_PreTrigg" : ["AK8Jet_PreTriggerHist_Plot", "AK8Jet 2D Histogram No Trigger"], "AK8Jet_Trigg" : ["AK8Jet_TriggerHist_Plot", "AK8Jet 2D Histogram Trigger"]
+		"AK8Jet_PreTrigg" : ["AK8Jet_PreTriggerHist_Plot", "AK8Jet 2D Histogram No Trigger"], "AK8Jet_Trigg" : ["AK8Jet_TriggerHist_Plot", "AK8Jet 2D Histogram Trigger"],
+		"AK8Jet_eff" : ["AK8Jet_Eff_Plot", "AK8Jet 2D Efficiency Histogram Trigger"]
 	}
 
 	trigger_MTHTJet_hist_dict_1d = {
@@ -463,7 +431,8 @@ if __name__ == "__main__":
 	}
 	
 	trigger_MTHTJet_hist_dict_2d = {
-		"Jet_PreTrigg" : ["Jet_PreTriggerHist_Plot", "MET and HT 2D Histogram No Trigger"], "Jet_Trigg" : ["Jet_TriggerHist_Plot", "MET and HT 2D Histogram Trigger"]
+		"Jet_PreTrigg" : ["Jet_PreTriggerHist_Plot", "MET and HT 2D Histogram No Trigger"], "Jet_Trigg" : ["Jet_TriggerHist_Plot", "MET and HT 2D Histogram Trigger"],
+		"Jet_eff" : ["Jet_Eff_Plot", "MET and HT Efficiency Histogram Trigger"]
 	}
 	
 	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": 39, "AK8PFJet400_TrimMass30": 40}
@@ -505,10 +474,8 @@ if __name__ == "__main__":
 				trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 
 				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
-					print("No Trigger")
 					plt.title(hist_name_arr[1] + " mass : " + mass_str[0] + " TeV", wrap=True)
 				else:
-					print("Trigger")
 					plt.title(hist_name_arr[1] + " (" + trigger_name + ") , mass : " + mass_str[0] + " TeV", wrap=True)
 				plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
 				plt.close()
