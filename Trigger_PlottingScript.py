@@ -91,6 +91,8 @@ class TriggerStudies(processor.ProcessorABC):
 			{
 				"AK8JetDropMass": events.AK8JetSoftDropMass,
 				"AK8JetPt": events.AK8JetPt,
+				"nMu": events.nMu,
+				"nEle": events.nEle,
 				"trigger": events.HLTJet,
 			},
 			with_name="AK8JetArray",
@@ -166,7 +168,10 @@ class TriggerStudies(processor.ProcessorABC):
 		AK8Jet = AK8Jet[ak.num(tau) == 4]
 		tau = tau[ak.num(tau) == 4] #4 tau events
 
-		if (trigger_bit == 40):	
+		if (trigger_bit == 40):
+			#Cut Z-->2mu and Z-->2e events
+			AK8Jet = AK8Jet[AK8Jet.nMu == 0]	
+			AK8Jet = AK8Jet[AK8Jet.nEle == 0]	
 			AK8Pt_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 			AK8Pt_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
 			AK8SoftMass_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
@@ -327,7 +332,6 @@ class TauPlotting(processor.ProcessorABC):
 			.StrCat(["Leading pair","Subleading pair"], name = "ditau_mass")
 			.Reg(50, 0, 200., name="ditau_mass_all", label=r"$m_{\tau\tau}$ [GeV]") 
             .Double()
-			#.Int64()
 		)
 			
 		#Apply cuts/selection
@@ -492,16 +496,20 @@ if __name__ == "__main__":
 				plt.close()
 			
 	#Obtain background information
-	events = NanoEventsFactory.from_root(
-		"~/Analysis/BoostedTau/TriggerEff/2018_Background/ZZ4l.root",
-		treepath="/4tau_tree",
-		schemaclass = BaseSchema,
-		metadata={"dataset": "boosted_tau"},
-	).events()
+	#background_array = ["ZZ4l",]
+	background_dict = {"ZZ4l" : r"$ZZ \rightarrow 4l$"}
+
+
+	for background_name, title in background_dict.items():
+		events = NanoEventsFactory.from_root(
+			"~/Analysis/BoostedTau/TriggerEff/2018_Background/" + background_name + ".root",
+			treepath="/4tau_tree",
+			schemaclass = BaseSchema,
+			metadata={"dataset": "boosted_tau"},
+		).events()
+		
+		p2 = TriggerStudies()
 	
-	p2 = TriggerStudies()
-	
-	for trigger_name, trigger_bit in trigger_dict.items():
 		for trigger_name, trigger_bit in trigger_dict.items():
 			trigger_out = p2.process(events, trigger_bit, False)
 			if (trigger_bit == 40):
@@ -515,22 +523,22 @@ if __name__ == "__main__":
 			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
 				fig, ax = plt.subplots()
 				trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
-
+	
 				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
-					plt.title(hist_name_arr[1] + r" $ZZ \rightarrow 4l$", wrap=True)
+					plt.title(hist_name_arr[1] + title, wrap=True)
 				else:
-					plt.title(hist_name_arr[1] + " (" + trigger_name + r"), $ZZ \rightarrow 4l$", wrap=True)
-				plt.savefig(hist_name_arr[0] + "-ZZ4l-" + trigger_name)
+					plt.title(hist_name_arr[1] + " (" + trigger_name + r"), " + title, wrap=True)
+				plt.savefig(hist_name_arr[0] + "-" + background_name + "-" + trigger_name)
 				plt.close()
 				  
 			for var_name, hist_name_arr in trigger_hist_dict_2d.items():
 				fig, ax = plt.subplots()
 				trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
-
+	
 				if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
-					plt.title(hist_name_arr[1] + r" $ZZ \rightarrow 4l$", wrap=True)
+					plt.title(hist_name_arr[1] + title, wrap=True)
 				else:
-					plt.title(hist_name_arr[1] + trigger_name + "), " + r"$ZZ \rightarrow 4l$", wrap=True)
-				plt.savefig(hist_name_arr[0] + "-ZZ4l-" + trigger_name)
+					plt.title(hist_name_arr[1] + trigger_name + "), " + title, wrap=True)
+				plt.savefig(hist_name_arr[0] + "-" + background_name + "-" + trigger_name)
 				plt.close()
 		
