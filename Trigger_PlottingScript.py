@@ -27,10 +27,12 @@ def bit_mask(in_bits):
 
 
 class TriggerStudies(processor.ProcessorABC):
-	def __init__(self):
-		pass
+	def __init__(self, trigger_bit, signal = True):
+		self.trigger_bit = trigger_bit
+		self.signal = signal
+		#pass
 	
-	def process(self, events, trigger_bit, signal = True):
+	def process(self, events):
 		dataset = events.metadata['dataset']
 		tau = ak.zip( 
 			{
@@ -70,9 +72,10 @@ class TriggerStudies(processor.ProcessorABC):
 			{
 				"nMu": events.nMu,
 				"E": events.muEn,
-				"px": events.muPt*np.cos(events.muPhi)
-				"py": events.muPt*np.sin(events.muPhi)
-				"px": events.muPt*np.sinh(events.muEta)
+				"px": events.muPt*np.cos(events.muPhi),
+				"py": events.muPt*np.sin(events.muPhi),
+				"px": events.muPt*np.sinh(events.muEta),
+				"charge": events.muCharge,
 				"trigger": events.HLTJet,
 			},
 			with_name="AK8JetArray",
@@ -83,9 +86,10 @@ class TriggerStudies(processor.ProcessorABC):
 			{
 				"nEle": events.nEle,
 				"E": events.eleEn,
-				"px": events.elePt*np.cos(events.elePhi)
-				"py": events.elePt*np.sin(events.elePhi)
-				"px": events.elePt*np.sinh(events.eleEta)
+				"px": events.elePt*np.cos(events.elePhi),
+				"py": events.elePt*np.sin(events.elePhi),
+				"px": events.elePt*np.sinh(events.eleEta),
+				"charge": events.eleCharge,
 				"trigger": events.HLTJet,
 			},
 			with_name="AK8JetArray",
@@ -147,7 +151,7 @@ class TriggerStudies(processor.ProcessorABC):
 		)
 	
 
-		trigger_mask = bit_mask([trigger_bit])		
+		trigger_mask = bit_mask([self.trigger_bit])		
 		tau = tau[tau.pt > 30] #pT
 		tau = tau[tau.eta < 2.3] #eta
 		
@@ -161,13 +165,13 @@ class TriggerStudies(processor.ProcessorABC):
 		Electron = Electron[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 
 		AK8Jet = AK8Jet[ak.num(tau) == 4]
-		Muon = AK8Jet[ak.num(tau) == 4]
-		Muon = AK8Jet[ak.num(tau) == 4]
+		Electron = Electron[ak.num(tau) == 4]
+		Muon = Muon[ak.num(tau) == 4]
 		tau = tau[ak.num(tau) == 4] #4 tau events
 
-		if (trigger_bit == 40):
+		if (self.trigger_bit == 40):
 			#Cut Z-->2mu and Z-->2e events
-			if (not(signal)):
+			if (not(self.signal)):
 				#print("%d Events"%len(ak.ravel(AK8Jet.nMu)))
 				AK8Jet = AK8Jet[AK8Jet.nMu == 0]	
 				#print("%d Events"%len(ak.ravel(AK8Jet.nMu)))
@@ -179,7 +183,7 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8SoftMass_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
 			AK8Pt_all.fill("No Trigger",ak.ravel(AK8Jet.AK8JetPt))
 		
-		if (trigger_bit == 39):
+		if (self.trigger_bit == 39):
 			#Apply Jet Cuts
 			Jet = Jet[Jet.eta <= 3]	
 			Jet = Jet[Jet.HT > 30]
@@ -207,7 +211,7 @@ class TriggerStudies(processor.ProcessorABC):
 		deltaR21 = deltaR(tau_plus2, tau_minus1)
 		
 		#Efficiency Histograms (How do I do these??)
-		if (trigger_bit == 40):	
+		if (self.trigger_bit == 40):	
 			AK8Pt_Trigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 			AK8SoftMass_Trigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
 			AK8Pt_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetPt))	
@@ -215,23 +219,23 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8SoftMass_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetDropMass))	
 			AK8SoftMass_Trigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
 	
-			print("Efficiency: %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
+			print("Efficiency (AK8Jet Trigger): %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
 			AK8Jet_PreTrigger.fill(AK8Pt_NoTrigg_Arr, AK8SoftMass_NoTrigg_Arr)
 			AK8Jet_Trigger.fill(AK8Pt_Trigg_Arr, AK8SoftMass_Trigg_Arr)
 			eff_AK8Jet = AK8Jet_Trigger/AK8Jet_PreTrigger
 		
-		if (trigger_bit == 39):
+		if (self.trigger_bit == 39):
 			HT_Trigg.fill(ak.ravel(Jet.HT))
 			HT_Trigg_Arr = ak.ravel(Jet.HT)
 			MET_Trigg.fill(ak.ravel(Jet.pfMET))
 			MET_Trigg_Arr = ak.ravel(Jet.pfMET)	
 			
-			print("Efficiency: %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
+			print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
 			Jet_PreTrigger.fill(MET_NoTrigg_Arr, HT_NoTrigg_Arr)
 			Jet_Trigger.fill(MET_Trigg_Arr, HT_Trigg_Arr)
 			eff_Jet = Jet_Trigger/Jet_PreTrigger
 		
-		if (trigger_bit == 40):
+		if (self.trigger_bit == 40):
 			return{
 				 dataset: {
 					"AK8JetPt_PreTrigg": AK8Pt_PreTrigg,
@@ -243,7 +247,7 @@ class TriggerStudies(processor.ProcessorABC):
 					"AK8Jet_eff": eff_AK8Jet,
 				}
 			}
-		if (trigger_bit == 39):
+		if (self.trigger_bit == 39):
 			return{
 				 dataset: {
 					"MET_PreTrigg": MET_PreTrigg,
@@ -408,8 +412,8 @@ class TauPlotting(processor.ProcessorABC):
 
 
 if __name__ == "__main__":
-	#mass_str_arr = ["1000","2000","3000"]
-	mass_str_arr = ["2000"]
+	mass_str_arr = ["1000","2000","3000"]
+	#mass_str_arr = ["2000"]
 	trigger_bit_list = [40]
 	#trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": [39], "AK8PFJet400_TrimMass30": [40]}
 
@@ -454,6 +458,7 @@ if __name__ == "__main__":
 		).events()
 		p = TauPlotting()
 		out = p.process(events)
+		#Tau plotting
 		for var_name, hist_name_arr in tau_hist_dict.items():
 			fig, ax = plt.subplots()
 			out["boosted_tau"][var_name].plot1d(ax=ax)
@@ -462,10 +467,12 @@ if __name__ == "__main__":
 				ax.legend(title=r"Di-$\tau$ Pair")
 			plt.savefig(hist_name_arr[0] + "-" + mass_str)
 			plt.close()
-		
-		p2 = TriggerStudies()
+
+		#Trigger Plotting
+		print("Mass: " + mass_str[0] + "." + mass_str[1] + " TeV")
 		for trigger_name, trigger_bit in trigger_dict.items():
-			trigger_out = p2.process(events, trigger_bit)
+			p2 = TriggerStudies(trigger_bit)
+			trigger_out = p2.process(events)
 			if (trigger_bit == 40):
 				trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
 				trigger_hist_dict_2d = trigger_AK8Jet_hist_dict_2d 
@@ -497,8 +504,14 @@ if __name__ == "__main__":
 			
 	#Obtain background information
 	#background_array = ["ZZ4l",]
-	background_dict = {"ZZ4l" : r"$ZZ \rightarrow 4l$"}
+	file_base = "~/Analysis/BoostedTau/TriggerEff/2018_Background/"
+	background_dict = {"ZZ4l" : r"$ZZ \rightarrow 4l$", "top": "Top Background"}
+	file_dict = {"ZZ4l": [file_base + "ZZ4l.root"], "top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
 
+	iterative_runner = processor.Runner(
+		executor = processor.IterativeExecutor(compression=None),
+		schema=BaseSchema
+	)
 
 	for background_name, title in background_dict.items():
 		events = NanoEventsFactory.from_root(
@@ -508,10 +521,12 @@ if __name__ == "__main__":
 			metadata={"dataset": "boosted_tau"},
 		).events()
 		
-		p2 = TriggerStudies()
-	
+		#p2 = iterative_runner(file_dict[background_name], treename="4tau_tree",processor_instance=TriggerStudies())
+		#p2 = TriggerStudies()
+		print("Background: " + background_name)	
 		for trigger_name, trigger_bit in trigger_dict.items():
-			trigger_out = p2.process(events, trigger_bit, False)
+			#trigger_out = p2.process(events, trigger_bit, False)
+			trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, False)) 
 			if (trigger_bit == 40):
 				trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
 				trigger_hist_dict_2d = trigger_AK8Jet_hist_dict_2d 
@@ -522,7 +537,7 @@ if __name__ == "__main__":
 			
 			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
 				fig, ax = plt.subplots()
-				trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
+				trigger_out["boosted_tau"][background_name][var_name].plot1d(ax=ax)
 	
 				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
 					plt.title(hist_name_arr[1] + title, wrap=True)
@@ -533,7 +548,7 @@ if __name__ == "__main__":
 				  
 			for var_name, hist_name_arr in trigger_hist_dict_2d.items():
 				fig, ax = plt.subplots()
-				trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
+				trigger_out["boosted_tau"][background_name][var_name].plot2d(ax=ax)
 	
 				if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
 					plt.title(hist_name_arr[1] + title, wrap=True)
