@@ -44,7 +44,6 @@ class TriggerStudies(processor.ProcessorABC):
 				"mass": events.boostedTauMass,
 				"eta": events.boostedTauEta,
 				"phi": events.boostedTauPhi,
-				"leadingIndx": events.leadtauIndex,
 				"nBoostedTau": events.nBoostedTau,
 				"charge": events.boostedTauCharge,
 				"iso1": events.boostedTauByIsolationMVArun2v1DBoldDMwLTrawNew,
@@ -169,13 +168,24 @@ class TriggerStudies(processor.ProcessorABC):
 		Muon = Muon[ak.num(tau) == 4]
 		tau = tau[ak.num(tau) == 4] #4 tau events
 
+		#Obtain electron and muon pairings
+		
+
 		if (self.trigger_bit == 40):
 			#Cut Z-->2mu and Z-->2e events
 			if (not(self.signal)):
+				print("%d Events"%len(ak.ravel(AK8Jet.AK8JetPt)))
+				for x,y in zip(ak.ravel(Muon.nMu), ak.ravel(Electron.nEle)):
+					if (x > 0):
+						print("%d muons"%x)
+					if (y > 0):
+						print("%d electrons"%y)
+					print("%d leptons"%(x + y))
+				
+					
+				#AK8Jet = AK8Jet[AK8Jet.nMu == 0]	
 				#print("%d Events"%len(ak.ravel(AK8Jet.nMu)))
-				AK8Jet = AK8Jet[AK8Jet.nMu == 0]	
-				#print("%d Events"%len(ak.ravel(AK8Jet.nMu)))
-				AK8Jet = AK8Jet[AK8Jet.nEle == 0]	
+				#AK8Jet = AK8Jet[AK8Jet.nEle == 0]	
 				#print("%d Events"%len(ak.ravel(AK8Jet.nMu)))
 			AK8Pt_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 			AK8Pt_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
@@ -506,7 +516,8 @@ if __name__ == "__main__":
 	#background_array = ["ZZ4l",]
 	file_base = "~/Analysis/BoostedTau/TriggerEff/2018_Background/"
 	background_dict = {"ZZ4l" : r"$ZZ \rightarrow 4l$", "top": "Top Background"}
-	file_dict = {"ZZ4l": [file_base + "ZZ4l.root"], "top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
+	#file_dict = {"ZZ4l": [file_base + "ZZ4l.root"], "top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
+	file_dict = {"top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
 
 	iterative_runner = processor.Runner(
 		executor = processor.IterativeExecutor(compression=None),
@@ -514,19 +525,27 @@ if __name__ == "__main__":
 	)
 
 	for background_name, title in background_dict.items():
-		events = NanoEventsFactory.from_root(
-			"~/Analysis/BoostedTau/TriggerEff/2018_Background/" + background_name + ".root",
-			treepath="/4tau_tree",
-			schemaclass = BaseSchema,
-			metadata={"dataset": "boosted_tau"},
-		).events()
+		if (background_name == "ZZ4l"):
+			events = NanoEventsFactory.from_root(
+				"~/Analysis/BoostedTau/TriggerEff/2018_Background/" + background_name + ".root",
+				treepath="/4tau_tree",
+				schemaclass = BaseSchema,
+				metadata={"dataset": "boosted_tau"},
+			).events()
+
 		
 		#p2 = iterative_runner(file_dict[background_name], treename="4tau_tree",processor_instance=TriggerStudies())
 		#p2 = TriggerStudies()
 		print("Background: " + background_name)	
 		for trigger_name, trigger_bit in trigger_dict.items():
-			#trigger_out = p2.process(events, trigger_bit, False)
-			trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, False)) 
+			if (background_name == "top" and trigger_bit == 40):
+				continue
+			if (background_name == "ZZ4l"):
+				p2 = TriggerStudies(trigger_bit, False)
+				trigger_out = p2.process(events)
+			else:
+				trigger_out = iterative_runner(file_dict, treename="mutau_tree",processor_instance=TriggerStudies(trigger_bit, False)) 
+			
 			if (trigger_bit == 40):
 				trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
 				trigger_hist_dict_2d = trigger_AK8Jet_hist_dict_2d 
@@ -537,7 +556,11 @@ if __name__ == "__main__":
 			
 			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
 				fig, ax = plt.subplots()
-				trigger_out["boosted_tau"][background_name][var_name].plot1d(ax=ax)
+				if (background_name == "ZZ4l"):
+					trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
+				else:
+					#trigger_out[background_name]["boosted_tau"][var_name].plot1d(ax=ax)
+					trigger_out[background_name][var_name].plot1d(ax=ax)
 	
 				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
 					plt.title(hist_name_arr[1] + title, wrap=True)
@@ -548,7 +571,11 @@ if __name__ == "__main__":
 				  
 			for var_name, hist_name_arr in trigger_hist_dict_2d.items():
 				fig, ax = plt.subplots()
-				trigger_out["boosted_tau"][background_name][var_name].plot2d(ax=ax)
+				if (background_name == "ZZ4l"):
+					trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
+				else:
+					#trigger_out[background_name]["boosted_tau"][var_name].plot2d(ax=ax)
+					trigger_out[background_name][var_name].plot2d(ax=ax)
 	
 				if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
 					plt.title(hist_name_arr[1] + title, wrap=True)
