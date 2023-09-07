@@ -175,12 +175,12 @@ class TriggerStudies(processor.ProcessorABC):
 			#Cut Z-->2mu and Z-->2e events
 			if (not(self.signal)):
 				print("%d Events"%len(ak.ravel(AK8Jet.AK8JetPt)))
-				for x,y in zip(ak.ravel(Muon.nMu), ak.ravel(Electron.nEle)):
-					if (x > 0):
-						print("%d muons"%x)
-					if (y > 0):
-						print("%d electrons"%y)
-					print("%d leptons"%(x + y))
+				#for x,y in zip(ak.ravel(Muon.nMu), ak.ravel(Electron.nEle)):
+				#	if (x > 0):
+				#		print("%d muons"%x)
+				#	if (y > 0):
+				#		print("%d electrons"%y)
+				#	print("%d leptons"%(x + y))
 				
 					
 				#AK8Jet = AK8Jet[AK8Jet.nMu == 0]	
@@ -228,6 +228,8 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8Pt_Trigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
 			AK8SoftMass_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetDropMass))	
 			AK8SoftMass_Trigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
+			pre_triggernum = ak.num(AK8Pt_NoTrigg_Arr,axis=0)
+			post_triggernum = ak.num(AK8Pt_Trigg_Arr,axis=0)
 	
 			print("Efficiency (AK8Jet Trigger): %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
 			AK8Jet_PreTrigger.fill(AK8Pt_NoTrigg_Arr, AK8SoftMass_NoTrigg_Arr)
@@ -238,7 +240,9 @@ class TriggerStudies(processor.ProcessorABC):
 			HT_Trigg.fill(ak.ravel(Jet.HT))
 			HT_Trigg_Arr = ak.ravel(Jet.HT)
 			MET_Trigg.fill(ak.ravel(Jet.pfMET))
-			MET_Trigg_Arr = ak.ravel(Jet.pfMET)	
+			MET_Trigg_Arr = ak.ravel(Jet.pfMET)
+			pre_triggernum = ak.num(MET_Trigg_Arr,axis=0)
+			post_triggernum = ak.num(MET_NoTrigg_Arr,axis=0)	
 			
 			print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
 			Jet_PreTrigger.fill(MET_NoTrigg_Arr, HT_NoTrigg_Arr)
@@ -255,6 +259,8 @@ class TriggerStudies(processor.ProcessorABC):
 					"AK8Jet_PreTrigg": AK8Jet_PreTrigger,
 					"AK8Jet_Trigg": AK8Jet_Trigger,
 					"AK8Jet_eff": eff_AK8Jet,
+					"pre_trigger_num": pre_triggernum, 
+					"post_trigger_num": post_triggernum 
 				}
 			}
 		if (self.trigger_bit == 39):
@@ -267,6 +273,8 @@ class TriggerStudies(processor.ProcessorABC):
 					"Jet_PreTrigg": Jet_PreTrigger,
 					"Jet_Trigg": Jet_Trigger,
 					"Jet_eff": eff_Jet,
+					"pre_trigger_num": pre_triggernum,
+					"post_trigger_num": post_triggernum 
 				}
 			}
 
@@ -532,10 +540,7 @@ if __name__ == "__main__":
 				schemaclass = BaseSchema,
 				metadata={"dataset": "boosted_tau"},
 			).events()
-
 		
-		#p2 = iterative_runner(file_dict[background_name], treename="4tau_tree",processor_instance=TriggerStudies())
-		#p2 = TriggerStudies()
 		print("Background: " + background_name)	
 		for trigger_name, trigger_bit in trigger_dict.items():
 			if (background_name == "top" and trigger_bit == 40):
@@ -561,12 +566,14 @@ if __name__ == "__main__":
 				else:
 					#trigger_out[background_name]["boosted_tau"][var_name].plot1d(ax=ax)
 					trigger_out[background_name][var_name].plot1d(ax=ax)
+					print("Efficiency = %f"%(trigger_out[background_name]["pre_trigger_num"]/trigger_out[background_name]["post_trigger_num"]))
 	
 				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
 					plt.title(hist_name_arr[1] + title, wrap=True)
 				else:
 					plt.title(hist_name_arr[1] + " (" + trigger_name + r"), " + title, wrap=True)
 				plt.savefig(hist_name_arr[0] + "-" + background_name + "-" + trigger_name)
+				print(background_name)
 				plt.close()
 				  
 			for var_name, hist_name_arr in trigger_hist_dict_2d.items():
