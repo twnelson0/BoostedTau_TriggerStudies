@@ -321,7 +321,7 @@ if __name__ == "__main__":
 	file_dict = {"1 TeV": [signal_base + "1000.root"], "2 TeV": [signal_base + "2000.root"], "ZZ4l": [background_base + "ZZ4l.root"]}
 	AK8Pt_NoTrigger_all = hist.Hist.new.StrCat(["1 TeV","2 TeV", "ZZ4l"], name = "AK8Pt_hist").Reg(40,0,1100, name="AK8Pt", label = "AK8 Jet r$p_T$ [GeV]").Double()	
 	AK8SoftMass_NoTrigger_all = hist.Hist.new.StrCat(["1 TeV","2 TeV", "ZZ4l"], name = "AK8SoftMass_hist").Reg(40,0,300, name="AK8SoftMass", label = "AK8 Jet Soft Drop Mass [GeV]").Double()
-	legend_arr = ["1 TeV","2 TeV", "ZZ4l"]	
+
 	iterative_runner = processor.Runner(
 		executor = processor.IterativeExecutor(compression=None),
 		schema=BaseSchema
@@ -334,28 +334,52 @@ if __name__ == "__main__":
 	#background_dict = {"ZZ4l" : r"$ZZ \rightarrow 4l$", "top": "Top Background"}
 	#file_dict = {"ZZ4l": [file_base + "ZZ4l.root"], "top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
 	#file_dict = {"top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
-	trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(40, False)) 
+
 	
 	#for x in legend_arr:
 	#	print(trigger_out[x]["AK8Pt_NoTrigg_Arr"])
 			
+	title_arr = ["rAK8 $p_T$ (Before Trigger)",r"AK8 $p_T$ (After Trigger)",r"AK8 Soft Mass (Before Trigger)",r"AK8 Soft Mass (After Trigger)",
+				r"MET (Before Trigger)",r"MET (After Trigger)",r"HT (Before Trigger)",r"HT (After Trigger)"]
+	plot_arr = ["AK8JetPt_PreTrigg","AK8JetPt_Trigg","AK8JetSoftMass_PreTrigg","AK8JetSoftMass_Trigg","MET_PreTrigg","MET_Trigg","HT_PreTrigg","HT_Trigg"]
+	sample_arr = ["1 TeV","2 TeV", "ZZ4l"]	
+	trigger_arr = [39,40]
 	
-	fig, ax = plt.subplots()
-
+	#for plot,title in zip(plot_arr, title_arr):
+	for trigger in trigger_arr:
+		trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger, False)) 
+		for i in range(8):
+			fig, ax = plt.subplots()
+			if (np.floor(i/4) == trigger % 2):
+				#Construct dictionary
+				trigger_dict = {}
+				for sample in sample_arr:
+					trigger_dict[sample] = trigger_out[sample][plot_arr[i]]*(1/trigger_out[sample][plot_arr[i]].sum())
+		
+				stack = hist.Stack.from_dict(trigger_dict)
+				stack.plot()
+				plt.title(title_arr[i])
+				plt.legend()
+				plt.savefig(plot_arr[i] + "_Comp_Plot")
+				plt.close()
+			
+	
+	#fig, ax = plt.subplots()
+	#trigger_dict = {"1 TeV": trigger_out["1 TeV"]["AK8JetPt_PreTrigg"], "2 TeV": trigger_out["2 TeV"]["AK8JetPt_PreTrigg"], "ZZ4l": trigger_out["ZZ4l"]["AK8JetPt_PreTrigg"]}
 	#AK8Pt Plots
-	stack = hist.Stack.from_dict({"1 TeV": trigger_out["1 TeV"]["AK8JetPt_PreTrigg"], "2 TeV": trigger_out["2 TeV"]["AK8JetPt_PreTrigg"], "ZZ4l": trigger_out["ZZ4l"]["AK8JetPt_PreTrigg"]})
-	stack.plot()
-	plt.title(r"AK8 $p_T$ (Before Trigger)")
-	plt.legend()
-	plt.savefig("AK8PT_Comp_PreTrigger")		
-	plt.close()
+	#stack = hist.Stack.from_dict(trigger_dict)
+	#stack.plot()
+	#plt.title(r"AK8 $p_T$ (Before Trigger)")
+	#plt.legend()
+	#plt.savefig("AK8PT_Comp_PreTrigger")		
+	#plt.close()
 	
-	stack = hist.Stack.from_dict({"1 TeV": trigger_out["1 TeV"]["AK8JetPt_Trigg"], "2 TeV": trigger_out["2 TeV"]["AK8JetPt_Trigg"], "ZZ4l": trigger_out["ZZ4l"]["AK8JetPt_Trigg"]})
-	stack.plot()
-	plt.title(r"AK8 $p_T$ (After Trigger)")
-	plt.legend()
-	plt.savefig("AK8PT_Comp_Trigger")		
-	plt.close()
+	#stack = hist.Stack.from_dict({"1 TeV": trigger_out["1 TeV"]["AK8JetPt_Trigg"], "2 TeV": trigger_out["2 TeV"]["AK8JetPt_Trigg"], "ZZ4l": trigger_out["ZZ4l"]["AK8JetPt_Trigg"]})
+	#stack.plot()
+	#plt.title(r"AK8 $p_T$ (After Trigger)")
+	#plt.legend()
+	#plt.savefig("AK8PT_Comp_Trigger")		
+	#plt.close()
 	
 	#AK8SoftMass
 		
