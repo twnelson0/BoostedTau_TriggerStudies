@@ -24,9 +24,11 @@ def bit_mask(in_bits):
 
 
 class TriggerStudies(processor.ProcessorABC):
-	def __init__(self, trigger_bit, signal = True):
+	def __init__(self, trigger_bit, trigger_cut = True, offline_cut = False, signal = True):
 		self.trigger_bit = trigger_bit
 		self.signal = signal
+		self.trigger_cut = trigger_cut
+		self.offline_cut = offline_cut
 		#pass
 	
 	def process(self, events):
@@ -171,6 +173,7 @@ class TriggerStudies(processor.ProcessorABC):
 			#Cut Z-->2mu and Z-->2e events
 			if (not(self.signal)):
 				print("%d Events"%len(ak.ravel(AK8Jet.AK8JetPt)))
+
 				#for x,y in zip(ak.ravel(Muon.nMu), ak.ravel(Electron.nEle)):
 				#	if (x > 0):
 				#		print("%d muons"%x)
@@ -215,6 +218,31 @@ class TriggerStudies(processor.ProcessorABC):
 		deltaR12 = deltaR(tau_plus1, tau_minus2)
 		deltaR22 = deltaR(tau_plus2, tau_minus2)
 		deltaR21 = deltaR(tau_plus2, tau_minus1)
+		
+		#Delta R selection
+		if (self.signal):
+			#print(ak.ravel(deltaR11 < deltaR12 and deltaR11 < deltaR21))
+			#Store count information (they're all the same)
+			counts = ak.num(deltaR11)
+			
+			deltaR11 = np.array(ak.flatten(deltaR11))
+			deltaR12 = np.array(ak.flatten(deltaR12))
+			deltaR21 = np.array(ak.flatten(deltaR21))
+			deltaR22 = np.array(ak.flatten(deltaR22))
+			
+			#print(deltaR11)
+			#print(deltaR12)
+			#print(deltaR21)
+
+			deltaRDoubletCut = ((deltaR11 < deltaR12).all() and (deltaR11 < deltaR21).all() and (deltaR11 < 0.8).all()) ^ ((deltaR12 < deltaR11).all() and (deltaR12 < deltaR22).all() and (deltaR12 < 0.8).all())
+			deltaRDoubletCut = ak.unflatten(ak.from_numpy(deltaRDoubletCut, counts))
+			print("Delta R Cut obtained")
+			tau = tau[deltaRDoubletCut] 
+			
+			#print(deltaR11)
+			#print(deltaR11 < deltaR12)
+			#print(deltaR11 < deltaR21)
+			#tau = tau[]
 		
 		#Efficiency Histograms (How do I do these??)
 		if (self.trigger_bit == 40):	
@@ -319,8 +347,6 @@ if __name__ == "__main__":
 	signal_base = "~/Analysis/BoostedTau/TriggerEff/2018_Samples/GluGluToRadionToHHTo4T_M-"
 	background_base = "~/Analysis/BoostedTau/TriggerEff/2018_Background/"
 	file_dict = {"1 TeV": [signal_base + "1000.root"], "2 TeV": [signal_base + "2000.root"], "ZZ4l": [background_base + "ZZ4l.root"]}
-	AK8Pt_NoTrigger_all = hist.Hist.new.StrCat(["1 TeV","2 TeV", "ZZ4l"], name = "AK8Pt_hist").Reg(40,0,1100, name="AK8Pt", label = "AK8 Jet r$p_T$ [GeV]").Double()	
-	AK8SoftMass_NoTrigger_all = hist.Hist.new.StrCat(["1 TeV","2 TeV", "ZZ4l"], name = "AK8SoftMass_hist").Reg(40,0,300, name="AK8SoftMass", label = "AK8 Jet Soft Drop Mass [GeV]").Double()
 
 	iterative_runner = processor.Runner(
 		executor = processor.IterativeExecutor(compression=None),
@@ -339,7 +365,7 @@ if __name__ == "__main__":
 	#for x in legend_arr:
 	#	print(trigger_out[x]["AK8Pt_NoTrigg_Arr"])
 			
-	title_arr = ["rAK8 $p_T$ (Before Trigger)",r"AK8 $p_T$ (After Trigger)",r"AK8 Soft Mass (Before Trigger)",r"AK8 Soft Mass (After Trigger)",
+	title_arr = [r"AK8 Jet $p_T$ (Before Trigger)",r"AK8 Jet $p_T$ (After Trigger)",r"AK8 Jet Soft Mass (Before Trigger)",r"AK8 Jet Soft Mass (After Trigger)",
 				r"MET (Before Trigger)",r"MET (After Trigger)",r"HT (Before Trigger)",r"HT (After Trigger)"]
 	plot_arr = ["AK8JetPt_PreTrigg","AK8JetPt_Trigg","AK8JetSoftMass_PreTrigg","AK8JetSoftMass_Trigg","MET_PreTrigg","MET_Trigg","HT_PreTrigg","HT_Trigg"]
 	sample_arr = ["1 TeV","2 TeV", "ZZ4l"]	
@@ -347,7 +373,7 @@ if __name__ == "__main__":
 	
 	#for plot,title in zip(plot_arr, title_arr):
 	for trigger in trigger_arr:
-		trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger, False)) 
+		trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger,signal = True)) 
 		for i in range(8):
 			fig, ax = plt.subplots()
 			if (np.floor(i/4) == trigger % 2):
