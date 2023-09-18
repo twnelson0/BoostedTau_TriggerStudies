@@ -230,12 +230,10 @@ class TriggerStudies(processor.ProcessorABC):
 			deltaR21 = np.array(ak.flatten(deltaR21))
 			deltaR22 = np.array(ak.flatten(deltaR22))
 			
-			#print(deltaR11)
-			#print(deltaR12)
-			#print(deltaR21)
-
-			deltaRDoubletCut = ((deltaR11 < deltaR12).all() and (deltaR11 < deltaR21).all() and (deltaR11 < 0.8).all()) ^ ((deltaR12 < deltaR11).all() and (deltaR12 < deltaR22).all() and (deltaR12 < 0.8).all())
-			deltaRDoubletCut = ak.unflatten(ak.from_numpy(deltaRDoubletCut, counts))
+			deltaRDoubletCut = ((deltaR11 < deltaR12) * (deltaR11 < deltaR21) * (deltaR11 < 0.8)) ^ ((deltaR12 < deltaR11) * (deltaR12 < deltaR22) * (deltaR12 < 0.8))
+			deltaRDoubletCut ^= (((deltaR21 < deltaR11) * (deltaR21 < deltaR22) * (deltaR21 < 0.8)) ^ ((deltaR22 < deltaR12) * (deltaR22 < deltaR21) * (deltaR22 < 0.8)))
+			#print(deltaRDoubletCut)
+			deltaRDoubletCut = ak.unflatten(ak.from_numpy(deltaRDoubletCut), counts)
 			print("Delta R Cut obtained")
 			tau = tau[deltaRDoubletCut] 
 			
@@ -352,15 +350,6 @@ if __name__ == "__main__":
 		executor = processor.IterativeExecutor(compression=None),
 		schema=BaseSchema
 	)
-
-
-	#Obtain background information
-	#background_array = ["ZZ4l",]
-	file_base = "~/Analysis/BoostedTau/TriggerEff/2018_Background/"
-	#background_dict = {"ZZ4l" : r"$ZZ \rightarrow 4l$", "top": "Top Background"}
-	#file_dict = {"ZZ4l": [file_base + "ZZ4l.root"], "top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
-	#file_dict = {"top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
-
 	
 	#for x in legend_arr:
 	#	print(trigger_out[x]["AK8Pt_NoTrigg_Arr"])
