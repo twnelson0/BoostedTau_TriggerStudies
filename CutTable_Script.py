@@ -213,7 +213,7 @@ class TriggerStudies(processor.ProcessorABC):
 		Electron = Electron[ak.num(tau) == 4]
 		Muon = Muon[ak.num(tau) == 4]
 		Jet = Jet[ak.num(tau) == 4]
-		print(len(tau[ak.num(tau) > 4]))
+		#print(len(tau[ak.num(tau) > 4]))
 		tau = tau[ak.num(tau) == 4] #4 tau events
 		
 		#Set up variables for offline cuts
@@ -227,35 +227,41 @@ class TriggerStudies(processor.ProcessorABC):
 		JetDown_MHT = Jet[Jet.PtTotUncDown > 30]
 		JetDown_MHT = JetDown_MHT[np.abs(JetDown_MHT.eta) < 5]
 		JetDown_MHT = JetDown_MHT[JetDown_MHT.PFLooseId > 0.5]
-		print(len(Jet_MHT))
-		print(len(Jet))
-		print(len(JetUp_MHT))
-		print(len(JetDown_MHT))
-		print(Jet.Pt)
-		print(ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=True))
+		#print(len(Jet_MHT))
+		#print(len(Jet))
+		#print(len(JetUp_MHT))
+		#print(len(JetDown_MHT))
+		#print(Jet.Pt)
+		#print(ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=True))
 		Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
 		Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
 		Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
 		print("Jet MHT Defined:")
-		print(Jet.MHT)
+		#print(Jet.MHT)
 
 		#HT
 		tau_jet = ak.cartesian({"tau": tau, "Jet_MHT": Jet_MHT},axis=1)
 		tau_jetUp = ak.cartesian({"tau": tau, "JetUp_MHT": JetUp_MHT},axis=1)
 		tau_jetDown = ak.cartesian({"tau": tau, "JetDown_MHT": JetDown_MHT},axis=1)
-		print("Tau x Jet Object:")
-		Jet_MHT["dR"] = deltaR(tau_jet["tau"],tau_jet["Jet_MHT"]) 
-		JetUp_MHT["dR"] = deltaR(tau_jetUp["tau"],tau_jetUp["JetUp_MHT"]) 
-		JetDown_MHT = deltaR(tau_jetDown["tau"],tau_jetDown["JetDown_MHT"]) 
-		print(R_Cut)
+		#print("Tau x Jet Object:")
+		#print(deltaR(tau_jet["tau"],tau_jet["Jet_MHT"]))
+		#print(len(deltaR(tau_jet["tau"],tau_jet["Jet_MHT"])))
+		#print(len(Jet_MHT))
+		Jet_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jet["tau"],tau_jet["Jet_MHT"]) >= 0.5,axis = 1, counts = 4), axis=2) #Clump jet and taus in structure
+		JetUp_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetUp["tau"],tau_jetUp["JetUp_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
+		JetDown_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetDown["tau"],tau_jetDown["JetDown_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
+		#print(R_Cut)
 		#print(len(R_Cut))
-		Jet_HT = Jet_MHT[Jet_MHT.dR >= 0.5] #Lepton cuts
-		JetUp_HT = JetUp_MHT[JetUp_MHT.dR >= 0.5]
-		JetDown_HT = JetDown_MHT[JetDown_MHT.dR >= 0.5]
-		print("Post HT len = %d"%len(Jet_HT))
+
+		#print("Len passing delta R Cut:"%len(Jet_MHT.dR >= 0.5))
+		#print("Len Not passing delta R Cut:"%len(Jet_MHT.dR >= 0.5))
+		Jet_HT = Jet_MHT[Jet_MHT.dR] #Lepton cuts
+		JetUp_HT = JetUp_MHT[JetUp_MHT.dR]
+		JetDown_HT = JetDown_MHT[JetDown_MHT.dR]
+		#print("Post HT len = %d"%len(Jet_HT))
 		Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
-		print("HT??")
-		print(Jet.HT)
+		#print("HT??")
+		#print(Jet.HT)
 		#print("R Len = %d"%len(R_Arr))
 
 		if (self.trigger_bit == 40):
@@ -270,9 +276,9 @@ class TriggerStudies(processor.ProcessorABC):
 			#Apply Jet Cuts
 			Jet = Jet[Jet.eta <= 3]	
 			Jet = Jet[Jet.HT > 30]
-			print(Jet.HT)
-			print("MHT Callback:")
-			print(Jet.MHT)
+			#print(Jet.HT)
+			#print("MHT Callback:")
+			#print(Jet.MHT)
 			
 			#Fill Histograms
 			HT_PreTrigg.fill(ak.ravel(Jet.HT))
@@ -286,39 +292,44 @@ class TriggerStudies(processor.ProcessorABC):
 			Jet = Jet[np.bitwise_and(Jet.trigger,trigger_mask) == trigger_mask]
 
 		if (self.offline_cut):
-			print("Offline Cut")
 			if (self.trigger_bit == 40):
-				tau = tau[AK8Jet.AK8JetPt > 400]
-				tau = tau[AK8Jet.AK8JetSoftMass > 30]
-				Jet = Jet[AK8Jet.AK8JetPt > 400]
-				Jet = Jet[AK8Jet.AK8JetPt > 400]
-				AK8Jet = AK8Jet[AK8Jet.AK8JetSoftMass > 30]
-				AK8Jet = AK8Jet[AK8Jet.AK8JetSoftMass > 30]
+				print("Offline Cut 40")
+				tau = tau[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
+				Jet = Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
+				AK8Jet = AK8Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
+				tau = tau[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+				Jet = Jet[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+				AK8Jet = AK8Jet[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+				print("Trigger Cuts applied to all")
 			if (self.trigger_bit == 39):
-				print("Offline Cut")
+				print("Offline Cut 39")
 				#print(Jet.HT)
 				#print(Jet.MHT)
-				tau = tau[ak.all(Jet.PFLooseId == True, axis = 1)]
+				tau = tau[ak.all(Jet.PFLooseId, axis = 1)]
+				AK8Jet = AK8Jet[ak.all(Jet.PFLooseId, axis = 1)]
+				Jet = Jet[ak.all(Jet.PFLooseId, axis = 1)]
 				print(len(tau))
 				tau = tau[ak.all(Jet.MHT > 100, axis = 1)]
+				AK8Jet = AK8Jet[ak.all(Jet.MHT > 100, axis = 1)]
+				Jet = Jet[ak.all(Jet.MHT > 100, axis = 1)]
 				print(len(tau))
 				tau = tau[ak.all(Jet.HT > 500, axis = 1)]
-				tau = tau[ak.all(Jet.pfMET > 100, axis = 1)]
-				AK8Jet = AK8Jet[ak.all(Jet.PFLooseId == True, axis = 1)]
-				AK8Jet = AK8Jet[ak.all(Jet.MHT > 100, axis = 1)]
 				AK8Jet = AK8Jet[ak.all(Jet.HT > 500, axis = 1)]
-				AK8Jet = AK8Jet[ak.all(Jet.pfMET > 100, axis = 1)]
-				Jet = Jet[ak.all(Jet.PFLooseId == True, axis = 1)]
-				Jet = Jet[ak.all(Jet.MHT > 100, axis = 1)]
 				Jet = Jet[ak.all(Jet.HT > 500, axis = 1)]
+				tau = tau[ak.all(Jet.pfMET > 100, axis = 1)]
+				AK8Jet = AK8Jet[ak.all(Jet.pfMET > 100, axis = 1)]
 				Jet = Jet[ak.all(Jet.pfMET > 100, axis = 1)]
+				print("Trigger Cuts applied to all")
 			
-		tau_plus = tau[tau.charge > 0]	
+		tau_plus = tau[tau.charge > 0]
+		#print(len(tau_plus))	
 		tau_minus = tau[tau.charge < 0]
+		#print(len(tau_minus))	
 
 		#Construct all possible valid ditau pairs
 		tau_plus1, tau_plus2 = ak.unzip(ak.combinations(tau_plus,2))
 		tau_minus1, tau_minus2 = ak.unzip(ak.combinations(tau_minus,2))
+		print(tau_plus1.eta)
 		
 		deltaR11 = deltaR(tau_plus1, tau_minus1)
 		deltaR12 = deltaR(tau_plus1, tau_minus2)
@@ -357,7 +368,8 @@ class TriggerStudies(processor.ProcessorABC):
 			post_triggernum = ak.num(MET_Trigg_Arr,axis=0)	
 			print("Number = %d"%post_triggernum)
 			
-			#print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
+			if (self.signal):	
+				print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
 			#eff_val_39 = (ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0))
 			Jet_PreTrigger.fill(MET_NoTrigg_Arr, HT_NoTrigg_Arr)
 			Jet_Trigger.fill(MET_Trigg_Arr, HT_Trigg_Arr)
