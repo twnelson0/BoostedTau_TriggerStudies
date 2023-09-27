@@ -247,6 +247,7 @@ class TriggerStudies(processor.ProcessorABC):
 		#print(deltaR(tau_jet["tau"],tau_jet["Jet_MHT"]))
 		#print(len(deltaR(tau_jet["tau"],tau_jet["Jet_MHT"])))
 		#print(len(Jet_MHT))
+		print(len(Jet_MHT))
 		Jet_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jet["tau"],tau_jet["Jet_MHT"]) >= 0.5,axis = 1, counts = 4), axis=2) #Clump jet and taus in structure
 		JetUp_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetUp["tau"],tau_jetUp["JetUp_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
 		JetDown_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetDown["tau"],tau_jetDown["JetDown_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
@@ -308,11 +309,11 @@ class TriggerStudies(processor.ProcessorABC):
 				tau = tau[ak.all(Jet.PFLooseId, axis = 1)]
 				AK8Jet = AK8Jet[ak.all(Jet.PFLooseId, axis = 1)]
 				Jet = Jet[ak.all(Jet.PFLooseId, axis = 1)]
-				print(len(tau))
+				#print(len(tau))
 				tau = tau[ak.all(Jet.MHT > 100, axis = 1)]
 				AK8Jet = AK8Jet[ak.all(Jet.MHT > 100, axis = 1)]
 				Jet = Jet[ak.all(Jet.MHT > 100, axis = 1)]
-				print(len(tau))
+				#print(len(tau))
 				tau = tau[ak.all(Jet.HT > 500, axis = 1)]
 				AK8Jet = AK8Jet[ak.all(Jet.HT > 500, axis = 1)]
 				Jet = Jet[ak.all(Jet.HT > 500, axis = 1)]
@@ -442,7 +443,9 @@ if __name__ == "__main__":
 	file_base = "~/Analysis/BoostedTau/TriggerEff/2018_Background/"
 	background_dict = {"ZZ4l" : r"$ZZ \rightarrow 4l$", "top": "Top Background"}
 	#file_dict = {"ZZ4l": [file_base + "ZZ4l.root"], "top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
-	file_dict = {"top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
+	#file_dict = {"top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
+	file_dict = {"top": [file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
+	#file_dict = {"top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tW.root"]}
 	
 	for i in range(3):
 		if (i == 0):
@@ -459,7 +462,7 @@ if __name__ == "__main__":
 			use_trigger = True
 			use_offline = True
 			table_title = "Trigger and Offline Cuts Efficiency Table"
-			table_file_name = "Trigger_cuts"
+			table_file_name = "Trigger_Cuts"
 	
 		#Signal
 		for mass_str in mass_str_arr:
@@ -477,39 +480,39 @@ if __name__ == "__main__":
 			for trigger_name, trigger_bit in trigger_dict.items():
 				p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, )
 				trigger_out = p2.process(events)
-				if (trigger_bit == 40):
-					trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
-					trigger_hist_dict_2d = trigger_AK8Jet_hist_dict_2d 
-				if (trigger_bit == 39):
-					trigger_hist_dict_1d = trigger_MTHTJet_hist_dict_1d  
-					trigger_hist_dict_2d = trigger_MTHTJet_hist_dict_2d 
-			
-				for var_name, hist_name_arr in trigger_hist_dict_1d.items():
-					fig, ax = plt.subplots()
-					trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
+			#	if (trigger_bit == 40):
+			#		trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
+			#		trigger_hist_dict_2d = trigger_AK8Jet_hist_dict_2d 
+			#	if (trigger_bit == 39):
+			#		trigger_hist_dict_1d = trigger_MTHTJet_hist_dict_1d  
+			#		trigger_hist_dict_2d = trigger_MTHTJet_hist_dict_2d 
+			#
+			#	for var_name, hist_name_arr in trigger_hist_dict_1d.items():
+			#		fig, ax = plt.subplots()
+			#		trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 
-					if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
-						plt.title(hist_name_arr[1] + " mass : " + mass_str[0] + " TeV", wrap=True)
-					else:
-						plt.title(hist_name_arr[1] + " (" + trigger_name + ") , mass : " + mass_str[0] + " TeV", wrap=True)
-					plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
-					plt.close()
-				  
-				for var_name, hist_name_arr in trigger_hist_dict_2d.items():
-					fig, ax = plt.subplots()
-					trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
+			#		if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
+			#			plt.title(hist_name_arr[1] + " mass : " + mass_str[0] + " TeV", wrap=True)
+			#		else:
+			#			plt.title(hist_name_arr[1] + " (" + trigger_name + ") , mass : " + mass_str[0] + " TeV", wrap=True)
+			#		plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
+			#		plt.close()
+			#	  
+			#	for var_name, hist_name_arr in trigger_hist_dict_2d.items():
+			#		fig, ax = plt.subplots()
+			#		trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
 
-					if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
-						plt.title(hist_name_arr[1] + " mass : " + mass_str[0] + " TeV", wrap=True)
-					else:
-						plt.title(hist_name_arr[1] + " (" +  trigger_name + "), mass : " + mass_str[0] + " TeV", wrap=True)
-					plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
-					plt.close()
+			#		if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
+			#			plt.title(hist_name_arr[1] + " mass : " + mass_str[0] + " TeV", wrap=True)
+			#		else:
+			#			plt.title(hist_name_arr[1] + " (" +  trigger_name + "), mass : " + mass_str[0] + " TeV", wrap=True)
+			#		plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
+			#		plt.close()
 				
-					if (trigger_bit == 39):
-						mass_eff_arr[0] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
-					if (trigger_bit == 40):
-						mass_eff_arr[1] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
+				if (trigger_bit == 39):
+					mass_eff_arr[0] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
+				if (trigger_bit == 40):
+					mass_eff_arr[1] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
 			
 				table_dict[title_dict[mass_str]] = mass_eff_arr #Update dictionary
 
@@ -519,8 +522,8 @@ if __name__ == "__main__":
 		)
 		#Background 
 		for background_name, title in background_dict.items():
-			if (background_name == "top"): #Skip top background for now because it's extremely broken
-				continue
+			#if (background_name == "top"): #Skip top background for now because it's extremely broken
+				#continue
 			if (background_name == "ZZ4l"):
 				events = NanoEventsFactory.from_root(
 					"~/Analysis/BoostedTau/TriggerEff/2018_Background/" + background_name + ".root",
@@ -549,7 +552,7 @@ if __name__ == "__main__":
 				for var_name, hist_name_arr in trigger_hist_dict_1d.items():
 					fig, ax = plt.subplots()
 					if (background_name == "ZZ4l"):
-						trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
+						#trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 						print("Efficiency = %f"%(trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]))
 						if (trigger_bit == 39):
 							eff_arr[0] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
@@ -557,40 +560,40 @@ if __name__ == "__main__":
 							eff_arr[1] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
 					else:
 						#trigger_out[background_name]["boosted_tau"][var_name].plot1d(ax=ax)
-						trigger_out[background_name][var_name].plot1d(ax=ax)
+						#trigger_out[background_name][var_name].plot1d(ax=ax)
 						print("Efficiency = %f"%(trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]))
 						if (trigger_bit == 39):
 							eff_arr[0] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
 						if (trigger_bit == 40):
 							eff_arr[1] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
 	
-					if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
-						plt.title(hist_name_arr[1] + title, wrap=True)
-					else:
-						plt.title(hist_name_arr[1] + " (" + trigger_name + r"), " + title, wrap=True)
-					plt.savefig(hist_name_arr[0] + "-" + background_name + "-" + trigger_name)
-					print(background_name)
-					plt.close()
+				#	if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
+				#		plt.title(hist_name_arr[1] + title, wrap=True)
+				#	else:
+				#		plt.title(hist_name_arr[1] + " (" + trigger_name + r"), " + title, wrap=True)
+				#	plt.savefig(hist_name_arr[0] + "-" + background_name + "-" + trigger_name)
+				#	print(background_name)
+				#	plt.close()
 				  
-				for var_name, hist_name_arr in trigger_hist_dict_2d.items():
-					fig, ax = plt.subplots()
-					if (background_name == "ZZ4l"):
-						trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
-					else:
-						#trigger_out[background_name]["boosted_tau"][var_name].plot2d(ax=ax)
-						trigger_out[background_name][var_name].plot2d(ax=ax)
+				#for var_name, hist_name_arr in trigger_hist_dict_2d.items():
+				#	fig, ax = plt.subplots()
+				#	if (background_name == "ZZ4l"):
+				#		trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
+				#	else:
+				#		#trigger_out[background_name]["boosted_tau"][var_name].plot2d(ax=ax)
+				#		trigger_out[background_name][var_name].plot2d(ax=ax)
 	
-					if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
-						plt.title(hist_name_arr[1] + title, wrap=True)
-					else:
-						plt.title(hist_name_arr[1] + trigger_name + "), " + title, wrap=True)
-					plt.savefig(hist_name_arr[0] + "-" + background_name + "-" + trigger_name)
-					plt.close()
+				#	if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
+				#		plt.title(hist_name_arr[1] + title, wrap=True)
+				#	else:
+				#		plt.title(hist_name_arr[1] + trigger_name + "), " + title, wrap=True)
+				#	plt.savefig(hist_name_arr[0] + "-" + background_name + "-" + trigger_name)
+				#	plt.close()
 		
 			table_dict[title_dict[background_name]] = eff_arr
 
 
-		#Set up table
+		#Set up efficiency table
 		DrawTable(table_title,table_file_name,table_dict)
 
 	

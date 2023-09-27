@@ -25,6 +25,13 @@ def bit_mask(in_bits):
 		mask += (1 << bit)
 	return mask
 
+def dilep_mass(leptons):
+	n_pair = np.floor(leptons.n/2)
+	lep_minus = leptons(leptons.charge < 0)
+	lep_plus = leptons(leptons.charge > 0)
+	
+	
+
 
 class TriggerStudies(processor.ProcessorABC):
 	def __init__(self, trigger_bit, signal = True):
@@ -60,6 +67,8 @@ class TriggerStudies(processor.ProcessorABC):
 				"AK8JetDropMass": events.AK8JetSoftDropMass,
 				"AK8JetPt": events.AK8JetPt,
 				"nMu": events.nMu,
+				"eta": events.AK8JetEta,
+				"phi": events.AK8JetPhi,
 				"nEle": events.nEle,
 				"trigger": events.HLTJet,
 			},
@@ -69,7 +78,7 @@ class TriggerStudies(processor.ProcessorABC):
 		
 		Muon = ak.zip(
 			{
-				"nMu": events.nMu,
+				"n": events.nMu,
 				"E": events.muEn,
 				"px": events.muPt*np.cos(events.muPhi),
 				"py": events.muPt*np.sin(events.muPhi),
@@ -83,7 +92,7 @@ class TriggerStudies(processor.ProcessorABC):
 		
 		Electron = ak.zip(
 			{
-				"nEle": events.nEle,
+				"n": events.nEle,
 				"E": events.eleEn,
 				"px": events.elePt*np.cos(events.elePhi),
 				"py": events.elePt*np.sin(events.elePhi),
@@ -172,16 +181,25 @@ class TriggerStudies(processor.ProcessorABC):
 		
 
 		if (self.trigger_bit == 40):
-			#Cut Z-->2mu and Z-->2e events
+			#Cut Z-->2mu and Z-->2e events with 85 GeV <= m <= 95 GeV 
 			if (not(self.signal)):
 				print("%d Events"%len(ak.ravel(AK8Jet.AK8JetPt)))
-				#for x,y in zip(ak.ravel(Muon.nMu), ak.ravel(Electron.nEle)):
-				#	if (x > 0):
-				#		print("%d muons"%x)
-				#	if (y > 0):
-				#		print("%d electrons"%y)
-				#	print("%d leptons"%(x + y))
+				#AK8JetRav = ak.ravel(AK8Jet)
+				#print(deltaR(AK8JetRav[0],AK8JetRav[1]))
+				e_minus = Electron[Electron.charge < 0]
+				e_plus = Electron[Electron.charge > 0]
+				mu_minus = Muon[Muon.charge < 0]
+				mu_plus = Muon[Muon.charge > 0]
 				
+				
+				
+				
+				#for x,y in zip(ak.ravel(Muon.nMu), ak.ravel(Electron.nEle)):
+				#	if (x == 0):
+				#		print("%d muons"%x)
+				#	if (y == 0):
+				#		print("%d electrons"%y)
+				#	#print("%d leptons"%(x + y))
 					
 				#AK8Jet = AK8Jet[AK8Jet.nMu == 0]	
 				#print("%d Events"%len(ak.ravel(AK8Jet.nMu)))
@@ -230,8 +248,9 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8SoftMass_Trigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
 			pre_triggernum = ak.num(AK8Pt_NoTrigg_Arr,axis=0)
 			post_triggernum = ak.num(AK8Pt_Trigg_Arr,axis=0)
-	
-			print("Efficiency (AK8Jet Trigger): %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
+            
+			if (self.signal):
+				print("Efficiency (AK8Jet Trigger): %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
 			AK8Jet_PreTrigger.fill(AK8Pt_NoTrigg_Arr, AK8SoftMass_NoTrigg_Arr)
 			AK8Jet_Trigger.fill(AK8Pt_Trigg_Arr, AK8SoftMass_Trigg_Arr)
 			eff_AK8Jet = AK8Jet_Trigger/AK8Jet_PreTrigger
@@ -241,8 +260,8 @@ class TriggerStudies(processor.ProcessorABC):
 			HT_Trigg_Arr = ak.ravel(Jet.HT)
 			MET_Trigg.fill(ak.ravel(Jet.pfMET))
 			MET_Trigg_Arr = ak.ravel(Jet.pfMET)
-			pre_triggernum = ak.num(MET_Trigg_Arr,axis=0)
-			post_triggernum = ak.num(MET_NoTrigg_Arr,axis=0)	
+			pre_triggernum = ak.num(MET_NoTrigg_Arr,axis=0)
+			post_triggernum = ak.num(MET_Trigg_Arr,axis=0)	
 			
 			print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
 			Jet_PreTrigger.fill(MET_NoTrigg_Arr, HT_NoTrigg_Arr)
@@ -322,7 +341,7 @@ class TauPlotting(processor.ProcessorABC):
 			hist.Hist.new
 			.StrCat(["Leading","Subleading","Third-leading","Fourth-leading"], name = "tau_pt")
             .Reg(50, 0, 1500., name="p_T_all", label="$p_{T}$ [GeV]") 
-            .Int64()
+            .Double()
 		)
 		eta_hist = (
 			hist.Hist.new
@@ -380,7 +399,12 @@ class TauPlotting(processor.ProcessorABC):
 		deltaR12 = deltaR(tau_plus1, tau_minus2)
 		deltaR22 = deltaR(tau_plus2, tau_minus2)
 		deltaR21 = deltaR(tau_plus2, tau_minus1)
-		
+
+		#print(deltaR11 < 0.8)
+		#print((deltaR11 < deltaR12) and (deltaR11 < deltaR21) and deltaR11 < 0.8)
+		print("Delta R11 length = %d"%len(deltaR11))
+		print("tau array length = %d"%len(tau))
+
 		#Get leading, subleading and fourth leading taus
 		leading_tau = tau[:,0]
 		subleading_tau = tau[:,1]
@@ -395,6 +419,7 @@ class TauPlotting(processor.ProcessorABC):
 		pt_all_hist.fill("Subleading",subleading_tau.pt)
 		pt_all_hist.fill("Third-leading",thirdleading_tau.pt)
 		pt_all_hist.fill("Fourth-leading",fourthleading_tau.pt)
+		pt_all_hist *= (1/pt_all_hist.sum())
 		pt4_hist.fill(fourthleading_tau.pt)
 		
 		#Ditau mass plots 
@@ -483,6 +508,8 @@ if __name__ == "__main__":
 			plt.title(hist_name_arr[1], wrap=True)
 			if (hist_name_arr[0] == "AllDitauMass_Plot"):
 				ax.legend(title=r"Di-$\tau$ Pair")
+			if (hist_name_arr[0] == "AllPt_Plot"):
+				ax.legend(title=r"$\tau$")
 			plt.savefig(hist_name_arr[0] + "-" + mass_str)
 			plt.close()
 
@@ -543,8 +570,8 @@ if __name__ == "__main__":
 		
 		print("Background: " + background_name)	
 		for trigger_name, trigger_bit in trigger_dict.items():
-			if (background_name == "top" and trigger_bit == 40):
-				continue
+			#if (background_name == "top" and trigger_bit == 40):
+			#	continue
 			if (background_name == "ZZ4l"):
 				p2 = TriggerStudies(trigger_bit, False)
 				trigger_out = p2.process(events)
@@ -563,10 +590,11 @@ if __name__ == "__main__":
 				fig, ax = plt.subplots()
 				if (background_name == "ZZ4l"):
 					trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
+					print("Efficiency = %f"%(trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]))
 				else:
 					#trigger_out[background_name]["boosted_tau"][var_name].plot1d(ax=ax)
 					trigger_out[background_name][var_name].plot1d(ax=ax)
-					print("Efficiency = %f"%(trigger_out[background_name]["pre_trigger_num"]/trigger_out[background_name]["post_trigger_num"]))
+					print("Efficiency = %f"%(trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]))
 	
 				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
 					plt.title(hist_name_arr[1] + title, wrap=True)
