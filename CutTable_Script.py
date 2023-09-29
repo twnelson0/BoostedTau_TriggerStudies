@@ -20,7 +20,24 @@ def mass(part1,part2):
 	#MHT_Val = 0
 	
 	#for jet, up, down in zip(jet_evnt, jet_up_evnt, jet_down_evnt):
-		#MHT_Val += 
+		#MHT_Val +=
+
+#dr Selection function
+def dR_selection(event_collection):
+	out = []
+	for taus in event_collection:
+		for tau_i in taus:
+			innr_arr = np.array([])
+			for tau_j in taus:
+				if (tau_i.charge == tau_j.charge): #Only consider charge conserving pairs
+					continue
+				innr_arr = np.append(innr_arr,deltaR(tau_i,tau_j) < 0.8)
+			out.append(innr_arr)
+	
+	return np.asarray(out) 
+
+dR_selection_vec = np.vectorize(dR_selection)
+
 
 def bit_mask(in_bits):
 	mask = 0
@@ -51,7 +68,7 @@ def DrawTable(table_title, table_name, table_dict):
 	
 	#Fill table
 	for sample, eff_arr in table_dict.items():
-		file.write(sample + " & " + str(eff_arr[0]) + " & " + str(eff_arr[1]) + "\\\\")
+		file.write(sample + " & " + "%.3f"%str(eff_arr[0]) + " & " + "%.3f"%str(eff_arr[1]) + "\\\\")
 		file.write("\n")
 	file.write("\\hline \n")
 	file.write("\\end{tabular}")
@@ -196,17 +213,36 @@ class TriggerStudies(processor.ProcessorABC):
 
 		trigger_mask = bit_mask([self.trigger_bit])		
 		tau = tau[tau.pt > 30] #pT
+		print("Taus after pt Cut: %d"%len(ak.ravel(tau.pt)))
 		tau = tau[tau.eta < 2.3] #eta
+		print("Taus after eta cut: %d"%len(ak.ravel(tau.pt)))
 		
 		#Loose isolation
 		tau = tau[tau.iso1 >= 0.5]
 		tau = tau[tau.iso2 >= 0.5]		
+		print("Taus after iso cut: %d"%len(ak.ravel(tau.pt)))
+		
+		#Delta R Selection (Current)
+		tau["dRCut"] = dR_selection(tau)
+		tau = tau[ak.all(tau.dRCut) == False]
+	
+		#Delta R Selection (Old)
+		#print(len(tau[ak.num(tau) < 4]))
+		#print(len(tau[ak.num(tau) >= 4]))
+		#tau_pairs = ak.combinations(tau,2,axis = 1) #Create array of all possible pairs
+		#print(tau_pairs)
+		#print("Tau pair element:")
+		#print(tau_pairs[0])
+		#print(tau_pairs[0][0]["0"])
+		#print(tau_pairs[0][0]["1"])
+		#print(tau_pairs[0][0]["2"])
 		
 		AK8Jet = AK8Jet[(ak.sum(tau.charge,axis=1) == 0)] #Apply charge conservation cut to AK8Jets
 		Muon = Muon[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		Electron = Electron[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		Jet = Jet[(ak.sum(tau.charge,axis=1) == 0)]
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
+		print("Taus after Charge Conservation cut: %d"%len(tau.pt))
 
 
 		AK8Jet = AK8Jet[ak.num(tau) == 4]
@@ -215,6 +251,7 @@ class TriggerStudies(processor.ProcessorABC):
 		Jet = Jet[ak.num(tau) == 4]
 		#print(len(tau[ak.num(tau) > 4]))
 		tau = tau[ak.num(tau) == 4] #4 tau events
+		print("Taus after 4 tau cut: %d"%len(tau.pt))
 		
 		#Set up variables for offline cuts
 		#MHT
