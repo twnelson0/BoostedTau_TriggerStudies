@@ -180,7 +180,7 @@ class TriggerStudies(processor.ProcessorABC):
 		AK8Pt_Trigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
 		AK8SoftMass_PreTrigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()
 		AK8SoftMass_Trigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()		
-		CutFlow_Table = hist.Hist.new.Reg(8,0,7, name = "CutFlow", label = "Cut").Int64()
+		CutFlow_Table = hist.Hist.new.Reg(9,0,8, name = "CutFlow", label = "Cut").Int64()
 		CutFlow_Table.fill(0*np.ones([len(ak.ravel(tau.pt))]))
 		
 		#2D Histograms
@@ -225,14 +225,49 @@ class TriggerStudies(processor.ProcessorABC):
 		CutFlow_Table.fill(2*np.ones([len(ak.ravel(tau.pt))]))
 		print("Taus after eta cut: %d"%len(ak.ravel(tau.pt)))
 		
-		#Delta R Selection (Current)
+		#Delta R Selection (Old)
 		#test = dR_selection(tau)
 		#print(test)
 		#print(type(test))
 		#print(len(test))
 		#print(test.show())
-		tau["dRCut"] = dR_selection(tau)
-		tau = tau[ak.all(tau.dRCut, axis=2) == False]
+		
+		#tau["dRCut"] = dR_selection(tau)
+		#tau = tau[ak.all(tau.dRCut, axis=2) != False]
+		#CutFlow_Table.fill(3*np.ones([len(ak.ravel(tau.pt))]))
+		#print("Taus after dR cut: %d"%len(ak.ravel(tau.pt)))
+	
+		#Delta R Selection (New)
+		#tau_plus = tau[tau.charge > 0]
+		#tau_minus = tau[tau.charge < 0]
+		#a,b = ak.unzip(ak.cartesian([tau_plus, tau_minus], axis = 1,nested = True))
+		#mval = deltaR(a,b) < 0.8
+		#print(mval)
+		#print(len(mval))
+		#print(mval[0])
+		#print(len(tau[0]))
+		#print(len(tau_plus[0]))
+		#print(len(tau_minus[0]))
+		#print(mval[1])
+		#print(len(tau[1]))
+		#print(len(tau_plus[1]))
+		#print(len(tau_minus[1]))
+		#print(mval[2])
+		#print(len(tau[2]))
+		#print(len(tau_plus[2]))
+		#print(len(tau_minus[2]))
+		#print(mval[3])
+		#print(len(tau[3]))
+		#print(len(tau_plus[3]))
+		#print(len(tau_minus[3]))
+		#tau["dRCut"] = mval
+		#tau = tau[ak.all(tau.dRCut, axis = 2) != True]
+		#tau = tau[ak.all(tau.metric_table(tau) < 0.8)]
+		a,b = ak.unzip(ak.cartesian([tau,tau], axis = 1, nested = True))
+		mval = deltaR(a,b) < 0.8 
+		tau["dRCut"] = mval
+		tau = tau[ak.any(tau.dRCut, axis = 2) == True]
+		
 		CutFlow_Table.fill(3*np.ones([len(ak.ravel(tau.pt))]))
 		print("Taus after dR cut: %d"%len(ak.ravel(tau.pt)))
 		
@@ -246,9 +281,9 @@ class TriggerStudies(processor.ProcessorABC):
 
 	
 		#Delta R Selection (Old)
-		print("Events with fewer than 4 events: %d"%len(tau[ak.num(tau) < 4]))
-		print("Events with 4 or more events: %d"%len(tau[ak.num(tau) >= 4]))
-		print("Events with more than 4 events: %d"%len(tau[ak.num(tau) > 4]))
+		#print("Events with fewer than 4 events: %d"%len(tau[ak.num(tau) < 4]))
+		#print("Events with 4 or more events: %d"%len(tau[ak.num(tau) >= 4]))
+		#print("Events with more than 4 events: %d"%len(tau[ak.num(tau) > 4]))
 		#tau_pairs = ak.combinations(tau,2,axis = 1) #Create array of all possible pairs
 		#print(tau_pairs)
 		#print("Tau pair element:")
@@ -265,9 +300,9 @@ class TriggerStudies(processor.ProcessorABC):
 		CutFlow_Table.fill(6*np.ones([len(ak.ravel(tau.pt))]))
 		print("Taus after Charge Conservation cut: %d"%len(tau.pt))
 		
-		print("Events with fewer than 4 events: %d"%len(tau[ak.num(tau) < 4]))
-		print("Events with 4 or more events: %d"%len(tau[ak.num(tau) >= 4]))
-		print("Events with more than 4 events: %d"%len(tau[ak.num(tau) > 4]))
+		#print("Events with fewer than 4 events: %d"%len(tau[ak.num(tau) < 4]))
+		#print("Events with 4 or more events: %d"%len(tau[ak.num(tau) >= 4]))
+		#print("Events with more than 4 events: %d"%len(tau[ak.num(tau) > 4]))
 
 
 		AK8Jet = AK8Jet[ak.num(tau) == 4]
@@ -502,15 +537,18 @@ if __name__ == "__main__":
 	
 	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": 39, "AK8PFJet400_TrimMass30": 40}
 
-	filebase = "~/Analysis/BoostedTau/TriggerEff/2018_Samples/GluGluToRadionToHHTo4T_M-"
+	#filebase = "~/Analysis/BoostedTau/TriggerEff/2018_Samples/GluGluToRadionToHHTo4T_M-"
+	signal_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v1_Hadd/GluGluToRadionToHHTo4T_M-"
 	table_dict = {}
 	title_dict = {"1000": "1 TeV Signal", "2000": "2 TeV Signal", "3000": "3 TeV Siganl", "ZZ4l": r"\(ZZ \rightarrow 4l\)", "top": "Top Background"}
-	file_base = "~/Analysis/BoostedTau/TriggerEff/2018_Background/"
+	#file_base = "~/Analysis/BoostedTau/TriggerEff/2018_Background/"
+	background_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v2_Hadd/"
 	background_dict = {"ZZ4l" : r"$ZZ \rightarrow 4l$", "top": "Top Background"}
-	#file_dict = {"ZZ4l": [file_base + "ZZ4l.root"], "top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
-	#file_dict = {"top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
-	file_dict = {"top": [file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
-	#file_dict = {"top": [file_base + "Tbar-tchan.root",file_base + "T-tW.root"]}
+	#file_dict = {"ZZ4l": [background_base + "ZZ4l.root"], "top": [background_base + "Tbar-tchan.root",background_base + "Tbar-tW.root",background_base + "T-tchan.root"]}
+	#file_dict = {"top": [background_base + "Tbar-tchan.root",background_base + "Tbar-tW.root",background_base + "T-tchan.root"]}
+	#file_dict = {"top": [background_base + "Tbar-tW.root",background_base + "T-tchan.root"]}
+	file_dict = {"top": [background_base + "TTTo2L2Nu.root",background_base + "TTToSemiLeptonic.root",background_base + "TTToHadronic.root"]}
+	#file_dict = {"top": [background_base + "Tbar-tchan.root",background_base + "T-tW.root"]}
 	
 	for i in range(3):
 		if (i == 0):
@@ -523,6 +561,7 @@ if __name__ == "__main__":
 			use_offline = True
 			table_title = "Offline Cuts Efficiency Table"
 			table_file_name = "NoTrigger_Cuts"
+			#break
 		if (i == 2):
 			use_trigger = True
 			use_offline = True
@@ -531,7 +570,7 @@ if __name__ == "__main__":
 	
 		#Signal
 		for mass_str in mass_str_arr:
-			fileName = filebase + mass_str + ".root"
+			fileName = signal_base + mass_str + ".root"
 			events = NanoEventsFactory.from_root(
 				fileName,
 				treepath="/4tau_tree",
@@ -557,7 +596,8 @@ if __name__ == "__main__":
 				if (i == 0):
 					fig, ax = plt.subplots()
 					trigger_out["boosted_tau"]["Cutflow_hist"].plot1d(ax=ax)
-					ax.set_yscale('log')
+					#ax.set_yscale('log')
+					plt.ylim(bottom = 1)
 					plt.title("Cutflow Table Mass: " + mass_str[0] + "." + mass_str[1] + " TeV")
 					plt.savefig("CutFlowTable_" + mass_str)
 					plt.close()
@@ -572,7 +612,8 @@ if __name__ == "__main__":
 				#continue
 			if (background_name == "ZZ4l"):
 				events = NanoEventsFactory.from_root(
-					"~/Analysis/BoostedTau/TriggerEff/2018_Background/" + background_name + ".root",
+					#"~/Analysis/BoostedTau/TriggerEff/2018_Background/" + background_name + ".root",
+					background_base + background_name + ".root",
 					treepath="/4tau_tree",
 					schemaclass = BaseSchema,
 					metadata={"dataset": "boosted_tau"},
@@ -585,7 +626,8 @@ if __name__ == "__main__":
 					p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False)
 					trigger_out = p2.process(events)
 				else:
-					trigger_out = iterative_runner(file_dict, treename="mutau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False)) 
+					#trigger_out = iterative_runner(file_dict, treename="mutau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False)) 
+					trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False)) 
 			
 				if (trigger_bit == 40):
 					trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
@@ -625,9 +667,12 @@ if __name__ == "__main__":
 				else:
 					trigger_out[background_name]["Cutflow_hist"].plot1d(ax=ax)
 					plt.title("Cutflow Table Top background")
-				ax.set_yscale('log')
+				#ax.set_yscale('log')
+				plt.ylim(bottom = 1)
 				plt.savefig("CutFlowTable_" + background_name)
 				plt.close()
+			#if (i != 0):
+			#	break
 
 
 		#Set up efficiency table
