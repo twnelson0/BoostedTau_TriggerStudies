@@ -79,16 +79,47 @@ def DrawTable(table_title, table_name, table_dict):
 	file.write("\\end{document}")
 	file.close()
 
+
+def TriggerDebuggTable(table_title,  table_dict):
+	file_name = "Efficiency_Table_PFTrimMass.tex"
+	file = open(file_name,"w")
+
+	#Set up the Tex Document
+	file.write("\\documentclass{article} \n")
+	file.write("\\usepackage{multirow} \n")
+	file.write("\\usepackage{multirow} \n")
+	#file.write("\\usepackage{lscape}\n")
+	#file.write("\\usepacke")
+	file.write("\\begin{document} \n")
+	file.write("\\centering \n")
+	
+	#Set up the table
+	file.write("\\begin{tabular}{|p{3cm}|p{6cm}|p{5cm}|} \n")
+	file.write("\\hline \n")
+	file.write("\\multicolumn{3}{|c|}{" + table_title  + "} \\\\ \n")
+	file.write("\\hline \n")
+	file.write("Sample File(s) & PFJet400 & TrimMass30 \\\\ \n")
+	file.write("\\hline \n")
+	
+	#Fill table
+	for sample, eff_arr in table_dict.items():
+		file.write(sample + " & " + "%.3f"%eff_arr[0] + " & " + "%.3f"%eff_arr[1] + "\\\\")
+		file.write("\n")
+	file.write("\\hline \n")
+	file.write("\\end{tabular}")
+	file.write("\\end{document}")
+	file.close() 
 	
 
 #class EffTable()
 
 class TriggerStudies(processor.ProcessorABC):
-	def __init__(self, trigger_bit, trigger_cut = True, offline_cut = False, signal = True):
+	def __init__(self, trigger_bit, trigger_cut = True, offline_cut = False, signal = True, cut_num = 0):
 		self.trigger_bit = trigger_bit
 		self.signal = signal
 		self.offline_cut = offline_cut
 		self.trigger_cut = trigger_cut
+		self.cut_num = cut_num
 		#pass
 	
 	def process(self, events):
@@ -225,44 +256,6 @@ class TriggerStudies(processor.ProcessorABC):
 		CutFlow_Table.fill(2*np.ones([len(ak.ravel(tau.pt))]))
 		print("Taus after eta cut: %d"%len(ak.ravel(tau.pt)))
 		
-		#Delta R Selection (Old)
-		#test = dR_selection(tau)
-		#print(test)
-		#print(type(test))
-		#print(len(test))
-		#print(test.show())
-		
-		#tau["dRCut"] = dR_selection(tau)
-		#tau = tau[ak.all(tau.dRCut, axis=2) != False]
-		#CutFlow_Table.fill(3*np.ones([len(ak.ravel(tau.pt))]))
-		#print("Taus after dR cut: %d"%len(ak.ravel(tau.pt)))
-	
-		#Delta R Selection (New)
-		#tau_plus = tau[tau.charge > 0]
-		#tau_minus = tau[tau.charge < 0]
-		#a,b = ak.unzip(ak.cartesian([tau_plus, tau_minus], axis = 1,nested = True))
-		#mval = deltaR(a,b) < 0.8
-		#print(mval)
-		#print(len(mval))
-		#print(mval[0])
-		#print(len(tau[0]))
-		#print(len(tau_plus[0]))
-		#print(len(tau_minus[0]))
-		#print(mval[1])
-		#print(len(tau[1]))
-		#print(len(tau_plus[1]))
-		#print(len(tau_minus[1]))
-		#print(mval[2])
-		#print(len(tau[2]))
-		#print(len(tau_plus[2]))
-		#print(len(tau_minus[2]))
-		#print(mval[3])
-		#print(len(tau[3]))
-		#print(len(tau_plus[3]))
-		#print(len(tau_minus[3]))
-		#tau["dRCut"] = mval
-		#tau = tau[ak.all(tau.dRCut, axis = 2) != True]
-		#tau = tau[ak.all(tau.metric_table(tau) < 0.8)]
 		a,b = ak.unzip(ak.cartesian([tau,tau], axis = 1, nested = True))
 		mval = deltaR(a,b) < 0.8 
 		tau["dRCut"] = mval
@@ -279,19 +272,6 @@ class TriggerStudies(processor.ProcessorABC):
 		print("Taus after iso cut: %d"%len(ak.ravel(tau.pt)))
 		
 
-	
-		#Delta R Selection (Old)
-		#print("Events with fewer than 4 events: %d"%len(tau[ak.num(tau) < 4]))
-		#print("Events with 4 or more events: %d"%len(tau[ak.num(tau) >= 4]))
-		#print("Events with more than 4 events: %d"%len(tau[ak.num(tau) > 4]))
-		#tau_pairs = ak.combinations(tau,2,axis = 1) #Create array of all possible pairs
-		#print(tau_pairs)
-		#print("Tau pair element:")
-		#print(tau_pairs[0])
-		#print(tau_pairs[0][0]["0"])
-		#print(tau_pairs[0][0]["1"])
-		#print(tau_pairs[0][0]["2"])
-		
 		AK8Jet = AK8Jet[(ak.sum(tau.charge,axis=1) == 0)] #Apply charge conservation cut to AK8Jets
 		Muon = Muon[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		Electron = Electron[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
@@ -396,10 +376,24 @@ class TriggerStudies(processor.ProcessorABC):
 				tau = tau[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
 				Jet = Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
 				AK8Jet = AK8Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
+				
 				tau = tau[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
 				Jet = Jet[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
 				AK8Jet = AK8Jet[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
 				print("Trigger Cuts applied to all")
+			
+			if (self.trigger_bit == 40 and self.cut_num == 1):
+				print("Applying PF400 Cut Only")	
+				tau = tau[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
+				Jet = Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
+				AK8Jet = AK8Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
+			
+			if (self.trigger_bit == 40 and self.cut_num == 2):
+				print("Applying Trim Mass Cut Only")	
+				tau = tau[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+				Jet = Jet[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+				AK8Jet = AK8Jet[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+			
 			if (self.trigger_bit == 39):
 				print("Offline Cut 39")
 				#print(Jet.HT)
@@ -419,6 +413,7 @@ class TriggerStudies(processor.ProcessorABC):
 				AK8Jet = AK8Jet[ak.all(Jet.pfMET > 100, axis = 1)]
 				Jet = Jet[ak.all(Jet.pfMET > 100, axis = 1)]
 				print("Trigger Cuts applied to all")
+
 			
 		tau_plus = tau[tau.charge > 0]
 		#print(len(tau_plus))	
@@ -540,6 +535,7 @@ if __name__ == "__main__":
 	#filebase = "~/Analysis/BoostedTau/TriggerEff/2018_Samples/GluGluToRadionToHHTo4T_M-"
 	signal_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v1_Hadd/GluGluToRadionToHHTo4T_M-"
 	table_dict = {}
+	debug_dict = {}
 	title_dict = {"1000": "1 TeV Signal", "2000": "2 TeV Signal", "3000": "3 TeV Siganl", "ZZ4l": r"\(ZZ \rightarrow 4l\)", "top": "Top Background"}
 	#file_base = "~/Analysis/BoostedTau/TriggerEff/2018_Background/"
 	background_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v2_Hadd/"
@@ -567,6 +563,11 @@ if __name__ == "__main__":
 			use_offline = True
 			table_title = "Trigger and Offline Cuts Efficiency Table"
 			table_file_name = "Trigger_Cuts"
+		#if (i == 3):
+		#	use_trigger = False 
+		#	use_offline = True
+		#	table_title = "Trigger and Offline Cuts Efficiency Table"
+		#	table_file_name = "Trigger_Cuts"
 	
 		#Signal
 		for mass_str in mass_str_arr:
@@ -582,7 +583,7 @@ if __name__ == "__main__":
 			print("Mass: " + mass_str[0] + "." + mass_str[1] + " TeV")
 			mass_eff_arr = [-1,-1]
 			for trigger_name, trigger_bit in trigger_dict.items():
-				p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, )
+				p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = True)
 				trigger_out = p2.process(events)
 				
 				if (trigger_bit == 39):
@@ -601,6 +602,16 @@ if __name__ == "__main__":
 					plt.title("Cutflow Table Mass: " + mass_str[0] + "." + mass_str[1] + " TeV")
 					plt.savefig("CutFlowTable_" + mass_str)
 					plt.close()
+
+		#Debugging trigger 40
+		debug_1 = TriggerStudies(40, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, cut_num = 1)
+		out_1 = debug_1.process(events)
+		mass_eff_arr[0] = out_1["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
+		debug_2 = TriggerStudies(40, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, cut_num = 2)
+		out_2 = debug_2.process(events)
+		mass_eff_arr[1] = out_2["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
+		debug_dict[title_dict[mass_str]] = mass_eff_arr #Update debugging dictionary 
+
 
 		iterative_runner = processor.Runner(
 			executor = processor.IterativeExecutor(compression=None),
@@ -673,8 +684,24 @@ if __name__ == "__main__":
 				plt.close()
 			#if (i != 0):
 			#	break
-
+		
+		#Set up debugging table
+			if (background_name == "ZZ4l"):
+				debug_1 = TriggerStudies(40, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, cut_num = 1)
+				out_1 = debug_1.process(events)
+				mass_eff_arr[0] = out_1["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
+				debug_2 = TriggerStudies(40, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, cut_num = 2)
+				out_2 = debug_2.process(events)
+				mass_eff_arr[1] = out_2["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
+				debug_dict[title_dict[background_name]] = mass_eff_arr	
+			else:
+				out_1 = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, cut_num = 1)) 
+				mass_eff_arr[0] = out_1["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
+				out_2 = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, cut_num = 2)) 
+				mass_eff_arr[1] = out_2["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
+				debug_dict[title_dict[background_name]] = mass_eff_arr	
 
 		#Set up efficiency table
 		DrawTable(table_title,table_file_name,table_dict)
+		TriggerDebuggTable("Trigger_40_debug",debug_dict)	
 
