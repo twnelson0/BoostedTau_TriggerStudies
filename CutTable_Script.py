@@ -335,7 +335,7 @@ class TriggerStudies(processor.ProcessorABC):
 			Jet = Jet[np.bitwise_and(Jet.trigger,trigger_mask) == trigger_mask]
 
 		if (self.offline_cut):
-			if (self.trigger_bit == 40):
+			if (self.trigger_bit == 40 and self.cut_num == 0):
 				print("Offline Cut 40")
 				tau = tau[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
 				Jet = Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
@@ -558,14 +558,15 @@ if __name__ == "__main__":
 					plt.close()
 
 			#Debugging trigger 40
+			new_eff_arr = [-1,-1]
 			debug_1 = TriggerStudies(40, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, cut_num = 1)
 			out_1 = debug_1.process(events)
-			mass_eff_arr[0] = out_1["boosted_tau"]["post_trigger_num"]/out_1["boosted_tau"]["pre_trigger_num"]
+			new_eff_arr[0] = out_1["boosted_tau"]["post_trigger_num"]/out_1["boosted_tau"]["pre_trigger_num"]
 			debug_2 = TriggerStudies(40, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, cut_num = 2)
 			out_2 = debug_2.process(events)
-			mass_eff_arr[1] = out_2["boosted_tau"]["post_trigger_num"]/out_2["boosted_tau"]["pre_trigger_num"]
+			new_eff_arr[1] = out_2["boosted_tau"]["post_trigger_num"]/out_2["boosted_tau"]["pre_trigger_num"]
 		
-			debug_dict[title_dict[mass_str]] = mass_eff_arr #Update debugging dictionary 
+			debug_dict[title_dict[mass_str]] = new_eff_arr #Update debugging dictionary 
 
 
 		iterative_runner = processor.Runner(
@@ -574,11 +575,8 @@ if __name__ == "__main__":
 		)
 		#Background 
 		for background_name, title in background_dict.items():
-			#if (background_name == "top"): #Skip top background for now because it's extremely broken
-				#continue
 			if (background_name == "ZZ4l"):
 				events = NanoEventsFactory.from_root(
-					#"~/Analysis/BoostedTau/TriggerEff/2018_Background/" + background_name + ".root",
 					background_base + background_name + ".root",
 					treepath="/4tau_tree",
 					schemaclass = BaseSchema,
@@ -604,9 +602,7 @@ if __name__ == "__main__":
 					trigger_hist_dict_2d = trigger_MTHTJet_hist_dict_2d 
 			
 				for var_name, hist_name_arr in trigger_hist_dict_1d.items():
-					#fig, ax = plt.subplots()
 					if (background_name == "ZZ4l"):
-						#trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 						print("Efficiency = %f"%(trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]))
 						if (trigger_bit == 39):
 							eff_arr[0] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
@@ -639,20 +635,21 @@ if __name__ == "__main__":
 				plt.close()
 		
 		#Set up debugging table
+			new_eff_arr = [-1,-1]
 			if (background_name == "ZZ4l"):
 				debug_1 = TriggerStudies(40, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, cut_num = 1)
 				out_1 = debug_1.process(events)
-				mass_eff_arr[0] = out_1["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
+				new_eff_arr[0] = out_1["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
 				debug_2 = TriggerStudies(40, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, cut_num = 2)
 				out_2 = debug_2.process(events)
-				mass_eff_arr[1] = out_2["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
-				debug_dict[title_dict[background_name]] = mass_eff_arr	
+				new_eff_arr[1] = out_2["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
+				debug_dict[title_dict[background_name]] = new_eff_arr	
 			else:
 				out_1 = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, cut_num = 1)) 
-				mass_eff_arr[0] = out_1[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]
+				new_eff_arr[0] = out_1[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]
 				out_2 = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, cut_num = 2)) 
-				mass_eff_arr[1] = out_2[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]
-				debug_dict[title_dict[background_name]] = mass_eff_arr	
+				new_eff_arr[1] = out_2[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]
+				debug_dict[title_dict[background_name]] = new_eff_arr	
 
 		#Set up efficiency table
 		DrawTable(table_title,table_file_name,table_dict)
