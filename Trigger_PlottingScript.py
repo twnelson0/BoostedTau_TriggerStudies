@@ -172,39 +172,58 @@ class TriggerStudies(processor.ProcessorABC):
 		Muon = Muon[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		Electron = Electron[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 
+        #Delta R Cut on taus
+		a,b = ak.unzip(ak.cartesian([tau,tau], axis = 1, nested = True))
+		mval = deltaR(a,b) < 0.8 
+		tau["dRCut"] = mval
+		tau = tau[ak.any(tau.dRCut, axis = 2) == True]
+
 		AK8Jet = AK8Jet[ak.num(tau) == 4]
 		Electron = Electron[ak.num(tau) == 4]
 		Muon = Muon[ak.num(tau) == 4]
 		tau = tau[ak.num(tau) == 4] #4 tau events
 
-		#Obtain electron and muon pairings
-		
+		#Set up variables for offline cuts
+		#MHT
+		Jet_MHT = Jet[Jet.Pt > 30]
+		Jet_MHT = Jet_MHT[np.abs(Jet_MHT.eta) < 5]
+		Jet_MHT = Jet_MHT[Jet_MHT.PFLooseId > 0.5]
+		JetUp_MHT = Jet[Jet.PtTotUncUp > 30]
+		JetUp_MHT = JetUp_MHT[np.abs(JetUp_MHT.eta) < 5]
+		JetUp_MHT = JetUp_MHT[JetUp_MHT.PFLooseId > 0.5]
+		JetDown_MHT = Jet[Jet.PtTotUncDown > 30]
+		JetDown_MHT = JetDown_MHT[np.abs(JetDown_MHT.eta) < 5]
+		JetDown_MHT = JetDown_MHT[JetDown_MHT.PFLooseId > 0.5]
+		Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
+		Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
+		Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
+		print("Jet MHT Defined:")
+
+		#HT
+		tau_jet = ak.cartesian({"tau": tau, "Jet_MHT": Jet_MHT},axis=1)
+		tau_jetUp = ak.cartesian({"tau": tau, "JetUp_MHT": JetUp_MHT},axis=1)
+		tau_jetDown = ak.cartesian({"tau": tau, "JetDown_MHT": JetDown_MHT},axis=1)
+		print(len(Jet_MHT))
+		Jet_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jet["tau"],tau_jet["Jet_MHT"]) >= 0.5,axis = 1, counts = 4), axis=2) #Clump jet and taus in structure
+		JetUp_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetUp["tau"],tau_jetUp["JetUp_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
+		JetDown_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetDown["tau"],tau_jetDown["JetDown_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
+
+		Jet_HT = Jet_MHT[Jet_MHT.dR] #Lepton cuts
+		JetUp_HT = JetUp_MHT[JetUp_MHT.dR]
+		JetDown_HT = JetDown_MHT[JetDown_MHT.dR]
+		Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
 
 		if (self.trigger_bit == 40):
 			#Cut Z-->2mu and Z-->2e events with 85 GeV <= m <= 95 GeV 
-			if (not(self.signal)):
-				print("%d Events"%len(ak.ravel(AK8Jet.AK8JetPt)))
+			#if (not(self.signal)):
+			#	print("%d Events"%len(ak.ravel(AK8Jet.AK8JetPt)))
 				#AK8JetRav = ak.ravel(AK8Jet)
 				#print(deltaR(AK8JetRav[0],AK8JetRav[1]))
-				e_minus = Electron[Electron.charge < 0]
-				e_plus = Electron[Electron.charge > 0]
-				mu_minus = Muon[Muon.charge < 0]
-				mu_plus = Muon[Muon.charge > 0]
+			#	e_minus = Electron[Electron.charge < 0]
+			#	e_plus = Electron[Electron.charge > 0]
+			#	mu_minus = Muon[Muon.charge < 0]
+			#	mu_plus = Muon[Muon.charge > 0]
 				
-				
-				
-				
-				#for x,y in zip(ak.ravel(Muon.nMu), ak.ravel(Electron.nEle)):
-				#	if (x == 0):
-				#		print("%d muons"%x)
-				#	if (y == 0):
-				#		print("%d electrons"%y)
-				#	#print("%d leptons"%(x + y))
-					
-				#AK8Jet = AK8Jet[AK8Jet.nMu == 0]	
-				#print("%d Events"%len(ak.ravel(AK8Jet.nMu)))
-				#AK8Jet = AK8Jet[AK8Jet.nEle == 0]	
-				#print("%d Events"%len(ak.ravel(AK8Jet.nMu)))
 			AK8Pt_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 			AK8Pt_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
 			AK8SoftMass_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
