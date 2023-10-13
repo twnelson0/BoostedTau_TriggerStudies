@@ -169,22 +169,24 @@ class TriggerStudies(processor.ProcessorABC):
 		
 		#Loose isolation
 		tau = tau[tau.iso1 >= 0.5]
-		tau = tau[tau.iso2 >= 0.5]		
-		
-		AK8Jet = AK8Jet[(ak.sum(tau.charge,axis=1) == 0)] #Apply charge conservation cut to AK8Jets
-		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
-		Muon = Muon[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
-		Electron = Electron[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
+		tau = tau[tau.iso2 >= 0.5]	
 
-        #Delta R Cut on taus
+		#Delta R Cut on taus
 		a,b = ak.unzip(ak.cartesian([tau,tau], axis = 1, nested = True))
 		mval = deltaR(a,b) < 0.8 
 		tau["dRCut"] = mval
-		tau = tau[ak.any(tau.dRCut, axis = 2) == True]
+		tau = tau[ak.any(tau.dRCut, axis = 2) == True]	
+		
+		AK8Jet = AK8Jet[(ak.sum(tau.charge,axis=1) == 0)] #Apply charge conservation cut to AK8Jets
+		Muon = Muon[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
+		Electron = Electron[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
+		Jet = Jet[(ak.sum(tau.charge,axis=1) == 0)]
+		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 
 		AK8Jet = AK8Jet[ak.num(tau) == 4]
 		Electron = Electron[ak.num(tau) == 4]
 		Muon = Muon[ak.num(tau) == 4]
+		Jet = Jet[ak.num(tau) == 4]
 		tau = tau[ak.num(tau) == 4] #4 tau events
 
 		#Set up variables for offline cuts
