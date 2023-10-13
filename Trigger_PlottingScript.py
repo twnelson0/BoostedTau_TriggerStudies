@@ -507,11 +507,11 @@ if __name__ == "__main__":
 	
 	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": 39, "AK8PFJet400_TrimMass30": 40}
 
-	filebase = "~/Analysis/BoostedTau/TriggerEff/2018_Samples/GluGluToRadionToHHTo4T_M-"
+	signal_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v1_Hadd/GluGluToRadionToHHTo4T_M-"
 	
 	#Signal
 	for mass_str in mass_str_arr:
-		fileName = filebase + mass_str + ".root"
+		fileName = signal_base + mass_str + ".root"
 		events = NanoEventsFactory.from_root(
 			fileName,
 			treepath="/4tau_tree",
@@ -569,9 +569,11 @@ if __name__ == "__main__":
 	#Obtain background information
 	#background_array = ["ZZ4l",]
 	file_base = "~/Analysis/BoostedTau/TriggerEff/2018_Background/"
+	background_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v2_Hadd/"
 	background_dict = {"ZZ4l" : r"$ZZ \rightarrow 4l$", "top": "Top Background"}
 	#file_dict = {"ZZ4l": [file_base + "ZZ4l.root"], "top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
-	file_dict = {"top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
+	#file_dict = {"top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
+	file_dict = {"top": [background_base + "TTTo2L2Nu.root",background_base + "TTToSemiLeptonic.root",background_base + "TTToHadronic.root"]}
 
 	iterative_runner = processor.Runner(
 		executor = processor.IterativeExecutor(compression=None),
@@ -581,7 +583,7 @@ if __name__ == "__main__":
 	for background_name, title in background_dict.items():
 		if (background_name == "ZZ4l"):
 			events = NanoEventsFactory.from_root(
-				"~/Analysis/BoostedTau/TriggerEff/2018_Background/" + background_name + ".root",
+				background_base + background_name + ".root",
 				treepath="/4tau_tree",
 				schemaclass = BaseSchema,
 				metadata={"dataset": "boosted_tau"},
@@ -595,7 +597,7 @@ if __name__ == "__main__":
 				p2 = TriggerStudies(trigger_bit, False)
 				trigger_out = p2.process(events)
 			else:
-				trigger_out = iterative_runner(file_dict, treename="mutau_tree",processor_instance=TriggerStudies(trigger_bit, False)) 
+				trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, False)) 
 			
 			if (trigger_bit == 40):
 				trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
