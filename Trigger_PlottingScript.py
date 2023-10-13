@@ -106,10 +106,14 @@ class TriggerStudies(processor.ProcessorABC):
 		
 		Jet = ak.zip(
 			{
-				"JetPt": events.jetPt,
+				"Pt": events.jetPt,
 				"pfMET": events.pfMET,
+				"PtTotUncDown": events.jetPtTotUncDown,
+				"PtTotUncUp": events.jetPtTotUncUp,
+				"PFLooseId": events.jetPFLooseId,
 				"HT": ak.sum(events.jetPt, axis=1),
 				"eta": events.jetEta,
+				"phi": events.jetPhi,
 				"trigger": events.HLTJet,
 			},
 			with_name="PFJetArray",

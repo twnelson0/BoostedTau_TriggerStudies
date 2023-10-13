@@ -295,7 +295,6 @@ class TriggerStudies(processor.ProcessorABC):
 		Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
 		Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
 		print("Jet MHT Defined:")
-		#print(Jet.MHT)
 
 		#HT
 		tau_jet = ak.cartesian({"tau": tau, "Jet_MHT": Jet_MHT},axis=1)
