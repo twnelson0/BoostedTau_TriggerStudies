@@ -238,8 +238,13 @@ class TriggerStudies(processor.ProcessorABC):
 			hist.axis.Regular(20, 0, 1000., name = "pfMET" , label = r"MET [GeV]"),
 			hist.axis.Regular(20, 0, 2000., name = "HT", label = r"HT [GeV]")
 		)
+		
+		#Set up variables for offline cuts
+
 
 		trigger_mask = bit_mask([self.trigger_bit])		
+		
+		#Apply Cuts
 		tau = tau[tau.pt > 30] #pT
 		CutFlow_Table.fill(1*np.ones([len(ak.ravel(tau.pt))]))
 		print("Taus after pt Cut: %d"%len(ak.ravel(tau.pt)))
@@ -280,7 +285,6 @@ class TriggerStudies(processor.ProcessorABC):
 		CutFlow_Table.fill(7*np.ones([len(ak.ravel(tau.pt))]))
 		print("Taus after 4 tau cut: %d"%len(tau.pt))
 		
-		#Set up variables for offline cuts
 		#MHT
 		Jet_MHT = Jet[Jet.Pt > 30]
 		Jet_MHT = Jet_MHT[np.abs(Jet_MHT.eta) < 5]
