@@ -141,8 +141,10 @@ class TriggerStudies(processor.ProcessorABC):
 
 		#Histograms (MET and HT) (Trigger bit = 39)
 		HT_PreTrigg = hist.Hist.new.Reg(40, 0, 3500., label = "HT [GeV]").Double()
+		HT_NoCut = hist.Hist.new.Reg(40, 0, 3500., label = "HT [GeV]").Double()
 		HT_Trigg = hist.Hist.new.Reg(40, 0, 3500., label = "HT [GeV]").Double()
 		MET_PreTrigg = hist.Hist.new.Reg(30, 0, 1200., name="MET", label="MET [GeV]").Double()
+		MET_NoCut = hist.Hist.new.Reg(30, 0, 1200., name="MET", label="MET [GeV]").Double()
 		MET_Trigg = hist.Hist.new.Reg(30, 0, 1200., name="MET", label="MET [GeV]").Double()
 
 		#2D Histograms
@@ -159,13 +161,56 @@ class TriggerStudies(processor.ProcessorABC):
 			hist.axis.Regular(20, 0, 3500., name = "HT", label = r"HT [GeV]")
 		)
 		
-
+		#MHT
+		Jet_MHT = Jet[Jet.Pt > 30]
+		Jet_MHT = Jet_MHT[np.abs(Jet_MHT.eta) < 5]
+		Jet_MHT = Jet_MHT[Jet_MHT.PFLooseId > 0.5]
+		JetUp_MHT = Jet[Jet.PtTotUncUp > 30]
+		JetUp_MHT = JetUp_MHT[np.abs(JetUp_MHT.eta) < 5]
+		JetUp_MHT = JetUp_MHT[JetUp_MHT.PFLooseId > 0.5]
+		JetDown_MHT = Jet[Jet.PtTotUncDown > 30]
+		JetDown_MHT = JetDown_MHT[np.abs(JetDown_MHT.eta) < 5]
+		JetDown_MHT = JetDown_MHT[JetDown_MHT.PFLooseId > 0.5]
+		Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
+		Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
+		Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
+		print("Jet MHT Defined:")
+		
+		#HT Seleciton (new)
+		#tau_temp1,HT = ak.unzip(ak.cartesian([tau,Jet_MHT], axis = 1, nested = True))
+		HT,tau_temp1 = ak.unzip(ak.cartesian([Jet_MHT,tau], axis = 1, nested = True))
+		HT_up,tau_temp2 = ak.unzip(ak.cartesian([JetUp_MHT,tau], axis = 1, nested = True))
+		HT_down,tau_temp3 = ak.unzip(ak.cartesian([JetDown_MHT,tau], axis = 1, nested = True))
+		mval_temp = deltaR(tau_temp1,HT) >= 0.5
+		print(len(mval_temp))
+		print(len(Jet_MHT.Pt))
+		print(mval_temp)
+		print(Jet_MHT.Pt)
+		print("Comparing to Jet")
+		for m, pt in zip(mval_temp, Jet_MHT.Pt):
+			if (len(m) != len(pt)):
+				print("Different Size problem!")
+				print(str(len(m)) + " != " + str(len(pt)))
+				#print(m)
+				#print(pt)
+		Jet_MHT["dR"] = mval_temp
+		mval_temp = deltaR(tau_temp2,HT_up) >= 0.5
+		JetUp_MHT["dR"] = mval_temp 
+		mval_temp = deltaR(tau_temp3,HT_down) >= 0.5
+		JetDown_MHT["dR"] = mval_temp	
+		Jet_HT = Jet_MHT[ak.all(Jet_MHT.dR == True, axis = 2)] #Lepton cuts
+		JetUp_HT = JetUp_MHT[ak.all(JetUp_MHT.dR == True, axis = 2)]
+		JetDown_HT = JetDown_MHT[ak.all(JetDown_MHT.dR == True, axis = 2)]
+		Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
 
 		#Histograms of variables relavent to trigger 
 		if (self.trigger_bit == 40):
 			AK8Pt_NoCut.fill(AK8Jet.AK8JetPt[0])
 			AK8SoftMass_NoCut.fill(ak.ravel(AK8Jet.AK8JetDropMass))
-		#if (self.trigger_bit == 39):	
+		if (self.trigger_bit == 39):
+			HT_NoCut.fill(ak.ravel(Jet.HT))
+			MET_NoCut.fill(ak.ravel(Jet.pfMET))
+				
 
 		trigger_mask = bit_mask([self.trigger_bit])		
 		tau = tau[tau.pt > 30] #pT
@@ -194,34 +239,34 @@ class TriggerStudies(processor.ProcessorABC):
 		tau = tau[ak.num(tau) == 4] #4 tau events
 		
 		#MHT
-		Jet_MHT = Jet[Jet.Pt > 30]
-		Jet_MHT = Jet_MHT[np.abs(Jet_MHT.eta) < 5]
-		Jet_MHT = Jet_MHT[Jet_MHT.PFLooseId > 0.5]
-		JetUp_MHT = Jet[Jet.PtTotUncUp > 30]
-		JetUp_MHT = JetUp_MHT[np.abs(JetUp_MHT.eta) < 5]
-		JetUp_MHT = JetUp_MHT[JetUp_MHT.PFLooseId > 0.5]
-		JetDown_MHT = Jet[Jet.PtTotUncDown > 30]
-		JetDown_MHT = JetDown_MHT[np.abs(JetDown_MHT.eta) < 5]
-		JetDown_MHT = JetDown_MHT[JetDown_MHT.PFLooseId > 0.5]
-		Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
-		Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
-		Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
-		print("Jet MHT Defined:")
+		#Jet_MHT = Jet[Jet.Pt > 30]
+		#Jet_MHT = Jet_MHT[np.abs(Jet_MHT.eta) < 5]
+		#Jet_MHT = Jet_MHT[Jet_MHT.PFLooseId > 0.5]
+		#JetUp_MHT = Jet[Jet.PtTotUncUp > 30]
+		#JetUp_MHT = JetUp_MHT[np.abs(JetUp_MHT.eta) < 5]
+		#JetUp_MHT = JetUp_MHT[JetUp_MHT.PFLooseId > 0.5]
+		#JetDown_MHT = Jet[Jet.PtTotUncDown > 30]
+		#JetDown_MHT = JetDown_MHT[np.abs(JetDown_MHT.eta) < 5]
+		#JetDown_MHT = JetDown_MHT[JetDown_MHT.PFLooseId > 0.5]
+		#Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
+		#Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
+		#Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
+		#print("Jet MHT Defined:")
 
-		#HT
-		tau_jet = ak.cartesian({"tau": tau, "Jet_MHT": Jet_MHT},axis=1)
-		tau_jetUp = ak.cartesian({"tau": tau, "JetUp_MHT": JetUp_MHT},axis=1)
-		tau_jetDown = ak.cartesian({"tau": tau, "JetDown_MHT": JetDown_MHT},axis=1)
-		print(len(Jet_MHT))
-		Jet_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jet["tau"],tau_jet["Jet_MHT"]) >= 0.5,axis = 1, counts = 4), axis=2) #Clump jet and taus in structure
-		JetUp_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetUp["tau"],tau_jetUp["JetUp_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
-		JetDown_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetDown["tau"],tau_jetDown["JetDown_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
+		#HT (Old)
+		#tau_jet = ak.cartesian({"tau": tau, "Jet_MHT": Jet_MHT},axis=1)
+		#tau_jetUp = ak.cartesian({"tau": tau, "JetUp_MHT": JetUp_MHT},axis=1)
+		#tau_jetDown = ak.cartesian({"tau": tau, "JetDown_MHT": JetDown_MHT},axis=1)
+		#print(len(Jet_MHT))
+		#Jet_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jet["tau"],tau_jet["Jet_MHT"]) >= 0.5,axis = 1, counts = 4), axis=2) #Clump jet and taus in structure
+		#JetUp_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetUp["tau"],tau_jetUp["JetUp_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
+		#JetDown_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetDown["tau"],tau_jetDown["JetDown_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
 
-		Jet_HT = Jet_MHT[Jet_MHT.dR] #Lepton cuts
-		JetUp_HT = JetUp_MHT[JetUp_MHT.dR]
-		JetDown_HT = JetDown_MHT[JetDown_MHT.dR]
-		Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
-
+		#Jet_HT = Jet_MHT[Jet_MHT.dR] #Lepton cuts
+		#JetUp_HT = JetUp_MHT[JetUp_MHT.dR]
+		#JetDown_HT = JetDown_MHT[JetDown_MHT.dR]
+		#Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
+		
 
 		if (self.trigger_bit == 40):
 			#Cut Z-->2mu and Z-->2e events with 85 GeV <= m <= 95 GeV 
@@ -324,7 +369,9 @@ class TriggerStudies(processor.ProcessorABC):
 					"Jet_Trigg": Jet_Trigger,
 					"Jet_eff": eff_Jet,
 					"pre_trigger_num": pre_triggernum,
-					"post_trigger_num": post_triggernum 
+					"post_trigger_num": post_triggernum,
+					"MET_NoCut": MET_NoCut,
+					"HT_NoCut": HT_NoCut 
 				}
 			}
 
@@ -515,8 +562,8 @@ if __name__ == "__main__":
 	}
 
 	trigger_MTHTJet_hist_dict_1d = {
-		"MET_Trigg" : ["MET_Trigger_Plot","pfMET Trigger"] , "MET_PreTrigg" : ["MET_NoTrigger_Plot","pfMET No Trigger"], 
-		"HT_Trigg" : ["HT_Trigger_Plot",r"HT Trigger"], "HT_PreTrigg" : ["HT_NoTrigger_Plot", r"HT No Trigger"]
+		"MET_Trigg" : ["MET_Trigger_Plot","pfMET Trigger"] , "MET_PreTrigg" : ["MET_NoTrigger_Plot","pfMET No Trigger"], "MET_NoCut": ["MET_NoCut_Plot", "pfMET No Cuts/Selections"], 
+		"HT_Trigg" : ["HT_Trigger_Plot",r"HT Trigger"], "HT_PreTrigg" : ["HT_NoTrigger_Plot", r"HT No Trigger"], "HT_NoCut" : ["HT_NoCut_Plot", "HT No Cuts/Selections"]
 	}
 	
 	trigger_MTHTJet_hist_dict_2d = {

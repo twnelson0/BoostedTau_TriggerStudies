@@ -51,7 +51,7 @@ def DrawTable(table_title, table_name, table_dict):
 	file.write("\\usepackage{lscape}\n")
 	#file.write("\\usepacke")
 	file.write("\\begin{document} \n")
-	file.write("\\begin{lscape} \n")
+	file.write("\\begin{landscape} \n")
 	file.write("\\centering \n")
 	
 	#Set up the table
@@ -59,7 +59,7 @@ def DrawTable(table_title, table_name, table_dict):
 	file.write("\\hline \n")
 	file.write("\\multicolumn{4}{|c|}{" + table_title  + "} \\\\ \n")
 	file.write("\\hline \n")
-	file.write("Sample File(s) & PFMET500\\_PFMET100 PFMHT100\\_IDTight Efficiency & AK8PFJet400\\_TrimMass30 Efficiency & PFMET500\\_PFMET100 PFMHT100\\_IDTight Efficiency $\oplus$ AK8PFJet400\\_TrimMass30 Efficiency  \\\\ \n")
+	file.write("Sample File(s) & PFMET500\\_PFMET100 PFMHT100\\_IDTight Efficiency & AK8PFJet400\\_TrimMass30 Efficiency & PFMET500\\_PFMET100 PFMHT100\\_IDTight or \\ AK8PFJet400\\_TrimMass30 Efficiency  \\\\ \n")
 	file.write("\\hline \n")
 	
 	#Fill table
@@ -68,7 +68,7 @@ def DrawTable(table_title, table_name, table_dict):
 		file.write("\n")
 	file.write("\\hline \n")
 	file.write("\\end{tabular} \n")
-	file.write("\\end{lscape} \n")
+	file.write("\\end{landscape} \n")
 	file.write("\\end{document}")
 	file.close()
 
@@ -183,9 +183,6 @@ class TriggerStudies(processor.ProcessorABC):
 			{
 				"Pt": events.jetPt,
 				"pfMET": events.pfMET,
-				#"MHT_x": events.jetPt*0, 
-				#"MHT_y": events.jetPt*0, 
-				#"MHT": events.jetPt*0, 
 				"PtTotUncDown": events.jetPtTotUncDown,
 				"PtTotUncUp": events.jetPtTotUncUp,
 				"PFLooseId": events.jetPFLooseId,
@@ -333,9 +330,12 @@ class TriggerStudies(processor.ProcessorABC):
 			HT_PreTrigg.fill(ak.ravel(Jet.HT))
 			HT_NoTrigg_Arr = ak.ravel(Jet.HT)
 			MET_PreTrigg.fill(ak.ravel(Jet.pfMET))
-			MET_NoTrigg_Arr = ak.ravel(Jet.pfMET)	
+			MET_NoTrigg_Arr = ak.ravel(Jet.pfMET)
 
-		if (self.trigger_cut and not(self.XorTrigger)):
+		if (self.trigger_bit == 41):
+			Pt_PreTrigg_Arr = ak.ravel(tau.pt)
+
+		if (self.trigger_cut and self.XorTrigger == False):
 			tau = tau[np.bitwise_and(tau.trigger,trigger_mask) == trigger_mask]
 			AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,trigger_mask) == trigger_mask]
 			Jet = Jet[np.bitwise_and(Jet.trigger,trigger_mask) == trigger_mask]
@@ -346,6 +346,7 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([40])) == bit_mask([40])]
 			Jet = Jet[np.bitwise_and(Jet.trigger,bit_mask([39])) == bit_mask([39])]
 			Jet = Jet[np.bitwise_and(Jet.trigger,bit_mask([40])) == bit_mask([40])]
+			print("Applied Or Cut")
 
 
 		if (self.offline_cut):
@@ -430,12 +431,18 @@ class TriggerStudies(processor.ProcessorABC):
 			print("Number = %d"%pre_triggernum)
 			post_triggernum = ak.num(MET_Trigg_Arr,axis=0)	
 			print("Number = %d"%post_triggernum)
-			
 			if (self.signal):	
 				print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
 			Jet_PreTrigger.fill(MET_NoTrigg_Arr, HT_NoTrigg_Arr)
 			Jet_Trigger.fill(MET_Trigg_Arr, HT_Trigg_Arr)
 			eff_Jet = Jet_Trigger/Jet_PreTrigger
+
+		if (self.trigger_bit == 41):
+			pre_triggernum = ak.num(Pt_PreTrigg_Arr,axis=0)
+			Pt_PostTrigg_Arr = ak.ravel(tau.pt)
+			post_triggernum = ak.num(Pt_PostTrigg_Arr,axis=0)
+			
+
 		
 		if (self.trigger_bit == 40):
 			return{
@@ -465,6 +472,13 @@ class TriggerStudies(processor.ProcessorABC):
 					"pre_trigger_num": pre_triggernum,
 					"post_trigger_num": post_triggernum,
 					"Cutflow_hist": CutFlow_Table 
+				}
+			}
+		if (self.trigger_bit == 41):
+			return{
+				 dataset: {
+					"pre_trigger_num": pre_triggernum,
+					"post_trigger_num": post_triggernum,
 				}
 			}
 
@@ -498,7 +512,7 @@ if __name__ == "__main__":
 		"Jet_eff" : ["Jet_Eff_Plot", "MET and HT Efficiency Histogram Trigger"]
 	}
 	
-	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": 39, "AK8PFJet400_TrimMass30": 40}
+	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": 39, "AK8PFJet400_TrimMass30": 40, "XorTrigger": 41}
 
 	#filebase = "~/Analysis/BoostedTau/TriggerEff/2018_Samples/GluGluToRadionToHHTo4T_M-"
 	signal_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v1_Hadd/GluGluToRadionToHHTo4T_M-"
@@ -518,7 +532,7 @@ if __name__ == "__main__":
 	use_offline = False
 	xor = True
 	table_title = "Trigger Efficiency Table"
-	table_file_name = "Trigger_NoCuts"
+	table_file_name = "Trigger_NoCuts_Xor"
 	
 	#if (i == 3):
 	#	use_trigger = False 
@@ -540,13 +554,20 @@ if __name__ == "__main__":
 		print("Mass: " + mass_str[0] + "." + mass_str[1] + " TeV")
 		mass_eff_arr = [-1,-1,-1]
 		for trigger_name, trigger_bit in trigger_dict.items():
-			p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = True)
+			if (trigger_bit != 41):
+				XorVal = False
+			else:
+				XorVal = True
+				
+			p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, XorTrigger = XorVal)
 			trigger_out = p2.process(events)
 			
 			if (trigger_bit == 39):
 				mass_eff_arr[0] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
 			if (trigger_bit == 40):
 				mass_eff_arr[1] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
+			if (trigger_bit == 41):
+				mass_eff_arr[2] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
 		
 			table_dict[title_dict[mass_str]] = mass_eff_arr #Update dictionary
 		
@@ -589,12 +610,15 @@ if __name__ == "__main__":
 		print("Background: " + background_name)	
 		eff_arr = [-1,-1,-1]
 		for trigger_name, trigger_bit in trigger_dict.items():
+			if (trigger_bit == 41):
+				XorVal = True
+			else:
+				XorVal = False
 			if (background_name == "ZZ4l"):
-				p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False)
+				p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, XorTrigger = XorVal)
 				trigger_out = p2.process(events)
 			else:
-				#trigger_out = iterative_runner(file_dict, treename="mutau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False)) 
-				trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False)) 
+				trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, XorTrigger = XorVal)) 
 		
 			if (trigger_bit == 40):
 				trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
@@ -611,6 +635,8 @@ if __name__ == "__main__":
 						eff_arr[0] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
 					if (trigger_bit == 40):
 						eff_arr[1] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
+					if (trigger_bit == 41):
+						eff_arr[2] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
 				else:
 					#trigger_out[background_name]["boosted_tau"][var_name].plot1d(ax=ax)
 					#trigger_out[background_name][var_name].plot1d(ax=ax)
@@ -619,6 +645,8 @@ if __name__ == "__main__":
 						eff_arr[0] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
 					if (trigger_bit == 40):
 						eff_arr[1] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
+					if (trigger_bit == 41):
+						eff_arr[2] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
 
 	
 		table_dict[title_dict[background_name]] = eff_arr
