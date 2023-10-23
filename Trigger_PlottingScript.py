@@ -142,9 +142,11 @@ class TriggerStudies(processor.ProcessorABC):
 		#Histograms (MET and HT) (Trigger bit = 39)
 		HT_PreTrigg = hist.Hist.new.Reg(40, 0, 3500., label = "HT [GeV]").Double()
 		HT_NoCut = hist.Hist.new.Reg(40, 0, 3500., label = "HT [GeV]").Double()
+		HT_NoCrossCleaning = hist.Hist.new.Reg(40, 0, 3500., label = "HT [GeV]").Double()
 		HT_Trigg = hist.Hist.new.Reg(40, 0, 3500., label = "HT [GeV]").Double()
 		MET_PreTrigg = hist.Hist.new.Reg(30, 0, 1200., name="MET", label="MET [GeV]").Double()
 		MET_NoCut = hist.Hist.new.Reg(30, 0, 1200., name="MET", label="MET [GeV]").Double()
+		MET_NoCrossCleaning = hist.Hist.new.Reg(30, 0, 1200., name="MET", label="MET [GeV]").Double()
 		MET_Trigg = hist.Hist.new.Reg(30, 0, 1200., name="MET", label="MET [GeV]").Double()
 
 		#2D Histograms
@@ -182,16 +184,21 @@ class TriggerStudies(processor.ProcessorABC):
 		HT,tau_temp1 = ak.unzip(ak.cartesian([Jet_MHT,tau], axis = 1, nested = True))
 		HT_up,tau_temp2 = ak.unzip(ak.cartesian([JetUp_MHT,tau], axis = 1, nested = True))
 		HT_down,tau_temp3 = ak.unzip(ak.cartesian([JetDown_MHT,tau], axis = 1, nested = True))
+		
+		#Get Cross clean free histograms
+		MET_NoCrossCleaning.fill(Jet.pfMET)
+		HT_NoCrossCleaning.fill(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False))	
+	
 		mval_temp = deltaR(tau_temp1,HT) >= 0.5
 		print(len(mval_temp))
 		print(len(Jet_MHT.Pt))
 		print(mval_temp)
 		print(Jet_MHT.Pt)
 		print("Comparing to Jet")
-		for m, pt in zip(mval_temp, Jet_MHT.Pt):
-			if (len(m) != len(pt)):
-				print("Different Size problem!")
-				print(str(len(m)) + " != " + str(len(pt)))
+		#for m, pt in zip(mval_temp, Jet_MHT.Pt):
+		#	if (len(m) != len(pt)):
+		#		print("Different Size problem!")
+		#		print(str(len(m)) + " != " + str(len(pt)))
 				#print(m)
 				#print(pt)
 		Jet_MHT["dR"] = mval_temp
@@ -206,9 +213,6 @@ class TriggerStudies(processor.ProcessorABC):
 
 		#Histograms of variables relavent to trigger 
 		if (self.trigger_bit == 40 and self.signal):
-			#print(ak.ravel(AK8Jet.AK8JetPt))
-			#print("Leading AK8Jet Pt:")
-			#print(AK8Jet[:,0].AK8JetPt)
 			AK8Jet_Temp = AK8Jet[ak.num(AK8Jet, axis = 1) > 0]
 			AK8Pt_NoCut.fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetPt)) #Change to leading pt
 			AK8SoftMass_NoCut.fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetDropMass))
@@ -242,35 +246,6 @@ class TriggerStudies(processor.ProcessorABC):
 		Muon = Muon[ak.num(tau) == 4]
 		Jet = Jet[ak.num(tau) == 4]
 		tau = tau[ak.num(tau) == 4] #4 tau events
-		
-		#MHT
-		#Jet_MHT = Jet[Jet.Pt > 30]
-		#Jet_MHT = Jet_MHT[np.abs(Jet_MHT.eta) < 5]
-		#Jet_MHT = Jet_MHT[Jet_MHT.PFLooseId > 0.5]
-		#JetUp_MHT = Jet[Jet.PtTotUncUp > 30]
-		#JetUp_MHT = JetUp_MHT[np.abs(JetUp_MHT.eta) < 5]
-		#JetUp_MHT = JetUp_MHT[JetUp_MHT.PFLooseId > 0.5]
-		#JetDown_MHT = Jet[Jet.PtTotUncDown > 30]
-		#JetDown_MHT = JetDown_MHT[np.abs(JetDown_MHT.eta) < 5]
-		#JetDown_MHT = JetDown_MHT[JetDown_MHT.PFLooseId > 0.5]
-		#Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
-		#Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
-		#Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
-		#print("Jet MHT Defined:")
-
-		#HT (Old)
-		#tau_jet = ak.cartesian({"tau": tau, "Jet_MHT": Jet_MHT},axis=1)
-		#tau_jetUp = ak.cartesian({"tau": tau, "JetUp_MHT": JetUp_MHT},axis=1)
-		#tau_jetDown = ak.cartesian({"tau": tau, "JetDown_MHT": JetDown_MHT},axis=1)
-		#print(len(Jet_MHT))
-		#Jet_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jet["tau"],tau_jet["Jet_MHT"]) >= 0.5,axis = 1, counts = 4), axis=2) #Clump jet and taus in structure
-		#JetUp_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetUp["tau"],tau_jetUp["JetUp_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
-		#JetDown_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetDown["tau"],tau_jetDown["JetDown_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
-
-		#Jet_HT = Jet_MHT[Jet_MHT.dR] #Lepton cuts
-		#JetUp_HT = JetUp_MHT[JetUp_MHT.dR]
-		#JetDown_HT = JetDown_MHT[JetDown_MHT.dR]
-		#Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
 		
 
 		if (self.trigger_bit == 40):
@@ -376,7 +351,9 @@ class TriggerStudies(processor.ProcessorABC):
 					"pre_trigger_num": pre_triggernum,
 					"post_trigger_num": post_triggernum,
 					"MET_NoCut": MET_NoCut,
-					"HT_NoCut": HT_NoCut 
+					"HT_NoCut": HT_NoCut,
+					"MET_NoCrossClean": MET_NoCrossCleaning,
+					"HT_NoCrossClean": HT_NoCrossCleaning 
 				}
 			}
 
@@ -568,7 +545,8 @@ if __name__ == "__main__":
 
 	trigger_MTHTJet_hist_dict_1d = {
 		"MET_Trigg" : ["MET_Trigger_Plot","pfMET Trigger"] , "MET_PreTrigg" : ["MET_NoTrigger_Plot","pfMET No Trigger"], "MET_NoCut": ["MET_NoCut_Plot", "pfMET No Cuts/Selections"], 
-		"HT_Trigg" : ["HT_Trigger_Plot",r"HT Trigger"], "HT_PreTrigg" : ["HT_NoTrigger_Plot", r"HT No Trigger"], "HT_NoCut" : ["HT_NoCut_Plot", "HT No Cuts/Selections"]
+		"HT_Trigg" : ["HT_Trigger_Plot",r"HT Trigger"], "HT_PreTrigg" : ["HT_NoTrigger_Plot", r"HT No Trigger"], "HT_NoCut" : ["HT_NoCut_Plot", "HT No Cuts/Selections"],
+		"MET_NoCrossClean" : ["MET_NoCrossClean_Plot", "pfMET No Cross Cleaning Applied"], "HT_NoCrossClean" : ["HT_NoCrossComp_Plot", "HT No Cross Cleaing Applied"]
 	}
 	
 	trigger_MTHTJet_hist_dict_2d = {
@@ -641,6 +619,7 @@ if __name__ == "__main__":
 	#background_array = ["ZZ4l",]
 	file_base = "~/Analysis/BoostedTau/TriggerEff/2018_Background/"
 	background_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v2_Hadd/"
+	#background_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedH3/2018/tt/v2_fast_Hadd/"
 	background_dict = {"ZZ4l" : r"$ZZ \rightarrow 4l$", "top": "Top Background"}
 	#file_dict = {"ZZ4l": [file_base + "ZZ4l.root"], "top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
 	#file_dict = {"top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
@@ -656,6 +635,7 @@ if __name__ == "__main__":
 			events = NanoEventsFactory.from_root(
 				background_base + background_name + ".root",
 				treepath="/4tau_tree",
+				#treepath="/tautau_tree",
 				schemaclass = BaseSchema,
 				metadata={"dataset": "boosted_tau"},
 			).events()
@@ -669,6 +649,7 @@ if __name__ == "__main__":
 				trigger_out = p2.process(events)
 			else:
 				trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, False)) 
+				#trigger_out = iterative_runner(file_dict, treename="tautau_tree",processor_instance=TriggerStudies(trigger_bit, False)) 
 			
 			if (trigger_bit == 40):
 				trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
