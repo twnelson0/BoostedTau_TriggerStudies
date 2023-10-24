@@ -119,7 +119,7 @@ class TriggerStudies(processor.ProcessorABC):
 		AK8Pt_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8Pt_hist").Reg(40,0,1100, name="AK8Pt", label = "AK8 Jet r$p_T$ [GeV]", overflow = False).Double()	
 		AK8SoftMass_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8SoftMass_hist").Reg(40,0,400, name="AK8SoftMass", label = "AK8 Jet Soft Drop Mass [GeV]", overflow = False).Double()
 		AK8Pt_PreTrigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]", overflow = False).Double()
-		AK8Pt_NoCut = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_NoCut", label = r"AK8Jet $p_T$ [GeV]", overflow = False).Double()
+		AK8Pt_NoCut = hist.Hist.new.Reg(40, 0, 1800, name = "JetPt_NoCut", label = r"AK8Jet $p_T$ [GeV]", overflow = False).Double()
 		AK8Pt_Trigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]", overflow = False).Double()
 		AK8SoftMass_PreTrigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]", overflow = False).Double()
 		AK8SoftMass_NoCut = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_NoCut", label = "AK8Jet Soft Mass [GeV]", overflow = False).Double()
@@ -186,8 +186,10 @@ class TriggerStudies(processor.ProcessorABC):
 		HT_down,tau_temp3 = ak.unzip(ak.cartesian([JetDown_MHT,tau], axis = 1, nested = True))
 		
 		#Get Cross clean free histograms
-		MET_NoCrossCleaning.fill(Jet.pfMET)
-		HT_NoCrossCleaning.fill(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False))	
+		MET_NoCrossCleaning.fill(ak.ravel(Jet.pfMET))
+		MET_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(Jet.pfMET))
+		HT_NoCrossCleaning.fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))	
+		HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))
 	
 		mval_temp = deltaR(tau_temp1,HT) >= 0.5
 		print(len(mval_temp))
@@ -210,6 +212,8 @@ class TriggerStudies(processor.ProcessorABC):
 		JetUp_HT = JetUp_MHT[ak.all(JetUp_MHT.dR == True, axis = 2)]
 		JetDown_HT = JetDown_MHT[ak.all(JetDown_MHT.dR == True, axis = 2)]
 		Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
+		MET_Acc_NoCut = MET_Acc_NoCrossClean
+		HT_Acc_NoCut = HT_Acc_NoCrossClean
 
 		#Histograms of variables relavent to trigger 
 		if (self.trigger_bit == 40 and self.signal):
@@ -218,7 +222,9 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8SoftMass_NoCut.fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetDropMass))
 		if (self.trigger_bit == 39 and self.signal):
 			HT_NoCut.fill(ak.ravel(Jet.HT))
-			MET_NoCut.fill(ak.ravel(Jet.pfMET))
+			HT_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(Jet.HT))
+			MET_NoCut.fill(ak.ravel(Jet_HT.pfMET))
+			MET_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(Jet_HT.pfMET))
 				
 
 		trigger_mask = bit_mask([self.trigger_bit])		
@@ -249,16 +255,6 @@ class TriggerStudies(processor.ProcessorABC):
 		
 
 		if (self.trigger_bit == 40):
-			#Cut Z-->2mu and Z-->2e events with 85 GeV <= m <= 95 GeV 
-			#if (not(self.signal)):
-			#	print("%d Events"%len(ak.ravel(AK8Jet.AK8JetPt)))
-				#AK8JetRav = ak.ravel(AK8Jet)
-				#print(deltaR(AK8JetRav[0],AK8JetRav[1]))
-			#	e_minus = Electron[Electron.charge < 0]
-			#	e_plus = Electron[Electron.charge > 0]
-			#	mu_minus = Muon[Muon.charge < 0]
-			#	mu_plus = Muon[Muon.charge > 0]
-				
 			AK8Pt_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 			AK8Pt_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
 			AK8SoftMass_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
@@ -351,9 +347,13 @@ class TriggerStudies(processor.ProcessorABC):
 					"pre_trigger_num": pre_triggernum,
 					"post_trigger_num": post_triggernum,
 					"MET_NoCut": MET_NoCut,
+					"Acc_MET_NoCut": MET_Acc_NoCut,
 					"HT_NoCut": HT_NoCut,
+					"Acc_HT_NoCut": HT_Acc_NoCut,
 					"MET_NoCrossClean": MET_NoCrossCleaning,
-					"HT_NoCrossClean": HT_NoCrossCleaning 
+					"Acc_MET_NoCrossClean": MET_Acc_NoCrossClean,
+					"HT_NoCrossClean": HT_NoCrossCleaning,
+					"Acc_HT_NoCrossClean": HT_Acc_NoCrossClean
 				}
 			}
 
@@ -601,6 +601,20 @@ if __name__ == "__main__":
 					plt.title(hist_name_arr[1] + " mass : " + mass_str[0] + " TeV", wrap=True)
 				else:
 					plt.title(hist_name_arr[1] + " (" + trigger_name + ") , mass : " + mass_str[0] + " TeV", wrap=True)
+			
+				#Add Text with average and number of entries	
+				if (var_name == "MET_NoCut"):
+					plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_MET_NoCut"].count, transform = ax.transAxes)
+					plt.text(x = 0.74, y = 0.7, s = "Mean: %d GeV"%trigger_out["boosted_tau"]["Acc_MET_NoCut"].value, transform = ax.transAxes)
+				if (var_name == "MET_NoCrossClean"):
+					plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_MET_NoCrossClean"].count, transform = ax.transAxes)
+					plt.text(x = 0.74, y = 0.7, s = "Mean: %d GeV"%trigger_out["boosted_tau"]["Acc_MET_NoCrossClean"].value, transform = ax.transAxes)
+				if (var_name == "HT_NoCut"):
+					plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_HT_NoCut"].count, transform = ax.transAxes)
+					plt.text(x = 0.74, y = 0.7, s = "Mean: %d GeV"%trigger_out["boosted_tau"]["Acc_HT_NoCut"].value, transform = ax.transAxes)
+				if (var_name == "HT_NoCrossClean"):
+					plt.text(x = 0.14, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_HT_NoCrossClean"].count, transform = ax.transAxes)
+					plt.text(x = 0.14, y = 0.7, s = "Mean: %d GeV"%trigger_out["boosted_tau"]["Acc_HT_NoCrossClean"].value, transform = ax.transAxes)
 				plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
 				plt.close()
 				  
