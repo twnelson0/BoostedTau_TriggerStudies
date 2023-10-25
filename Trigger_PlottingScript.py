@@ -116,27 +116,27 @@ class TriggerStudies(processor.ProcessorABC):
 		)
 		
 		#Histograms (AK8Jet) (Trigger bit = 40)
-		AK8Pt_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8Pt_hist").Reg(40,0,1100, name="AK8Pt", label = "AK8 Jet r$p_T$ [GeV]", overflow = False).Double()	
-		AK8SoftMass_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8SoftMass_hist").Reg(40,0,400, name="AK8SoftMass", label = "AK8 Jet Soft Drop Mass [GeV]", overflow = False).Double()
-		AK8Pt_PreTrigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]", overflow = False).Double()
-		AK8Pt_NoCut = hist.Hist.new.Reg(40, 0, 1800, name = "JetPt_NoCut", label = r"AK8Jet $p_T$ [GeV]", overflow = False).Double()
-		AK8Pt_Trigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]", overflow = False).Double()
-		AK8SoftMass_PreTrigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]", overflow = False).Double()
-		AK8SoftMass_NoCut = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_NoCut", label = "AK8Jet Soft Mass [GeV]", overflow = False).Double()
-		AK8SoftMass_Trigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]", overflow = False).Double()		
+		AK8Pt_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8Pt_hist").Reg(40,0,1100, name="AK8Pt", label = "AK8 Jet r$p_T$ [GeV]").Double()	
+		AK8SoftMass_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8SoftMass_hist").Reg(40,0,400, name="AK8SoftMass", label = "AK8 Jet Soft Drop Mass [GeV]").Double()
+		AK8Pt_PreTrigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
+		AK8Pt_NoCut = hist.Hist.new.Reg(40, 0, 1800, name = "JetPt_NoCut", label = r"AK8Jet $p_T$ [GeV]").Double()
+		AK8Pt_Trigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
+		AK8SoftMass_PreTrigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()
+		AK8SoftMass_NoCut = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_NoCut", label = "AK8Jet Soft Mass [GeV]").Double()
+		AK8SoftMass_Trigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()		
 		
 		#2D Histograms
 		AK8Jet_PreTrigger = hist.Hist(
-						hist.axis.Regular(20, 0, 1100, name="JetPt", label=r"AK8Jet $p_T$ [GeV]", overflow=False),
-						hist.axis.Regular(10, 0, 300, name="SoftMass", label=r"AK8Jet Soft Mass [GeV]", overflow=False)
+						hist.axis.Regular(20, 0, 1100, name="JetPt", label=r"AK8Jet $p_T$ [GeV]"),
+						hist.axis.Regular(10, 0, 300, name="SoftMass", label=r"AK8Jet Soft Mass [GeV]")
 					)		
 		AK8Jet_Trigger = hist.Hist(
-						hist.axis.Regular(20, 0, 1100, name="JetPt", label=r"AK8Jet $p_T$ [GeV]", overflow=False),
-						hist.axis.Regular(10, 0, 300, name="SoftMass", label="AK8Jet Soft Mass [GeV]", overflow=False)
+						hist.axis.Regular(20, 0, 1100, name="JetPt", label=r"AK8Jet $p_T$ [GeV]"),
+						hist.axis.Regular(10, 0, 300, name="SoftMass", label="AK8Jet Soft Mass [GeV]")
 					)		
 		eff_AK8Jet = hist.Hist(
-						hist.axis.Regular(20, 0, 1100, name="JetPt", label=r"AK8Jet $p_T$ [GeV]", overflow=False),
-						hist.axis.Regular(10, 0, 300, name="SoftMass", label="AK8Jet Soft Mass [GeV]", overflow=False)
+						hist.axis.Regular(20, 0, 1100, name="JetPt", label=r"AK8Jet $p_T$ [GeV]"),
+						hist.axis.Regular(10, 0, 300, name="SoftMass", label="AK8Jet Soft Mass [GeV]")
 					)		
 
 		#Histograms (MET and HT) (Trigger bit = 39)
@@ -176,6 +176,8 @@ class TriggerStudies(processor.ProcessorABC):
 		JetDown_MHT = JetDown_MHT[JetDown_MHT.PFLooseId > 0.5]
 		Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
 		Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
+		#Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False)
+		#Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False)
 		Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
 		print("Jet MHT Defined:")
 		
@@ -188,7 +190,10 @@ class TriggerStudies(processor.ProcessorABC):
 		#Get Cross clean free histograms
 		MET_NoCrossCleaning.fill(ak.ravel(Jet.pfMET))
 		MET_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(Jet.pfMET))
-		HT_NoCrossCleaning.fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))	
+		#HT_NoCrossCleaning.fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))	
+		HT_NoCrossCleaning.fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=True)))	
+		#print("No Cross Cleaning Applied")
+		#print("Len HT = %d"%len(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))
 		HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))
 	
 		mval_temp = deltaR(tau_temp1,HT) >= 0.5
@@ -212,8 +217,11 @@ class TriggerStudies(processor.ProcessorABC):
 		JetUp_HT = JetUp_MHT[ak.all(JetUp_MHT.dR == True, axis = 2)]
 		JetDown_HT = JetDown_MHT[ak.all(JetDown_MHT.dR == True, axis = 2)]
 		Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
-		MET_Acc_NoCut = MET_Acc_NoCrossClean
-		HT_Acc_NoCut = HT_Acc_NoCrossClean
+		#Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False)
+		print("Cross Cleaning Applied")
+		print("Len HT = %d"%len(Jet.HT))
+		MET_Acc_NoCut = []
+		HT_Acc_NoCut = []
 
 		#Histograms of variables relavent to trigger 
 		if (self.trigger_bit == 40 and self.signal):
@@ -221,6 +229,7 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8Pt_NoCut.fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetPt)) #Change to leading pt
 			AK8SoftMass_NoCut.fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetDropMass))
 		if (self.trigger_bit == 39 and self.signal):
+			print("No Cut Accumulators updated")
 			HT_NoCut.fill(ak.ravel(Jet.HT))
 			HT_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(Jet.HT))
 			MET_NoCut.fill(ak.ravel(Jet_HT.pfMET))
@@ -638,6 +647,7 @@ if __name__ == "__main__":
 	#file_dict = {"ZZ4l": [file_base + "ZZ4l.root"], "top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
 	#file_dict = {"top": [file_base + "Tbar-tchan.root",file_base + "Tbar-tW.root",file_base + "T-tchan.root"]}
 	file_dict = {"top": [background_base + "TTTo2L2Nu.root",background_base + "TTToSemiLeptonic.root",background_base + "TTToHadronic.root"]}
+	#file_dict = {"top": [background_base + "TTTo2L2Nu.root"]} #Single top file
 
 	iterative_runner = processor.Runner(
 		executor = processor.IterativeExecutor(compression=None),
@@ -697,7 +707,24 @@ if __name__ == "__main__":
 					trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
 				else:
 					#trigger_out[background_name]["boosted_tau"][var_name].plot2d(ax=ax)
-					trigger_out[background_name][var_name].plot2d(ax=ax)
+					if ("eff" not in var_name):
+						trigger_out[background_name][var_name].plot2d(ax=ax)
+					if (var_name == "Jet_eff"):
+						#Set up efficiency histogram
+						eff_Jet = hist.Hist(
+							hist.axis.Regular(20, 0, 1200., name = "pfMET" , label = r"MET [GeV]"),
+							hist.axis.Regular(20, 0, 3500., name = "HT", label = r"HT [GeV]")
+						)
+						eff_Jet = trigger_out[background_name]["Jet_Trigg"]/trigger_out[background_name]["Jet_PreTrigg"] 
+						eff_Jet.plot2d(ax=ax)
+					if (var_name == "AK8Jet_eff"):
+						print("AK8Jet Stuff!!")
+						eff_AK8Jet = hist.Hist(
+							hist.axis.Regular(20, 0, 1100, name="JetPt", label=r"AK8Jet $p_T$ [GeV]"),
+							hist.axis.Regular(10, 0, 300, name="SoftMass", label="AK8Jet Soft Mass [GeV]")
+						)		
+						eff_AK8Jet = trigger_out[background_name]["AK8Jet_Trigg"]/trigger_out[background_name]["AK8Jet_PreTrigg"]		
+						eff_AK8Jet.plot2d(ax=ax)
 	
 				if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
 					plt.title(hist_name_arr[1] + title, wrap=True)
