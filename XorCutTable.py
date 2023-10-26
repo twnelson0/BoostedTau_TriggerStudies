@@ -40,6 +40,13 @@ def bit_mask(in_bits):
 		mask += (1 << bit)
 	return mask
 
+def bit_or(data):
+	cond_1 = np.bitwise_and(data.trigger,bit_mask([39,40])) == bit_mask([39,40])
+	cond_2 = np.bitwise_and(data.trigger,bit_mask([39,40])) == bit_mask([39])
+	cond_3 = np.bitwise_and(data.trigger,bit_mask([39,40])) == bit_mask([40])
+	return np.bitwise_or(cond_1, np.bitwise_or(cond_2,cond_3))
+	
+
 def DrawTable(table_title, table_name, table_dict):
 	file_name = "Efficiency_Table_" + table_name + ".tex"
 	file = open(file_name,"w")
@@ -59,7 +66,7 @@ def DrawTable(table_title, table_name, table_dict):
 	file.write("\\hline \n")
 	file.write("\\multicolumn{4}{|c|}{" + table_title  + "} \\\\ \n")
 	file.write("\\hline \n")
-	file.write("Sample File(s) & PFMET500\\_PFMET100 PFMHT100\\_IDTight Efficiency & AK8PFJet400\\_TrimMass30 Efficiency & PFMET500\\_PFMET100 PFMHT100\\_IDTight or \\ AK8PFJet400\\_TrimMass30 Efficiency  \\\\ \n")
+	file.write("Sample File(s) & PFHT500\\_PFMET100 PFMHT100\\_IDTight Efficiency & AK8PFJet400\\_TrimMass30 Efficiency & PFHT500\\_PFMET100 PFMHT100\\_IDTight or \\ AK8PFJet400\\_TrimMass30 Efficiency  \\\\ \n")
 	file.write("\\hline \n")
 	
 	#Fill table
@@ -339,13 +346,17 @@ class TriggerStudies(processor.ProcessorABC):
 			tau = tau[np.bitwise_and(tau.trigger,trigger_mask) == trigger_mask]
 			AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,trigger_mask) == trigger_mask]
 			Jet = Jet[np.bitwise_and(Jet.trigger,trigger_mask) == trigger_mask]
-		if (self.trigger_cut and self.XorTrigger):
-			tau = tau[np.bitwise_and(tau.trigger,bit_mask([39])) == bit_mask([39])]
-			tau = tau[np.bitwise_and(tau.trigger,bit_mask([40])) == bit_mask([40])]
-			AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([39])) == bit_mask([39])]
-			AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([40])) == bit_mask([40])]
-			Jet = Jet[np.bitwise_and(Jet.trigger,bit_mask([39])) == bit_mask([39])]
-			Jet = Jet[np.bitwise_and(Jet.trigger,bit_mask([40])) == bit_mask([40])]
+		if (self.trigger_cut and self.XorTrigger): #Not sure where the issue is here...
+			#cond_1 = np.bitwise_and(trigger,bit_mask([39,40])) == bit_mask([39,40])
+			#cond_2 = np.bitwise_and(trigger,bit_mask([39,40])) == bit_mask([39])
+			#cond_3 = np.bitwise_and(trigger,bit_mask([39,40])) == bit_mask([40])
+			#cond = np.bitwise_or(cond_1, np.bitwise_or(cond_2,cond_3))
+			#Want to cut all for which c1 or c2 or c3 is false but using or won't work since [True] or [False] != [False] or [True]
+			#Make this garabage into a function since you have to do it 3 times for each collection of stuff since they each have their own trigger	
+		
+			tau = tau[bit_or(tau)]
+			AK8Jet = AK8Jet[bit_or(AK8Jet)]
+			Jet = Jet[bit_or(Jet)]
 			print("Applied Or Cut")
 
 

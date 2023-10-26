@@ -190,8 +190,8 @@ class TriggerStudies(processor.ProcessorABC):
 		#Get Cross clean free histograms
 		MET_NoCrossCleaning.fill(ak.ravel(Jet.pfMET))
 		MET_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(Jet.pfMET))
-		#HT_NoCrossCleaning.fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))	
-		HT_NoCrossCleaning.fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=True)))	
+		HT_NoCrossCleaning.fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))	
+		#HT_NoCrossCleaning.fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=True)))	
 		#print("No Cross Cleaning Applied")
 		#print("Len HT = %d"%len(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))
 		HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))
@@ -232,8 +232,10 @@ class TriggerStudies(processor.ProcessorABC):
 			print("No Cut Accumulators updated")
 			HT_NoCut.fill(ak.ravel(Jet.HT))
 			HT_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(Jet.HT))
+			print("HT Mean: %f"%HT_Acc_NoCut.value)
 			MET_NoCut.fill(ak.ravel(Jet_HT.pfMET))
 			MET_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(Jet_HT.pfMET))
+			print("MET Mean: %f"%MET_Acc_NoCut.value)
 				
 
 		trigger_mask = bit_mask([self.trigger_bit])		
@@ -614,16 +616,16 @@ if __name__ == "__main__":
 				#Add Text with average and number of entries	
 				if (var_name == "MET_NoCut"):
 					plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_MET_NoCut"].count, transform = ax.transAxes)
-					plt.text(x = 0.74, y = 0.7, s = "Mean: %d GeV"%trigger_out["boosted_tau"]["Acc_MET_NoCut"].value, transform = ax.transAxes)
+					plt.text(x = 0.74, y = 0.7, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_MET_NoCut"].value, transform = ax.transAxes)
 				if (var_name == "MET_NoCrossClean"):
 					plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_MET_NoCrossClean"].count, transform = ax.transAxes)
-					plt.text(x = 0.74, y = 0.7, s = "Mean: %d GeV"%trigger_out["boosted_tau"]["Acc_MET_NoCrossClean"].value, transform = ax.transAxes)
+					plt.text(x = 0.74, y = 0.7, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_MET_NoCrossClean"].value, transform = ax.transAxes)
 				if (var_name == "HT_NoCut"):
 					plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_HT_NoCut"].count, transform = ax.transAxes)
-					plt.text(x = 0.74, y = 0.7, s = "Mean: %d GeV"%trigger_out["boosted_tau"]["Acc_HT_NoCut"].value, transform = ax.transAxes)
+					plt.text(x = 0.74, y = 0.7, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_HT_NoCut"].value, transform = ax.transAxes)
 				if (var_name == "HT_NoCrossClean"):
 					plt.text(x = 0.14, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_HT_NoCrossClean"].count, transform = ax.transAxes)
-					plt.text(x = 0.14, y = 0.7, s = "Mean: %d GeV"%trigger_out["boosted_tau"]["Acc_HT_NoCrossClean"].value, transform = ax.transAxes)
+					plt.text(x = 0.14, y = 0.7, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_HT_NoCrossClean"].value, transform = ax.transAxes)
 				plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
 				plt.close()
 				  
@@ -666,8 +668,6 @@ if __name__ == "__main__":
 		
 		print("Background: " + background_name)	
 		for trigger_name, trigger_bit in trigger_dict.items():
-			#if (background_name == "top" and trigger_bit == 40):
-			#	continue
 			if (background_name == "ZZ4l"):
 				p2 = TriggerStudies(trigger_bit, False)
 				trigger_out = p2.process(events)
