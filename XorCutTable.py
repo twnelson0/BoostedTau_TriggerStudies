@@ -46,6 +46,10 @@ def bit_or(data):
 	cond_3 = np.bitwise_and(data.trigger,bit_mask([39,40])) == bit_mask([40])
 	return np.bitwise_or(cond_1, np.bitwise_or(cond_2,cond_3))
 	
+def bit_Xor(data):
+	cond_1 = np.bitwise_and(data.trigger,bit_mask([39,40])) == bit_mask([39])
+	cond_2 = np.bitwise_and(data.trigger,bit_mask([39,40])) == bit_mask([40])
+	return np.bitwise_or(cond_1,cond_2)
 
 def DrawTable(table_title, table_name, table_dict):
 	file_name = "Efficiency_Table_" + table_name + ".tex"
@@ -355,6 +359,7 @@ class TriggerStudies(processor.ProcessorABC):
 			#Make this garabage into a function since you have to do it 3 times for each collection of stuff since they each have their own trigger	
 		
 			tau = tau[bit_or(tau)]
+			#tau = tau[np.bitwise_and(tau.trigger,bit_mask([39])) or np.bitwise_and(tau.trigger,bit_mask([40]))]
 			AK8Jet = AK8Jet[bit_or(AK8Jet)]
 			Jet = Jet[bit_or(Jet)]
 			print("Applied Or Cut")
@@ -542,7 +547,7 @@ if __name__ == "__main__":
 	use_trigger = True
 	use_offline = False
 	xor = True
-	table_title = "Trigger Efficiency Table"
+	table_title = "Online Trigger Efficiency Table"
 	table_file_name = "Trigger_NoCuts_Xor"
 	
 	#if (i == 3):

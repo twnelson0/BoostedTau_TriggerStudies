@@ -165,76 +165,89 @@ class TriggerStudies(processor.ProcessorABC):
 
 		
 		#MHT
-		Jet_MHT = Jet[Jet.Pt > 30]
-		Jet_MHT = Jet_MHT[np.abs(Jet_MHT.eta) < 5]
-		Jet_MHT = Jet_MHT[Jet_MHT.PFLooseId > 0.5]
-		JetUp_MHT = Jet[Jet.PtTotUncUp > 30]
-		JetUp_MHT = JetUp_MHT[np.abs(JetUp_MHT.eta) < 5]
-		JetUp_MHT = JetUp_MHT[JetUp_MHT.PFLooseId > 0.5]
-		JetDown_MHT = Jet[Jet.PtTotUncDown > 30]
-		JetDown_MHT = JetDown_MHT[np.abs(JetDown_MHT.eta) < 5]
-		JetDown_MHT = JetDown_MHT[JetDown_MHT.PFLooseId > 0.5]
-		Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
-		Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
-		#Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False)
-		#Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False)
+		Jet = Jet[Jet.Pt > 30]
+		Jet = Jet[np.abs(Jet.eta) < 5]
+		Jet = Jet[Jet.PFLooseId > 0.5]
+		#JetUp_MHT = Jet[Jet.PtTotUncUp > 30]
+		#JetUp_MHT = JetUp_MHT[np.abs(JetUp_MHT.eta) < 5]
+		#JetUp_MHT = JetUp_MHT[JetUp_MHT.PFLooseId > 0.5]
+		#JetDown_MHT = Jet[Jet.PtTotUncDown > 30]
+		#JetDown_MHT = JetDown_MHT[np.abs(JetDown_MHT.eta) < 5]
+		#JetDown_MHT = JetDown_MHT[JetDown_MHT.PFLooseId > 0.5]
+		#Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
+		#Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
+		Jet["MHT_x"] = ak.sum(Jet.Pt*np.cos(Jet.phi),axis=1,keepdims=False)
+		Jet["MHT_y"] = ak.sum(Jet.Pt*np.sin(Jet.phi),axis=1,keepdims=False)
 		Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
 		print("Jet MHT Defined:")
 		
 		#HT Seleciton (new)
 		#tau_temp1,HT = ak.unzip(ak.cartesian([tau,Jet_MHT], axis = 1, nested = True))
-		HT,tau_temp1 = ak.unzip(ak.cartesian([Jet_MHT,tau], axis = 1, nested = True))
-		HT_up,tau_temp2 = ak.unzip(ak.cartesian([JetUp_MHT,tau], axis = 1, nested = True))
-		HT_down,tau_temp3 = ak.unzip(ak.cartesian([JetDown_MHT,tau], axis = 1, nested = True))
+		HT,tau_temp1 = ak.unzip(ak.cartesian([Jet,tau], axis = 1, nested = True))
+		#HT_up,tau_temp2 = ak.unzip(ak.cartesian([JetUp_MHT,tau], axis = 1, nested = True))
+		#HT_down,tau_temp3 = ak.unzip(ak.cartesian([JetDown_MHT,tau], axis = 1, nested = True))
 		
 		#Get Cross clean free histograms
 		MET_NoCrossCleaning.fill(ak.ravel(Jet.pfMET))
 		MET_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(Jet.pfMET))
-		HT_NoCrossCleaning.fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))	
+		#HT_NoCrossCleaning.fill(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False))	
+		HT_NoCrossCleaning.fill(ak.sum(Jet.Pt,axis = 1,keepdims=False))	
 		#HT_NoCrossCleaning.fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=True)))	
 		#print("No Cross Cleaning Applied")
 		#print("Len HT = %d"%len(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))
-		HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False)))
+		#HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False))
+		HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.sum(Jet.Pt,axis = 1,keepdims=False))
 	
 		mval_temp = deltaR(tau_temp1,HT) >= 0.5
-		print(len(mval_temp))
-		print(len(Jet_MHT.Pt))
-		print(mval_temp)
-		print(Jet_MHT.Pt)
-		print("Comparing to Jet")
+		#print(len(mval_temp))
+		#print(len(Jet.Pt))
+		if (len(Jet.Pt) != len(mval_temp)):
+			print("Things aren't good")
+			if (len(Jet.Pt) > len(mval_temp)):
+				print("More Jets than entries in mval_temp")
+			if (len(Jet.Pt) < len(mval_temp)):
+				print("Fewer entries in Jets than mval_temp")
+		#print(mval_temp)
+		#print(Jet_MHT.Pt)
+		#print("Comparing to Jet")
 		#for m, pt in zip(mval_temp, Jet_MHT.Pt):
 		#	if (len(m) != len(pt)):
 		#		print("Different Size problem!")
 		#		print(str(len(m)) + " != " + str(len(pt)))
 				#print(m)
 				#print(pt)
-		Jet_MHT["dR"] = mval_temp
-		mval_temp = deltaR(tau_temp2,HT_up) >= 0.5
-		JetUp_MHT["dR"] = mval_temp 
-		mval_temp = deltaR(tau_temp3,HT_down) >= 0.5
-		JetDown_MHT["dR"] = mval_temp	
-		Jet_HT = Jet_MHT[ak.all(Jet_MHT.dR == True, axis = 2)] #Lepton cuts
-		JetUp_HT = JetUp_MHT[ak.all(JetUp_MHT.dR == True, axis = 2)]
-		JetDown_HT = JetDown_MHT[ak.all(JetDown_MHT.dR == True, axis = 2)]
-		Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
+		Jet["dR"] = mval_temp
+		#mval_temp = deltaR(tau_temp2,HT_up) >= 0.5
+		#JetUp_MHT["dR"] = mval_temp 
+		#mval_temp = deltaR(tau_temp3,HT_down) >= 0.5
+		#JetDown_MHT["dR"] = mval_temp
+
+		#print("Pre dR Length %d"%len(Jet))
+		Jet = Jet[ak.all(Jet.dR == True, axis = 2)] #Lepton cuts
+		#JetUp_HT = JetUp_MHT[ak.all(JetUp_MHT.dR == True, axis = 2)]
+		#JetDown_HT = JetDown_MHT[ak.all(JetDown_MHT.dR == True, axis = 2)]
+		#print("Post dR Length %d"%len(Jet))
+		Jet["HT"] = ak.sum(Jet.Pt,axis = 1,keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
 		#Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False)
 		print("Cross Cleaning Applied")
 		print("Len HT = %d"%len(Jet.HT))
-		MET_Acc_NoCut = []
-		HT_Acc_NoCut = []
+		#MET_Acc_NoCut = []
+		#HT_Acc_NoCut = []
 
 		#Histograms of variables relavent to trigger 
-		if (self.trigger_bit == 40 and self.signal):
+		if (self.trigger_bit == 40):
 			AK8Jet_Temp = AK8Jet[ak.num(AK8Jet, axis = 1) > 0]
 			AK8Pt_NoCut.fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetPt)) #Change to leading pt
+			AK8Pt_Acc = hist.accumulators.Mean().fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetPt))
 			AK8SoftMass_NoCut.fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetDropMass))
-		if (self.trigger_bit == 39 and self.signal):
+			AK8SoftMass_Acc = hist.accumulators.Mean().fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetDropMass))
+		if (self.trigger_bit == 39):
 			print("No Cut Accumulators updated")
 			HT_NoCut.fill(ak.ravel(Jet.HT))
 			HT_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(Jet.HT))
 			print("HT Mean: %f"%HT_Acc_NoCut.value)
-			MET_NoCut.fill(ak.ravel(Jet_HT.pfMET))
-			MET_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(Jet_HT.pfMET))
+			MET_NoCut.fill(ak.ravel(Jet.pfMET))
+			MET_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(Jet.pfMET))
 			print("MET Mean: %f"%MET_Acc_NoCut.value)
 				
 
@@ -342,7 +355,9 @@ class TriggerStudies(processor.ProcessorABC):
 					"pre_trigger_num": pre_triggernum, 
 					"post_trigger_num": post_triggernum,
 					"AK8JetPt_NoCut": AK8Pt_NoCut, 
-					"AK8JetSofMass_NoCut": AK8SoftMass_NoCut
+					"AK8JetSoftMass_NoCut": AK8SoftMass_NoCut,
+					"Acc_AK8JetPt_NoCut": AK8Pt_Acc,
+					"Acc_AK8JetSoftMass_NoCut": AK8SoftMass_Acc
 				}
 			}
 		if (self.trigger_bit == 39):
@@ -546,7 +561,7 @@ if __name__ == "__main__":
 	trigger_AK8Jet_hist_dict_1d = {
 		"AK8JetSoftMass_Trigg" : ["AK8SoftMass_Trigger_Plot","AK8SoftDrop Mass Trigger"] , "AK8JetSoftMass_PreTrigg" : ["AK8SoftMass_NoTrigger_Plot","AK8SoftDrop Mass No Trigger"], 
 		"AK8JetPt_Trigg" : ["AK8Pt_Trigger_Plot",r"AK8Jet $p_T$ Trigger"], "AK8JetPt_PreTrigg" : ["AK8Pt_NoTrigger_Plot",r"AK8Jet $p_T$ No Trigger"],
-		"AK8JetPt_NoCut" : ["AK8Pt_NoCut_Plot", r"AK8Jet $p_T$ No Cuts"], "AK8JetSofMass_NoCut" : ["AK8SoftMass_NoCut_Plot", "AK8SoftDrop Mass No Cut"]
+		"AK8JetPt_NoCut" : ["AK8Pt_NoCut_Plot", r"AK8Jet $p_T$ No Cuts"], "AK8JetSoftMass_NoCut" : ["AK8SoftMass_NoCut_Plot", "AK8SoftDrop Mass No Cut"]
 	}
 	
 	trigger_AK8Jet_hist_dict_2d = {
@@ -616,16 +631,22 @@ if __name__ == "__main__":
 				#Add Text with average and number of entries	
 				if (var_name == "MET_NoCut"):
 					plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_MET_NoCut"].count, transform = ax.transAxes)
-					plt.text(x = 0.74, y = 0.7, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_MET_NoCut"].value, transform = ax.transAxes)
+					plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_MET_NoCut"].value, transform = ax.transAxes)
 				if (var_name == "MET_NoCrossClean"):
 					plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_MET_NoCrossClean"].count, transform = ax.transAxes)
-					plt.text(x = 0.74, y = 0.7, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_MET_NoCrossClean"].value, transform = ax.transAxes)
+					plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_MET_NoCrossClean"].value, transform = ax.transAxes)
 				if (var_name == "HT_NoCut"):
 					plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_HT_NoCut"].count, transform = ax.transAxes)
-					plt.text(x = 0.74, y = 0.7, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_HT_NoCut"].value, transform = ax.transAxes)
+					plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_HT_NoCut"].value, transform = ax.transAxes)
 				if (var_name == "HT_NoCrossClean"):
 					plt.text(x = 0.14, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_HT_NoCrossClean"].count, transform = ax.transAxes)
-					plt.text(x = 0.14, y = 0.7, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_HT_NoCrossClean"].value, transform = ax.transAxes)
+					plt.text(x = 0.14, y = 0.74, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_HT_NoCrossClean"].value, transform = ax.transAxes)
+				if (var_name == "AK8JetPt_NoCut"):
+					plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_AK8JetPt_NoCut"].count, transform = ax.transAxes)
+					plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_AK8JetPt_NoCut"].value, transform = ax.transAxes)
+				if (var_name == "AK8JetSoftMass_NoCut"):
+					plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_AK8JetSoftMass_NoCut"].count, transform = ax.transAxes)
+					plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_AK8JetSoftMass_NoCut"].value, transform = ax.transAxes)
 				plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
 				plt.close()
 				  
