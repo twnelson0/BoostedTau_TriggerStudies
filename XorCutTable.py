@@ -118,13 +118,13 @@ def TriggerDebuggTable(table_title,  table_dict):
 #class EffTable()
 
 class TriggerStudies(processor.ProcessorABC):
-	def __init__(self, trigger_bit, trigger_cut = True, offline_cut = False, signal = True, cut_num = 0, XorTrigger = False):
+	def __init__(self, trigger_bit, trigger_cut = True, offline_cut = False, signal = True, cut_num = 0, OrTrigger = False):
 		self.trigger_bit = trigger_bit
 		self.signal = signal
 		self.offline_cut = offline_cut
 		self.trigger_cut = trigger_cut
 		self.cut_num = cut_num
-		self.XorTrigger = XorTrigger
+		self.OrTrigger = OrTrigger
 		#pass
 	
 	def process(self, events):
@@ -251,9 +251,8 @@ class TriggerStudies(processor.ProcessorABC):
 		)
 		
 		#Set up variables for offline cuts
-
-
-		trigger_mask = bit_mask([self.trigger_bit])		
+		#trigger_mask = bit_mask([self.trigger_bit])		
+		trigger_mask = bit_mask([39,40])		
 		
 		#Apply Cuts
 		tau = tau[tau.pt > 30] #pT
@@ -346,22 +345,53 @@ class TriggerStudies(processor.ProcessorABC):
 		if (self.trigger_bit == 41):
 			Pt_PreTrigg_Arr = ak.ravel(tau.pt)
 
-		if (self.trigger_cut and self.XorTrigger == False):
+		if (self.trigger_cut and self.OrTrigger == False):
 			tau = tau[np.bitwise_and(tau.trigger,trigger_mask) == trigger_mask]
 			AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,trigger_mask) == trigger_mask]
 			Jet = Jet[np.bitwise_and(Jet.trigger,trigger_mask) == trigger_mask]
-		if (self.trigger_cut and self.XorTrigger): #Not sure where the issue is here...
-			#cond_1 = np.bitwise_and(trigger,bit_mask([39,40])) == bit_mask([39,40])
-			#cond_2 = np.bitwise_and(trigger,bit_mask([39,40])) == bit_mask([39])
-			#cond_3 = np.bitwise_and(trigger,bit_mask([39,40])) == bit_mask([40])
-			#cond = np.bitwise_or(cond_1, np.bitwise_or(cond_2,cond_3))
-			#Want to cut all for which c1 or c2 or c3 is false but using or won't work since [True] or [False] != [False] or [True]
-			#Make this garabage into a function since you have to do it 3 times for each collection of stuff since they each have their own trigger	
-		
-			tau = tau[bit_or(tau)]
+			
+			#Set of more strigent trigger selections
+			#tau = tau[np.bitwise_and(tau.trigger,trigger_mask) == bit_mask([self.trigger_bit])]
+			#AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,trigger_mask) == bit_mask([self.trigger_bit])]
+			#Jet = Jet[np.bitwise_and(Jet.trigger,trigger_mask) == bit_mask([self.trigger_bit])]
+		if (self.trigger_cut and self.OrTrigger): #Not sure where the issue is here...
+			#tau = tau[bit_or(tau)]
 			#tau = tau[np.bitwise_and(tau.trigger,bit_mask([39])) or np.bitwise_and(tau.trigger,bit_mask([40]))]
-			AK8Jet = AK8Jet[bit_or(AK8Jet)]
-			Jet = Jet[bit_or(Jet)]
+			#AK8Jet = AK8Jet[bit_or(AK8Jet)]
+			#Jet = Jet[bit_or(Jet)]
+			
+			#Look at properties of bitmask[39,40] &_b trigger:
+			sum_and = 0
+			sum_39 = 0
+			sum_40 = 0
+			total_num = 0
+			print(np.bitwise_and(tau.trigger,bit_mask([39,40])))
+			
+			#Test assumption that all non-empty events have 4 entries
+			for x in np.bitwise_and(tau.trigger,bit_mask([39,40])):
+				if (len(x) != 4 and len(x) != 0):
+					print("Assumtption is wrong")
+					print(x)
+	
+			for x in ak.ravel(np.bitwise_and(tau.trigger,bit_mask([39,40]))):
+				total_num += 1
+				if (x == bit_mask([39,40])):
+					sum_and += 1
+				if (x == bit_mask([39])):
+					sum_39 += 1
+				if (x == bit_mask([40])):
+					sum_40 += 1
+			
+			print("Both triggers = %d"%sum_and)
+			print("Trigger 39 = %d"%sum_39)
+			print("Triger 40 = %d"%sum_40)
+			print("Or fraction = %.4f"%((sum_and + sum_39 + sum_40)/(total_num)))
+			
+			#Simpiler or cut but it should be the same
+			tau = tau[np.bitwise_and(tau.trigger,bit_mask([39,40])) != 0]
+			AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([39,40])) != 0]
+			Jet = Jet[np.bitwise_and(Jet.trigger,bit_mask([39,40])) != 0]
+
 			print("Applied Or Cut")
 
 
@@ -432,8 +462,8 @@ class TriggerStudies(processor.ProcessorABC):
 			post_triggernum = ak.num(AK8Pt_Trigg_Arr,axis=0)
 			print("Number = %d"%post_triggernum)
             
-			if (self.signal):
-				print("Efficiency (AK8Jet Trigger): %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
+			#if (self.signal):
+			#	print("Efficiency (AK8Jet Trigger): %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
 			AK8Jet_PreTrigger.fill(AK8Pt_NoTrigg_Arr, AK8SoftMass_NoTrigg_Arr)
 			AK8Jet_Trigger.fill(AK8Pt_Trigg_Arr, AK8SoftMass_Trigg_Arr)
 			eff_AK8Jet = AK8Jet_Trigger/AK8Jet_PreTrigger
@@ -447,8 +477,8 @@ class TriggerStudies(processor.ProcessorABC):
 			print("Number = %d"%pre_triggernum)
 			post_triggernum = ak.num(MET_Trigg_Arr,axis=0)	
 			print("Number = %d"%post_triggernum)
-			if (self.signal):	
-				print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
+			#if (self.signal):	
+			#	print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
 			Jet_PreTrigger.fill(MET_NoTrigg_Arr, HT_NoTrigg_Arr)
 			Jet_Trigger.fill(MET_Trigg_Arr, HT_Trigg_Arr)
 			eff_Jet = Jet_Trigger/Jet_PreTrigger
@@ -528,7 +558,7 @@ if __name__ == "__main__":
 		"Jet_eff" : ["Jet_Eff_Plot", "MET and HT Efficiency Histogram Trigger"]
 	}
 	
-	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": 39, "AK8PFJet400_TrimMass30": 40, "XorTrigger": 41}
+	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": 39, "AK8PFJet400_TrimMass30": 40, "OrTrigger": 41}
 
 	#filebase = "~/Analysis/BoostedTau/TriggerEff/2018_Samples/GluGluToRadionToHHTo4T_M-"
 	signal_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v1_Hadd/GluGluToRadionToHHTo4T_M-"
@@ -548,7 +578,7 @@ if __name__ == "__main__":
 	use_offline = False
 	xor = True
 	table_title = "Online Trigger Efficiency Table"
-	table_file_name = "Trigger_NoCuts_Xor"
+	table_file_name = "Trigger_NoCuts_Or"
 	
 	#if (i == 3):
 	#	use_trigger = False 
@@ -575,7 +605,7 @@ if __name__ == "__main__":
 			else:
 				XorVal = True
 				
-			p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, XorTrigger = XorVal)
+			p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, OrTrigger = XorVal)
 			trigger_out = p2.process(events)
 			
 			if (trigger_bit == 39):
@@ -631,10 +661,11 @@ if __name__ == "__main__":
 			else:
 				XorVal = False
 			if (background_name == "ZZ4l"):
-				p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, XorTrigger = XorVal)
+				p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, OrTrigger = XorVal)
 				trigger_out = p2.process(events)
 			else:
-				trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, XorTrigger = XorVal)) 
+				print("Top Background")
+				trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, OrTrigger = XorVal)) 
 		
 			if (trigger_bit == 40):
 				trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
