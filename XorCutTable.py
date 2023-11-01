@@ -251,8 +251,8 @@ class TriggerStudies(processor.ProcessorABC):
 		)
 		
 		#Set up variables for offline cuts
-		#trigger_mask = bit_mask([self.trigger_bit])		
-		trigger_mask = bit_mask([39,40])		
+		trigger_mask = bit_mask([self.trigger_bit])		
+		#trigger_mask = bit_mask([39,40])		
 		
 		#Apply Cuts
 		tau = tau[tau.pt > 30] #pT
@@ -325,6 +325,7 @@ class TriggerStudies(processor.ProcessorABC):
 		Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
 
 		if (self.trigger_bit == 40):	
+			Pt_PreTrigg_Arr = ak.ravel(tau.pt)
 			AK8Pt_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 			AK8Pt_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
 			AK8SoftMass_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
@@ -337,6 +338,7 @@ class TriggerStudies(processor.ProcessorABC):
 			Jet = Jet[Jet.HT > 30]
 			
 			#Fill Histograms
+			Pt_PreTrigg_Arr = ak.ravel(tau.pt)
 			HT_PreTrigg.fill(ak.ravel(Jet.HT))
 			HT_NoTrigg_Arr = ak.ravel(Jet.HT)
 			MET_PreTrigg.fill(ak.ravel(Jet.pfMET))
@@ -382,6 +384,7 @@ class TriggerStudies(processor.ProcessorABC):
 				if (x == bit_mask([40])):
 					sum_40 += 1
 			
+			print("Total number = %d"%total_num)	
 			print("Both triggers = %d"%sum_and)
 			print("Trigger 39 = %d"%sum_39)
 			print("Triger 40 = %d"%sum_40)
@@ -451,15 +454,19 @@ class TriggerStudies(processor.ProcessorABC):
 		
 		#Efficiency Histograms 
 		if (self.trigger_bit == 40):	
+			Pt_PostTrigg_Arr = ak.ravel(tau.pt)
 			AK8Pt_Trigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 			AK8SoftMass_Trigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
 			AK8Pt_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetPt))	
 			AK8Pt_Trigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
 			AK8SoftMass_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetDropMass))	
 			AK8SoftMass_Trigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
-			pre_triggernum = ak.num(AK8Pt_NoTrigg_Arr,axis=0)
+			#pre_triggernum = ak.num(AK8Pt_NoTrigg_Arr,axis=0)
+			pre_triggernum = ak.num(Pt_PreTrigg_Arr,axis=0)
 			print("Number = %d"%pre_triggernum)
-			post_triggernum = ak.num(AK8Pt_Trigg_Arr,axis=0)
+			Pt_PostTrigg_Arr = ak.ravel(tau.pt)
+			post_triggernum = ak.num(Pt_PostTrigg_Arr,axis=0)
+			#post_triggernum = ak.num(AK8Pt_Trigg_Arr,axis=0)
 			print("Number = %d"%post_triggernum)
             
 			#if (self.signal):
@@ -469,13 +476,17 @@ class TriggerStudies(processor.ProcessorABC):
 			eff_AK8Jet = AK8Jet_Trigger/AK8Jet_PreTrigger
 		
 		if (self.trigger_bit == 39):
+			Pt_PostTrigg_Arr = ak.ravel(tau.pt)
 			HT_Trigg.fill(ak.ravel(Jet.HT))
 			HT_Trigg_Arr = ak.ravel(Jet.HT)
 			MET_Trigg.fill(ak.ravel(Jet.pfMET))
 			MET_Trigg_Arr = ak.ravel(Jet.pfMET)
-			pre_triggernum = ak.num(MET_NoTrigg_Arr,axis=0)
+			#pre_triggernum = ak.num(MET_NoTrigg_Arr,axis=0)
+			pre_triggernum = ak.num(Pt_PreTrigg_Arr,axis=0)
 			print("Number = %d"%pre_triggernum)
-			post_triggernum = ak.num(MET_Trigg_Arr,axis=0)	
+			Pt_PostTrigg_Arr = ak.ravel(tau.pt)
+			#post_triggernum = ak.num(MET_Trigg_Arr,axis=0)	
+			post_triggernum = ak.num(Pt_PostTrigg_Arr,axis=0)
 			print("Number = %d"%post_triggernum)
 			#if (self.signal):	
 			#	print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
@@ -572,7 +583,9 @@ if __name__ == "__main__":
 	#file_dict = {"top": [background_base + "Tbar-tchan.root",background_base + "Tbar-tW.root",background_base + "T-tchan.root"]}
 	#file_dict = {"top": [background_base + "Tbar-tW.root",background_base + "T-tchan.root"]}
 	file_dict = {"top": [background_base + "TTTo2L2Nu.root",background_base + "TTToSemiLeptonic.root",background_base + "TTToHadronic.root"]}
-	#file_dict = {"top": [background_base + "Tbar-tchan.root",background_base + "T-tW.root"]}
+	#file_dict = {"top": [background_base + "TTTo2L2Nu.root"]}
+	#file_dict = {"top": [background_base + "TTToSemiLeptonic.root"]}
+	#file_dict = {"top": [background_base + "TTToHadronic.root"]}
 	
 	use_trigger = True
 	use_offline = False
