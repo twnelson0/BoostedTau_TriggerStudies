@@ -121,8 +121,8 @@ class TriggerStudies(processor.ProcessorABC):
 				"phi": events.boostedTauPhi,
 				"nBoostedTau": events.nBoostedTau,
 				"charge": events.boostedTauCharge,
-				"iso1": events.boostedTauByIsolationMVArun2v1DBoldDMwLTrawNew,
-				"iso2": events.boostedTaupfTausDiscriminationByDecayModeFinding,
+				"iso": events.boostedTauByIsolationMVArun2v1DBoldDMwLTrawNew,
+				"decay": events.boostedTaupfTausDiscriminationByDecayModeFinding,
 				"trigger": events.HLTJet,
 				"pfMET": events.pfMET,
 			},
@@ -336,11 +336,11 @@ class TriggerStudies(processor.ProcessorABC):
 		print("Taus after dR cut: %d"%len(ak.ravel(tau.pt)))
 		
 		#Loose isolation
-		tau = tau[tau.iso1 >= 0.5]
+		tau = tau[tau.decay >= 0.5]		
 		CutFlow_Table.fill(4*np.ones([len(ak.ravel(tau.pt))]))
-		tau = tau[tau.iso2 >= 0.5]		
+		tau = tau[tau.iso >= 0.5]
 		CutFlow_Table.fill(5*np.ones([len(ak.ravel(tau.pt))]))
-		print("Taus after iso cut: %d"%len(ak.ravel(tau.pt)))
+		print("Taus after iso & decay cut: %d"%len(ak.ravel(tau.pt)))
 		
 
 		AK8Jet = AK8Jet[(ak.sum(tau.charge,axis=1) == 0)] #Apply charge conservation cut to AK8Jets
