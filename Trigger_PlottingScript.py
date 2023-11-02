@@ -219,14 +219,14 @@ class TriggerStudies(processor.ProcessorABC):
 
 		Jet_HT["dR"] = mval_temp
 		mval_temp = deltaR(tau_temp2,HT_up) >= 0.5
-		JetUp_MHT["dR"] = mval_temp 
+		JetUp_HT["dR"] = mval_temp 
 		mval_temp = deltaR(tau_temp3,HT_down) >= 0.5
-		JetDown_MHT["dR"] = mval_temp
+		JetDown_HT["dR"] = mval_temp
 
 		#print("Pre dR Length %d"%len(Jet))
 		Jet_HT = Jet_HT[ak.all(Jet_HT.dR == True, axis = 2)] #Lepton cuts
-		JetUp_HT = JetUp_MHT[ak.all(JetUp_MHT.dR == True, axis = 2)]
-		JetDown_HT = JetDown_MHT[ak.all(JetDown_MHT.dR == True, axis = 2)]
+		JetUp_HT = JetUp_HT[ak.all(JetUp_HT.dR == True, axis = 2)]
+		JetDown_HT = JetDown_HT[ak.all(JetDown_HT.dR == True, axis = 2)]
 		#print("Post dR Length %d"%len(Jet))
 		HT_Val_NoCuts = ak.sum(Jet_HT.Pt,axis = 1,keepdims=True) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
 		#Jet["HT"] = ak.sum(Jet.Pt,axis = 1,keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
@@ -271,8 +271,9 @@ class TriggerStudies(processor.ProcessorABC):
 		tau = tau[tau.eta < 2.3] #eta
 		
 		#Loose isolation
-		tau = tau[tau.iso1 >= 0.5]
-		tau = tau[tau.iso2 >= 0.5]	
+		tau = tau[tau.decay >= 0.5]	
+		tau = tau[tau.iso >= 0.5]
+
 
 		#Delta R Cut on taus
 		a,b = ak.unzip(ak.cartesian([tau,tau], axis = 1, nested = True))
@@ -434,8 +435,8 @@ class TauPlotting(processor.ProcessorABC):
 				"leadingIndx": events.leadtauIndex,
 				"nBoostedTau": events.nBoostedTau,
 				"charge": events.boostedTauCharge,
-				"iso1": events.boostedTauByIsolationMVArun2v1DBoldDMwLTrawNew,
-				"iso2": events.boostedTaupfTausDiscriminationByDecayModeFinding,
+				"iso": events.boostedTauByIsolationMVArun2v1DBoldDMwLTrawNew,
+				"decay": events.boostedTaupfTausDiscriminationByDecayModeFinding,
 			},
 			with_name="TauArray",
 			behavior=candidate.behavior,
@@ -494,8 +495,8 @@ class TauPlotting(processor.ProcessorABC):
 		tau = tau[tau.eta < 2.3] #eta
 		
 		#Loose isolation
-		tau = tau[tau.iso1 >= 0.5]
-		tau = tau[tau.iso2 >= 0.5]		
+		tau = tau[tau.decay >= 0.5]		
+		tau = tau[tau.iso >= 0.5]
 		
 		#Delta R Cut on taus
 		a,b = ak.unzip(ak.cartesian([tau,tau], axis = 1, nested = True))
