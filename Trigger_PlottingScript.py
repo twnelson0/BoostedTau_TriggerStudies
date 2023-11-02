@@ -309,10 +309,6 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8Pt_all.fill("No Trigger",ak.ravel(AK8Jet.AK8JetPt))
 		
 		if (self.trigger_bit == 39):
-			#Apply Jet Cuts
-			#Jet = Jet[Jet.eta <= 3]	
-			#Jet = Jet[Jet.HT > 30]
-			
 			#Fill Histograms
 			HT_Val_PreTrigger = ak.sum(Jet_HT.Pt, axis = 1, keepdims=True) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
 			Jet["HT"] = ak.sum(Jet_HT.Pt, axis = 1, keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=False)

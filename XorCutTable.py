@@ -16,24 +16,6 @@ def deltaR(part1, part2):
 def mass(part1,part2):
 	return np.sqrt((part1.E + part2.E)**2 - (part1.Px + part2.Px)**2 - (part1.Py + part2.Py)**2 - (part1.Pz + part2.Pz)**2)
 
-#dR Selection function (Old) (REMOVE!!)
-def dR_selection(event_collection):
-	out = []
-	for taus in event_collection:
-		#innr_arr = np.array([])
-		innr_arr = []
-		for tau_i in taus:
-			subinnr_arr = []
-			for tau_j in taus:
-				if (tau_i.charge == tau_j.charge): #Only consider charge conserving pairs
-					continue
-				#innr_arr = np.append(innr_arr,deltaR(tau_i,tau_j) < 0.8)
-				subinnr_arr.append(deltaR(tau_i,tau_j) < 0.8)
-			innr_arr.append(subinnr_arr)
-		out.append(innr_arr)
-		
-	return ak.from_iter(out) 
-
 def bit_mask(in_bits):
 	mask = 0
 	for bit in in_bits:
@@ -247,80 +229,6 @@ class TriggerStudies(processor.ProcessorABC):
 			hist.axis.Regular(20, 0, 1000., name = "pfMET" , label = r"MET [GeV]"),
 			hist.axis.Regular(20, 0, 2000., name = "HT", label = r"HT [GeV]")
 		)
-		
-		#Set up variables for offline cuts
-		trigger_mask = bit_mask([self.trigger_bit])		
-		#trigger_mask = bit_mask([39,40])		
-		
-		#Apply Cuts
-		tau = tau[tau.pt > 30] #pT
-		CutFlow_Table.fill(1*np.ones([len(ak.ravel(tau.pt))]))
-		print("Taus after pt Cut: %d"%len(ak.ravel(tau.pt)))
-		tau = tau[tau.eta < 2.3] #eta
-		CutFlow_Table.fill(2*np.ones([len(ak.ravel(tau.pt))]))
-		print("Taus after eta cut: %d"%len(ak.ravel(tau.pt)))
-		
-		a,b = ak.unzip(ak.cartesian([tau,tau], axis = 1, nested = True))
-		mval = deltaR(a,b) < 0.8 
-		tau["dRCut"] = mval
-		tau = tau[ak.any(tau.dRCut, axis = 2) == True]
-		
-		CutFlow_Table.fill(3*np.ones([len(ak.ravel(tau.pt))]))
-		print("Taus after dR cut: %d"%len(ak.ravel(tau.pt)))
-		
-		#Loose isolation
-		tau = tau[tau.iso1 >= 0.5]
-		CutFlow_Table.fill(4*np.ones([len(ak.ravel(tau.pt))]))
-		tau = tau[tau.iso2 >= 0.5]		
-		CutFlow_Table.fill(5*np.ones([len(ak.ravel(tau.pt))]))
-		print("Taus after iso cut: %d"%len(ak.ravel(tau.pt)))
-		
-
-		AK8Jet = AK8Jet[(ak.sum(tau.charge,axis=1) == 0)] #Apply charge conservation cut to AK8Jets
-		Muon = Muon[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
-		Electron = Electron[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
-		Jet = Jet[(ak.sum(tau.charge,axis=1) == 0)]
-		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
-		CutFlow_Table.fill(6*np.ones([len(ak.ravel(tau.pt))]))
-		print("Taus after Charge Conservation cut: %d"%len(tau.pt))
-		
-		AK8Jet = AK8Jet[ak.num(tau) == 4]
-		Electron = Electron[ak.num(tau) == 4]
-		Muon = Muon[ak.num(tau) == 4]
-		Jet = Jet[ak.num(tau) == 4]
-		#print(len(tau[ak.num(tau) > 4]))
-		tau = tau[ak.num(tau) == 4] #4 tau events
-		CutFlow_Table.fill(7*np.ones([len(ak.ravel(tau.pt))]))
-		print("Taus after 4 tau cut: %d"%len(tau.pt))
-		
-		#MHT (OLD)
-		# Jet_MHT = Jet[Jet.Pt > 30]
-		# Jet_MHT = Jet_MHT[np.abs(Jet_MHT.eta) < 5]
-		# Jet_MHT = Jet_MHT[Jet_MHT.PFLooseId > 0.5]
-		# JetUp_MHT = Jet[Jet.PtTotUncUp > 30]
-		# JetUp_MHT = JetUp_MHT[np.abs(JetUp_MHT.eta) < 5]
-		# JetUp_MHT = JetUp_MHT[JetUp_MHT.PFLooseId > 0.5]
-		# JetDown_MHT = Jet[Jet.PtTotUncDown > 30]
-		# JetDown_MHT = JetDown_MHT[np.abs(JetDown_MHT.eta) < 5]
-		# JetDown_MHT = JetDown_MHT[JetDown_MHT.PFLooseId > 0.5]
-		# Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
-		# Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
-		# Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
-		# print("Jet MHT Defined:")
-
-		# #HT
-		# tau_jet = ak.cartesian({"tau": tau, "Jet_MHT": Jet_MHT},axis=1)
-		# tau_jetUp = ak.cartesian({"tau": tau, "JetUp_MHT": JetUp_MHT},axis=1)
-		# tau_jetDown = ak.cartesian({"tau": tau, "JetDown_MHT": JetDown_MHT},axis=1)
-		# print(len(Jet_MHT))
-		# Jet_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jet["tau"],tau_jet["Jet_MHT"]) >= 0.5,axis = 1, counts = 4), axis=2) #Clump jet and taus in structure
-		# JetUp_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetUp["tau"],tau_jetUp["JetUp_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
-		# JetDown_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jetDown["tau"],tau_jetDown["JetDown_MHT"]) >= 0.5, axis = 1, counts = 4), axis=2) 
-
-		# Jet_HT = Jet_MHT[Jet_MHT.dR] #Lepton cuts
-		# JetUp_HT = JetUp_MHT[JetUp_MHT.dR]
-		# JetDown_HT = JetDown_MHT[JetDown_MHT.dR]
-		# Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
 
 		#MHT
 		Jet_MHT = Jet[Jet.Pt > 30]
@@ -406,6 +314,59 @@ class TriggerStudies(processor.ProcessorABC):
 		print("Pt Len: %d"%len(Jet.Pt))
 		print("Cross Cleaning Applied")
 		print("Len HT = %d"%len(Jet.HT))
+		
+		#Set up variables for offline cuts
+		trigger_mask = bit_mask([self.trigger_bit])		
+		#trigger_mask = bit_mask([39,40])		
+		
+		#Apply Cuts
+		tau = tau[tau.pt > 30] #pT
+		CutFlow_Table.fill(1*np.ones([len(ak.ravel(tau.pt))]))
+		print("Taus after pt Cut: %d"%len(ak.ravel(tau.pt)))
+		tau = tau[tau.eta < 2.3] #eta
+		CutFlow_Table.fill(2*np.ones([len(ak.ravel(tau.pt))]))
+		print("Taus after eta cut: %d"%len(ak.ravel(tau.pt)))
+		
+		a,b = ak.unzip(ak.cartesian([tau,tau], axis = 1, nested = True))
+		mval = deltaR(a,b) < 0.8 
+		tau["dRCut"] = mval
+		tau = tau[ak.any(tau.dRCut, axis = 2) == True]
+		
+		CutFlow_Table.fill(3*np.ones([len(ak.ravel(tau.pt))]))
+		print("Taus after dR cut: %d"%len(ak.ravel(tau.pt)))
+		
+		#Loose isolation
+		tau = tau[tau.iso1 >= 0.5]
+		CutFlow_Table.fill(4*np.ones([len(ak.ravel(tau.pt))]))
+		tau = tau[tau.iso2 >= 0.5]		
+		CutFlow_Table.fill(5*np.ones([len(ak.ravel(tau.pt))]))
+		print("Taus after iso cut: %d"%len(ak.ravel(tau.pt)))
+		
+
+		AK8Jet = AK8Jet[(ak.sum(tau.charge,axis=1) == 0)] #Apply charge conservation cut to AK8Jets
+		Muon = Muon[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
+		Electron = Electron[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
+		Jet = Jet[(ak.sum(tau.charge,axis=1) == 0)]
+		Jet_HT = Jet_HT[(ak.sum(tau.charge,axis=1) == 0)]
+		JetUp_HT = JetUp_HT[(ak.sum(tau.charge,axis=1) == 0)]
+		JetDown_HT = JetDown_HT[(ak.sum(tau.charge,axis=1) == 0)]
+		Jet_MHT = Jet_MHT[(ak.sum(tau.charge,axis=1) == 0)]
+		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
+		CutFlow_Table.fill(6*np.ones([len(ak.ravel(tau.pt))]))
+		print("Taus after Charge Conservation cut: %d"%len(tau.pt))
+		
+		AK8Jet = AK8Jet[ak.num(tau) == 4]
+		Electron = Electron[ak.num(tau) == 4]
+		Muon = Muon[ak.num(tau) == 4]
+		Jet_MHT = Jet_MHT[ak.num(tau) == 4]
+		Jet_HT = Jet_HT[ak.num(tau) == 4]
+		JetUp_HT = JetUp_HT[ak.num(tau) == 4]
+		JetDown_HT = JetDown_HT[ak.num(tau) == 4]
+		Jet = Jet[ak.num(tau) == 4]
+		#print(len(tau[ak.num(tau) > 4]))
+		tau = tau[ak.num(tau) == 4] #4 tau events
+		CutFlow_Table.fill(7*np.ones([len(ak.ravel(tau.pt))]))
+		print("Taus after 4 tau cut: %d"%len(tau.pt))
 
 
 		if (self.trigger_bit == 40):	
@@ -417,16 +378,17 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8Pt_all.fill("No Trigger",ak.ravel(AK8Jet.AK8JetPt))
 		
 		if (self.trigger_bit == 39):
-			#Apply Jet Cuts
-			Jet = Jet[Jet.eta <= 3]	
-			Jet = Jet[Jet.HT > 30]
-			
 			#Fill Histograms
 			Pt_PreTrigg_Arr = ak.ravel(tau.pt)
-			HT_PreTrigg.fill(ak.ravel(Jet.HT))
+			HT_Val_PreTrigger = ak.sum(Jet_HT.Pt, axis = 1, keepdims=True) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
+			Jet["HT"] = ak.sum(Jet_HT.Pt, axis = 1, keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=False)
+			HT_PreTrigg.fill(ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0]))
+			#HT_NoTrigg_Arr = ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0])
 			HT_NoTrigg_Arr = ak.ravel(Jet.HT)
 			MET_PreTrigg.fill(ak.ravel(Jet.pfMET))
 			MET_NoTrigg_Arr = ak.ravel(Jet.pfMET)
+			print("MET Len: %d"%len(MET_NoTrigg_Arr))	
+			print("HT Len: %d"%len(HT_NoTrigg_Arr))	
 
 		if (self.trigger_bit == 41):
 			Pt_PreTrigg_Arr = ak.ravel(tau.pt)
@@ -795,38 +757,6 @@ if __name__ == "__main__":
 	
 		table_dict[title_dict[background_name]] = eff_arr
 		
-		#Produce cutflow table
-		# if (i == 0):
-		# 	fig, ax = plt.subplots()
-		# 	if (background_name == "ZZ4l"):
-		# 		trigger_out["boosted_tau"]["Cutflow_hist"].plot1d(ax=ax)
-		# 		plt.title(r"Cutflow Table $ZZ \rightarrow 4l$ Background")
-		# 	else:
-		# 		trigger_out[background_name]["Cutflow_hist"].plot1d(ax=ax)
-		# 		plt.title("Cutflow Table Top background")
-		# 	#ax.set_yscale('log')
-		# 	plt.ylim(bottom = 1)
-		# 	plt.savefig("CutFlowTable_" + background_name)
-		# 	plt.close()
-	
-		#Set up debugging table
-		# new_eff_arr = [-1,-1]
-		# if (background_name == "ZZ4l"):
-		# 	debug_1 = TriggerStudies(40, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, cut_num = 1)
-		# 	out_1 = debug_1.process(events)
-		# 	new_eff_arr[0] = out_1["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
-		# 	debug_2 = TriggerStudies(40, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, cut_num = 2)
-		# 	out_2 = debug_2.process(events)
-		# 	new_eff_arr[1] = out_2["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
-		# 	debug_dict[title_dict[background_name]] = new_eff_arr	
-		# else:
-		# 	out_1 = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, cut_num = 1)) 
-		# 	new_eff_arr[0] = out_1[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]
-		# 	out_2 = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = False, cut_num = 2)) 
-		# 	new_eff_arr[1] = out_2[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]
-		# 	debug_dict[title_dict[background_name]] = new_eff_arr	
-
 		#Set up efficiency table
 		DrawTable(table_title,table_file_name,table_dict)
-		#TriggerDebuggTable("Debug Table",debug_dict)	
 
