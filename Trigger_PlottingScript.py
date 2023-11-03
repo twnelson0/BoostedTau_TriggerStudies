@@ -13,7 +13,7 @@ from math import pi
 def deltaR(part1, part2):
 	return np.sqrt((part2.eta - part1.eta)**2 + (part2.phi - part1.phi)**2)
 
-def mass(part1,part2):
+def di_mass(part1,part2):
 	return np.sqrt((part1.E + part2.E)**2 - (part1.Px + part2.Px)**2 - (part1.Py + part2.Py)**2 - (part1.Pz + part2.Pz)**2)
 
 def bit_mask(in_bits):
@@ -22,7 +22,7 @@ def bit_mask(in_bits):
 		mask += (1 << bit)
 	return mask
 
-def dilep_mass(leptons):
+def dilep_di_mass(leptons):
 	n_pair = np.floor(leptons.n/2)
 	lep_minus = leptons(leptons.charge < 0)
 	lep_plus = leptons(leptons.charge > 0)
@@ -292,19 +292,19 @@ class TriggerStudies(processor.ProcessorABC):
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		
 		#Investegate entries with more than 4 taus
-		n_more = len(tau[ak.num(tau) > 4])
-		print("Events with more than 4 taus: %d"%n_more)
+		# n_more = len(tau[ak.num(tau) > 4])
+		# print("Events with more than 4 taus: %d"%n_more)
 		
-		if (n_more > 0):
-			print("========!!Important information about events with more than 4 tau!!========")
-			diff_num = n_more
-			test_obj = tau[ak.num(tau) > 4] 
-			n = 5
-			while(n_more > 0):
-				N_events = len(test_obj[ak.num(test_obj) == 5])
-				print("Number of events with %d taus: %d"%(n,N_events))
-				n +=1
-				diff_num -= N_events
+		# if (n_more > 0):
+		# 	print("========!!Important information about events with more than 4 tau!!========")
+		# 	diff_num = n_more
+		# 	test_obj = tau[ak.num(tau) > 4] 
+		# 	n = 5
+		# 	while(n_more > 0):
+		# 		N_events = len(test_obj[ak.num(test_obj) == 5])
+		# 		print("Number of events with %d taus: %d"%(n,N_events))
+		# 		n +=1
+		# 		diff_num -= N_events
 		
 
 		AK8Jet = AK8Jet[ak.num(tau) >= 4]
@@ -575,17 +575,17 @@ class TauPlotting(processor.ProcessorABC):
 		pt4_hist.fill(fourthleading_tau.pt)
 		
 		#Ditau mass plots 
-		dimass_all_hist.fill("Leading pair", ak.ravel(mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))
-		dimass_all_hist.fill("Leading pair", ak.ravel(mass(tau_plus2[(deltaR21 < deltaR11)], tau_minus1[(deltaR21 < deltaR11)])))
-		dimass_all_hist.fill("Subleading pair", ak.ravel(mass(tau_plus1[(deltaR12 < deltaR22)], tau_minus2[(deltaR12 < deltaR22)])))
-		dimass_all_hist.fill("Subleading pair", ak.ravel(mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))
+		dimass_all_hist.fill("Leading pair", ak.ravel(di_mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))
+		dimass_all_hist.fill("Leading pair", ak.ravel(di_mass(tau_plus2[(deltaR21 < deltaR11)], tau_minus1[(deltaR21 < deltaR11)])))
+		dimass_all_hist.fill("Subleading pair", ak.ravel(di_mass(tau_plus1[(deltaR12 < deltaR22)], tau_minus2[(deltaR12 < deltaR22)])))
+		dimass_all_hist.fill("Subleading pair", ak.ravel(di_mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))
 		dimass_all_hist *= 1/(dimass_all_hist.sum())		
 	
-		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))	
-		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[(deltaR21 < deltaR11)], tau_minus2[(deltaR21 < deltaR11)])))
+		ditau_mass1_hist.fill(ak.ravel(di_mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))	
+		ditau_mass1_hist.fill(ak.ravel(di_mass(tau_plus1[(deltaR21 < deltaR11)], tau_minus2[(deltaR21 < deltaR11)])))
 		ditau_mass1_hist *= (1/ditau_mass1_hist.sum())
-		ditau_mass2_hist.fill(ak.ravel(mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))	
-		ditau_mass2_hist.fill(ak.ravel(mass(tau_plus2[(deltaR12 < deltaR22)], tau_minus1[(deltaR12 < deltaR22)])))
+		ditau_mass2_hist.fill(ak.ravel(di_mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))	
+		ditau_mass2_hist.fill(ak.ravel(di_mass(tau_plus2[(deltaR12 < deltaR22)], tau_minus1[(deltaR12 < deltaR22)])))
 		ditau_mass2_hist *= (1/ditau_mass2_hist.sum())	
 
 		return{
