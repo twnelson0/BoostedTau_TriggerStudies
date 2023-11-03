@@ -22,13 +22,13 @@ def bit_mask(in_bits):
 		mask += (1 << bit)
 	return mask
 
-def dilep_mass(leptons):
-	n_pair = np.floor(leptons.n/2)
-	lep_minus = leptons(leptons.charge < 0)
-	lep_plus = leptons(leptons.charge > 0)
-	
+def bit_or(data):
+	cond_1 = np.bitwise_and(data.trigger,bit_mask([39,40])) == bit_mask([39,40])
+	cond_2 = np.bitwise_and(data.trigger,bit_mask([39,40])) == bit_mask([39])
+	cond_3 = np.bitwise_and(data.trigger,bit_mask([39,40])) == bit_mask([40])
+	return np.bitwise_or(cond_1, np.bitwise_or(cond_2,cond_3))
 
-class TriggerStudies(processor.ProcessorABC):
+class FourTauPlotting(processor.ProcessorABC):
 	def __init__(self, trigger_bit, signal = True):
 		self.trigger_bit = trigger_bit
 		self.signal = signal
@@ -292,19 +292,19 @@ class TriggerStudies(processor.ProcessorABC):
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		
 		#Investegate entries with more than 4 taus
-		n_more = len(tau[ak.num(tau) > 4])
-		print("Events with more than 4 taus: %d"%n_more)
+		# n_more = len(tau[ak.num(tau) > 4])
+		# print("Events with more than 4 taus: %d"%n_more)
 		
-		if (n_more > 0):
-			print("========!!Important information about events with more than 4 tau!!========")
-			diff_num = n_more
-			test_obj = tau[ak.num(tau) > 4] 
-			n = 5
-			while(n_more > 0):
-				N_events = len(test_obj[ak.num(test_obj) == 5])
-				print("Number of events with %d taus: %d"%(n,N_events))
-				n +=1
-				diff_num -= N_events
+		# if (n_more > 0):
+		# 	print("========!!Important information about events with more than 4 tau!!========")
+		# 	diff_num = n_more
+		# 	test_obj = tau[ak.num(tau) > 4] 
+		# 	n = 5s
+		# 	while(n_more > 0):
+		# 		N_events = len(test_obj[ak.num(test_obj) == 5])
+		# 		print("Number of events with %d taus: %d"%(n,N_events))
+		# 		n +=1
+		# 		diff_num -= N_events
 		
 
 		AK8Jet = AK8Jet[ak.num(tau) >= 4]
@@ -431,180 +431,6 @@ class TriggerStudies(processor.ProcessorABC):
 	
 	def postprocess(self, accumulator):
 		pass	
-
-class TauPlotting(processor.ProcessorABC):
-	def __init__(self):
-		pass
-	
-	def process(self, events):
-		dataset = events.metadata['dataset']
-		tau = ak.zip( 
-			{
-				"pt": events.boostedTauPt,
-				"E": events.boostedTauEnergy,
-				"Px": events.boostedTauPx,
-				"Py": events.boostedTauPy,
-				"Pz": events.boostedTauPz,
-				"mass": events.boostedTauMass,
-				"eta": events.boostedTauEta,
-				"phi": events.boostedTauPhi,
-				"leadingIndx": events.leadtauIndex,
-				"nBoostedTau": events.nBoostedTau,
-				"charge": events.boostedTauCharge,
-				"iso": events.boostedTauByIsolationMVArun2v1DBoldDMwLTrawNew,
-				"decay": events.boostedTaupfTausDiscriminationByDecayModeFinding,
-			},
-			with_name="TauArray",
-			behavior=candidate.behavior,
-		)
-		
-		pt_hist = (
-			hist.Hist.new
-            .Reg(50, 0, 1000., name="p_T", label="$p_{T}$ [GeV]") 
-            .Int64()
-		)
-		E_hist = (
-			hist.Hist.new
-            .Reg(50, 0, 500., name="E", label=r"Energy [GeV]") 
-            .Int64()
-		)
-		pt_all_hist = (
-			hist.Hist.new
-			.StrCat(["Leading","Subleading","Third-leading","Fourth-leading"], name = "tau_pt")
-            .Reg(50, 0, 1500., name="p_T_all", label="$p_{T}$ [GeV]") 
-            .Double()
-		)
-		eta_hist = (
-			hist.Hist.new
-            .Reg(50, -3., 3., name="eta", label=r"$\eta$")
-            .Int64()
-		)
-		phi_hist = (
-			hist.Hist.new
-            .Reg(50, -pi, pi, name="phi", label="$phi$")
-            .Int64()
-		)
-		pt4_hist = (
-			hist.Hist.new
-            .Reg(50, 0, 500., name="p_T4", label="$p_{T}$ [GeV]") 
-            .Int64()
-		)
-		ditau_mass1_hist = (
-			hist.Hist.new
-			.Reg(50, 0, 200., name = "mass1", label=r"$m_{\tau \tau} [GeV]$")
-			.Double()
-		)
-		ditau_mass2_hist = (
-			hist.Hist.new
-			.Reg(50, 0, 200., name = "mass2", label=r"$m_{\tau \tau} [GeV]$")
-			.Double()
-		)
-		dimass_all_hist = (
-			hist.Hist.new
-			.StrCat(["Leading pair","Subleading pair"], name = "ditau_mass")
-			.Reg(50, 0, 200., name="ditau_mass_all", label=r"$m_{\tau\tau}$ [GeV]") 
-            .Double()
-		)
-			
-		#Apply cuts/selection
-		tau = tau[tau.pt > 30] #pT
-		tau = tau[tau.eta < 2.3] #eta
-		
-		#Loose isolation
-		tau = tau[tau.decay >= 0.5]		
-		tau = tau[tau.iso >= 0.5]
-		
-		#Delta R Cut on taus
-		a,b = ak.unzip(ak.cartesian([tau,tau], axis = 1, nested = True))
-		mval = deltaR(a,b) < 0.8 
-		tau["dRCut"] = mval
-		tau = tau[ak.any(tau.dRCut, axis = 2) == True]	
-		
-		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
-		
-		#print("Before 4 tau cut length is: %d" % len(tau))
-		#Investegate entries with more than 4 taus
-		# n_more = len(tau[ak.num(tau) > 4])
-		# print("Events with more than 4 taus: %d"%n_more)
-		
-		# if (n_more > 0):
-		# 	print("========!!Important information about events with more than 4 tau!!========")
-		# 	diff_num = n_more
-		# 	test_obj = tau[ak.num(tau) > 4] 
-		# 	n = 5
-		# 	while(n_more > 0):
-		# 		N_events = len(test_obj[ak.num(test_obj) == 5])
-		# 		print("Number of events with %d taus: %d"%(n,N_events))
-		# 		n +=1
-		# 		diff_num -= N_events
-		
-		tau = tau[ak.num(tau) >= 4] #4 tau events (unsure about this)	
-		#print("After 4 tau cut length is: %d" % len(tau))
-		tau_plus = tau[tau.charge > 0]	
-		tau_minus = tau[tau.charge < 0]
-
-		#Construct all possible valid ditau pairs
-		tau_plus1, tau_plus2 = ak.unzip(ak.combinations(tau_plus,2))
-		tau_minus1, tau_minus2 = ak.unzip(ak.combinations(tau_minus,2))
-		
-		deltaR11 = deltaR(tau_plus1, tau_minus1)
-		deltaR12 = deltaR(tau_plus1, tau_minus2)
-		deltaR22 = deltaR(tau_plus2, tau_minus2)
-		deltaR21 = deltaR(tau_plus2, tau_minus1)
-
-		#print(deltaR11 < 0.8)
-		#print((deltaR11 < deltaR12) and (deltaR11 < deltaR21) and deltaR11 < 0.8)
-		print("Delta R11 length = %d"%len(deltaR11))
-		print("tau array length = %d"%len(tau))
-
-		#Get leading, subleading and fourth leading taus
-		leading_tau = tau[:,0]
-		subleading_tau = tau[:,1]
-		thirdleading_tau = tau[:,2]
-		fourthleading_tau = tau[:,3]
-		
-		#Fill plots
-		pt_hist.fill(leading_tau.pt)
-		eta_hist.fill(leading_tau.eta)
-		phi_hist.fill(leading_tau.phi)
-		pt_all_hist.fill("Leading",leading_tau.pt)
-		pt_all_hist.fill("Subleading",subleading_tau.pt)
-		pt_all_hist.fill("Third-leading",thirdleading_tau.pt)
-		pt_all_hist.fill("Fourth-leading",fourthleading_tau.pt)
-		pt_all_hist *= (1/pt_all_hist.sum())
-		pt4_hist.fill(fourthleading_tau.pt)
-		
-		#Ditau mass plots 
-		dimass_all_hist.fill("Leading pair", ak.ravel(mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))
-		dimass_all_hist.fill("Leading pair", ak.ravel(mass(tau_plus2[(deltaR21 < deltaR11)], tau_minus1[(deltaR21 < deltaR11)])))
-		dimass_all_hist.fill("Subleading pair", ak.ravel(mass(tau_plus1[(deltaR12 < deltaR22)], tau_minus2[(deltaR12 < deltaR22)])))
-		dimass_all_hist.fill("Subleading pair", ak.ravel(mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))
-		dimass_all_hist *= 1/(dimass_all_hist.sum())		
-	
-		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))	
-		ditau_mass1_hist.fill(ak.ravel(mass(tau_plus1[(deltaR21 < deltaR11)], tau_minus2[(deltaR21 < deltaR11)])))
-		ditau_mass1_hist *= (1/ditau_mass1_hist.sum())
-		ditau_mass2_hist.fill(ak.ravel(mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))	
-		ditau_mass2_hist.fill(ak.ravel(mass(tau_plus2[(deltaR12 < deltaR22)], tau_minus1[(deltaR12 < deltaR22)])))
-		ditau_mass2_hist *= (1/ditau_mass2_hist.sum())	
-
-		return{
-			dataset: {
-				"entries" : len(events),
-				"pT": pt_hist,
-				"eta":eta_hist,
-				"phi":phi_hist,
-				"pT_all": pt_all_hist,
-				"pT_4": pt4_hist,
-				"mass1": ditau_mass1_hist,
-				"mass2": ditau_mass2_hist,
-				"ditau_mass": dimass_all_hist
-			}
-		}	
-	
-	def postprocess(self, accumulator):
-		pass	
-
 
 if __name__ == "__main__":
 	mass_str_arr = ["1000","2000","3000"]

@@ -343,17 +343,17 @@ class TriggerStudies(processor.ProcessorABC):
 		CutFlow_Table.fill(6*np.ones([len(ak.ravel(tau.pt))]))
 		print("Taus after Charge Conservation cut: %d"%len(tau.pt))
 		
-		AK8Jet = AK8Jet[ak.num(tau) == 4]
-		Electron = Electron[ak.num(tau) == 4]
-		Muon = Muon[ak.num(tau) == 4]
-		Jet_MHT = Jet_MHT[ak.num(tau) == 4]
-		JetUp_MHT = JetUp_MHT[ak.num(tau) == 4]
-		JetDown_MHT = JetDown_MHT[ak.num(tau) == 4]
-		Jet_HT = Jet_HT[ak.num(tau) == 4]
-		JetUp_HT = JetUp_HT[ak.num(tau) == 4]
-		JetDown_HT = JetDown_HT[ak.num(tau) == 4]
-		Jet = Jet[ak.num(tau) == 4]
-		tau = tau[ak.num(tau) == 4] #4 tau events
+		AK8Jet = AK8Jet[ak.num(tau) >= 4]
+		Electron = Electron[ak.num(tau) >= 4]
+		Muon = Muon[ak.num(tau) >= 4]
+		Jet_MHT = Jet_MHT[ak.num(tau) >= 4]
+		JetUp_MHT = JetUp_MHT[ak.num(tau) >= 4]
+		JetDown_MHT = JetDown_MHT[ak.num(tau) >= 4]
+		Jet_HT = Jet_HT[ak.num(tau) >= 4]
+		JetUp_HT = JetUp_HT[ak.num(tau) >= 4]
+		JetDown_HT = JetDown_HT[ak.num(tau) >= 4]
+		Jet = Jet[ak.num(tau) >= 4]
+		tau = tau[ak.num(tau) >= 4] #4 tau events
 		CutFlow_Table.fill(7*np.ones([len(ak.ravel(tau.pt))]))
 		print("Taus after 4 tau cut: %d"%len(tau.pt))
 		
