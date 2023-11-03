@@ -290,6 +290,22 @@ class TriggerStudies(processor.ProcessorABC):
 		JetDown_HT = JetDown_HT[(ak.sum(tau.charge,axis=1) == 0)]
 		Jet_MHT = Jet_MHT[(ak.sum(tau.charge,axis=1) == 0)]
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
+		
+		#Investegate entries with more than 4 taus
+		n_more = len(tau[ak.num(tau) > 4])
+		print("Events with more than 4 taus: %d"%n_more)
+		
+		if (n_more > 0):
+			print("========!!Important information about events with more than 4 tau!!========")
+			diff_num = n_more
+			test_obj = tau[ak.num(tau) > 4] 
+			n = 5
+			while(n_more > 0):
+				N_events = len(test_obj[ak.num(test_obj) == 5])
+				print("Number of events with %d taus: %d"%(n,N_events))
+				n +=1
+				diff_num -= N_events
+		
 
 		AK8Jet = AK8Jet[ak.num(tau) == 4]
 		Electron = Electron[ak.num(tau) == 4]
@@ -510,6 +526,18 @@ class TauPlotting(processor.ProcessorABC):
 		#Investegate entries with more than 4 taus
 		n_more = len(tau[ak.num(tau) > 4])
 		print("Events with more than 4 taus: %d"%n_more)
+		
+		if (n_more > 0):
+			print("========!!Important information about events with more than 4 tau!!========")
+			diff_num = n_more
+			test_obj = tau[ak.num(tau) > 4] 
+			n = 5
+			while(n_more > 0):
+				N_events = len(test_obj[ak.num(test_obj) == 5])
+				print("Number of events with %d taus: %d"%(n,N_events))
+				n +=1
+				diff_num -= N_events
+		
 		tau = tau[ak.num(tau) == 4] #4 tau events (unsure about this)	
 		#print("After 4 tau cut length is: %d" % len(tau))
 		tau_plus = tau[tau.charge > 0]	
