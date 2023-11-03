@@ -507,6 +507,9 @@ class TauPlotting(processor.ProcessorABC):
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		
 		#print("Before 4 tau cut length is: %d" % len(tau))
+		#Investegate entries with more than 4 taus
+		n_more = len(tau[ak.num(tau) > 4])
+		print("Events with more than 4 taus: %d"%n_more)
 		tau = tau[ak.num(tau) == 4] #4 tau events (unsure about this)	
 		#print("After 4 tau cut length is: %d" % len(tau))
 		tau_plus = tau[tau.charge > 0]	
