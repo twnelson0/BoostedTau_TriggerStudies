@@ -568,17 +568,23 @@ class TauPlotting(processor.ProcessorABC):
 		eta_hist.fill(leading_tau.eta)
 		phi_hist.fill(leading_tau.phi)
 		pt_all_hist.fill("Leading",leading_tau.pt)
+		pt_leading_acc = hist.accumulators.Mean().fill(leading_tau.pt)
 		pt_all_hist.fill("Subleading",subleading_tau.pt)
+		pt_subleading_acc = hist.accumulators.Mean().fill(subleading_tau.pt)
 		pt_all_hist.fill("Third-leading",thirdleading_tau.pt)
+		pt_thirdleading_acc = hist.accumulators.Mean().fill(thirdleading_tau.pt)
 		pt_all_hist.fill("Fourth-leading",fourthleading_tau.pt)
+		pt_fourthleading_acc = hist.accumulators.Mean().fill(fourthleading_tau.pt)
 		pt_all_hist *= (1/pt_all_hist.sum())
 		pt4_hist.fill(fourthleading_tau.pt)
 		
 		#Ditau mass plots 
 		dimass_all_hist.fill("Leading pair", ak.ravel(di_mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))
 		dimass_all_hist.fill("Leading pair", ak.ravel(di_mass(tau_plus2[(deltaR21 < deltaR11)], tau_minus1[(deltaR21 < deltaR11)])))
+		dimass_leading_acc = hist.accumulators.Mean().fill(ak.concatenate([ak.ravel(di_mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])), ak.ravel(di_mass(tau_plus2[(deltaR21 < deltaR11)], tau_minus1[(deltaR21 < deltaR11)]))]))
 		dimass_all_hist.fill("Subleading pair", ak.ravel(di_mass(tau_plus1[(deltaR12 < deltaR22)], tau_minus2[(deltaR12 < deltaR22)])))
 		dimass_all_hist.fill("Subleading pair", ak.ravel(di_mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))
+		dimass_subleading_acc = hist.accumulators.Mean().fill(ak.concatenate([ak.ravel(di_mass(tau_plus1[(deltaR12 < deltaR22)], tau_minus2[(deltaR12 < deltaR22)])), ak.ravel(di_mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)]))]))
 		dimass_all_hist *= 1/(dimass_all_hist.sum())		
 	
 		ditau_mass1_hist.fill(ak.ravel(di_mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))	
@@ -598,7 +604,14 @@ class TauPlotting(processor.ProcessorABC):
 				"pT_4": pt4_hist,
 				"mass1": ditau_mass1_hist,
 				"mass2": ditau_mass2_hist,
-				"ditau_mass": dimass_all_hist
+				"ditau_mass": dimass_all_hist,
+				"pt_leading_acc": pt_leading_acc,
+				"pt_subleading_acc": pt_subleading_acc,
+				"pt_thirdleading_acc": pt_thirdleading_acc,
+				"pt_fourthleading_acc": pt_fourthleading_acc,
+				"dimass_leading_acc": dimass_leading_acc,
+				"dimass_subleading_acc": dimass_subleading_acc
+				
 			}
 		}	
 	
@@ -662,8 +675,14 @@ if __name__ == "__main__":
 			plt.title(hist_name_arr[1], wrap=True)
 			if (hist_name_arr[0] == "AllDitauMass_Plot"):
 				ax.legend(title=r"Di-$\tau$ Pair")
+				plt.text(x = 0.74,y = 0.7, s = r"Mean leading Di-$\tau$ mass: %.2f GeV"%out["boosted_tau"]["dimass_leading_acc"].value)
+				plt.text(x = 0.74,y = 0.6, s = r"Mean subleading Di-$\tau$ mass: %.2f GeV"%out["boosted_tau"]["dimass_subleading_acc"].value)
 			if (hist_name_arr[0] == "AllPt_Plot"):
 				ax.legend(title=r"$\tau$")
+				plt.text(x = 0.74, y = 0.7, s = r"Mean leading $\tau$ p_T: %.2f GeV"%out["boosted_tau"]["pt_leading_acc"].value)
+				plt.text(x = 0.74, y = 0.65, s = r"Mean subleading $\tau$ p_T: %.2f GeV"%out["boosted_tau"]["pt_subleading_acc"].value)
+				plt.text(x = 0.74, y = 0.6, s = r"Mean third-leading $\tau$ p_T: %.2f GeV"%out["boosted_tau"]["pt_thirdleading_acc"].value)
+				plt.text(x = 0.74, y = 0.55, s = r"Mean fourth-leading $\tau$ p_T: %.2f GeV"%out["boosted_tau"]["pt_fourthleading_acc"].value)
 			plt.savefig(hist_name_arr[0] + "-" + mass_str)
 			plt.close()
 

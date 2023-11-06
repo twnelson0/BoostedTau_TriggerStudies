@@ -16,8 +16,11 @@ def deltaR(part1, part2):
 def di_mass(part1,part2):
 	return np.sqrt((part1.E + part2.E)**2 - (part1.Px + part2.Px)**2 - (part1.Py + part2.Py)**2 - (part1.Pz + part2.Pz)**2)
 
-def four_mass(part_list): #Four Particle mass assuming each event has 4 particles
-	return np.sqrt(sum(part_list.E)**2 - sum(part_list.Px)**2 - sum(part_list.Py)**2 - sum(part_list.Pz)**2)
+def four_mass(part_arr): #Four Particle mass assuming each event has 4 particles
+	return np.sqrt((part_arr[0].E + part_arr[1].E + part_arr[2].E + part_arr[3].E)**2 - (part_arr[0].Px + part_arr[1].Px + part_arr[2].Px + part_arr[3].Px)**2 - 
+		(part_arr[0].Py + part_arr[1].Py + part_arr[2].Py + part_arr[3].Py)**2 - 
+		(part_arr[0].Pz + part_arr[1].Pz + part_arr[2].Pz + part_arr[3].Pz)**2)
+	#return np.sqrt((sum(part.E))**2 - (sum(part.Px))**2 - (sum(part.Py))**2 - (sum(part.Pz))**2)
 
 def bit_mask(in_bits):
 	mask = 0
@@ -128,7 +131,7 @@ class FourTauPlotting(processor.ProcessorABC):
 		MET_Trigg = hist.Hist.new.Reg(30, 0, 1200., name="MET", label="MET [GeV]").Double()
 
 		#Histograms 4 tau
-		FourTau_Mass_hist = hist.Hist.new.Reg(40,10,300, label = r"$m_{4\tau} [GeV]$").Double()
+		FourTau_Mass_hist = hist.Hist.new.Reg(40,0,3000, label = r"$m_{4\tau} [GeV]$").Double()
 
 		#2D Histograms
 		Jet_PreTrigger = hist.Hist(
@@ -294,6 +297,19 @@ class FourTauPlotting(processor.ProcessorABC):
 		Jet = Jet[ak.num(tau) >= 4]
 		tau = tau[ak.num(tau) >= 4] #4 tau events
 		
+		#Construct all possible valid ditau pairs
+		tau_plus = tau[tau.charge > 0]		
+		tau_minus = tau[tau.charge < 0]
+		tau_plus1, tau_plus2 = ak.unzip(ak.combinations(tau_plus,2))
+		tau_minus1, tau_minus2 = ak.unzip(ak.combinations(tau_minus,2))
+		
+		deltaR11 = deltaR(tau_plus1, tau_minus1)
+		deltaR12 = deltaR(tau_plus1, tau_minus2)
+		deltaR22 = deltaR(tau_plus2, tau_minus2)
+		deltaR21 = deltaR(tau_plus2, tau_minus1)
+
+		tau["FourMass"] = four_mass([tau[:,0],tau[:,1],tau[:,2],tau[:,3]])
+		
 		if (self.OrTrigger): #Select for both triggers
 			Jet["HT"] = ak.sum(Jet_HT.Pt, axis = 1, keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=False)
 			tau = tau[np.bitwise_and(tau.trigger,bit_mask([39,40])) != 0]
@@ -327,21 +343,18 @@ class FourTauPlotting(processor.ProcessorABC):
 			Jet_HT = Jet_HT[np.bitwise_and(Jet_HT.trigger,trigger_mask) == trigger_mask]
 			Jet_MHT = Jet_MHT[np.bitwise_and(Jet_MHT.trigger,trigger_mask) == trigger_mask]		
 
-		#Construct all possible valid ditau pairs
-		tau_plus = tau[tau.charge > 0]		
-		tau_minus = tau[tau.charge < 0]
-		tau_plus1, tau_plus2 = ak.unzip(ak.combinations(tau_plus,2))
-		tau_minus1, tau_minus2 = ak.unzip(ak.combinations(tau_minus,2))
-		
-		deltaR11 = deltaR(tau_plus1, tau_minus1)
-		deltaR12 = deltaR(tau_plus1, tau_minus2)
-		deltaR22 = deltaR(tau_plus2, tau_minus2)
-		deltaR21 = deltaR(tau_plus2, tau_minus1)
+
 
 		#Fill 4tau Mass Histogram
-		FourTau_Mass_hist.fill(ak.ravel(four_mass(tau)))
-		FourTau_Mass_hist *= (1/FourTau_Mass_hist.sum()) #Normalize the histogram
-		FourTau_Mass_Acc = hist.accumulators.Mean().fill()
+		tau = tau[ak.num(tau) > 0] #Handle trigger
+		print(len(tau))
+		#FourTau_Mass_hist.fill(ak.ravel(four_mass(tau)))
+		FourTau_Mass_hist.fill(ak.ravel(tau.FourMass))
+		#tau["FourTau_Mass"] = 
+		#FourTau_Mass_hist.fill(four_mass(tau))
+		if (FourTau_Mass_hist.sum() > 0):
+			FourTau_Mass_hist *= (1/FourTau_Mass_hist.sum()) #Normalize the histogram
+		FourTau_Mass_Acc = hist.accumulators.Mean().fill(ak.ravel(tau.FourMass))
 		
 		#Efficiency Histograms
 		if (self.trigger_bit == 40):	
@@ -375,51 +388,10 @@ class FourTauPlotting(processor.ProcessorABC):
 		
 		return{
 			dataset: {
-				"FourTau_Mass_hist": FourTau_Mass_hist
+				"FourTau_Mass_hist": FourTau_Mass_hist,
 				"FourTau_Mass_Acc": FourTau_Mass_Acc
 			}
 		}
-		# if (self.trigger_bit == 40):
-		# 	return{
-		# 		 dataset: {
-		# 			"AK8JetPt_PreTrigg": AK8Pt_PreTrigg,
-		# 			"AK8JetPt_Trigg": AK8Pt_Trigg,
-		# 			"AK8JetSoftMass_PreTrigg": AK8SoftMass_PreTrigg,
-		# 			"AK8JetSoftMass_Trigg": AK8SoftMass_Trigg,
-		# 			"AK8Jet_PreTrigg": AK8Jet_PreTrigger,
-		# 			"AK8Jet_Trigg": AK8Jet_Trigger,
-		# 			"AK8Jet_eff": eff_AK8Jet,
-		# 			"pre_trigger_num": pre_triggernum, 
-		# 			"post_trigger_num": post_triggernum,
-		# 			"AK8JetPt_NoCut": AK8Pt_NoCut, 
-		# 			"AK8JetSoftMass_NoCut": AK8SoftMass_NoCut,
-		# 			"Acc_AK8JetPt_NoCut": AK8Pt_Acc,
-		# 			"Acc_AK8JetSoftMass_NoCut": AK8SoftMass_Acc
-		# 		}
-		# 	}
-		# if (self.trigger_bit == 39):
-		# 	return{
-		# 		 dataset: {
-		# 			"MET_PreTrigg": MET_PreTrigg,
-		# 			"MET_Trigg": MET_Trigg,
-		# 			"HT_PreTrigg": HT_PreTrigg,
-		# 			"HT_Trigg": HT_Trigg,
-		# 			"Jet_PreTrigg": Jet_PreTrigger,
-		# 			"Jet_Trigg": Jet_Trigger,
-		# 			"Jet_eff": eff_Jet,
-		# 			"pre_trigger_num": pre_triggernum,
-		# 			"post_trigger_num": post_triggernum,
-		# 			"MET_NoCut": MET_NoCut,
-		# 			"Acc_MET_NoCut": MET_Acc_NoCut,
-		# 			"HT_NoCut": HT_NoCut,
-		# 			"Acc_HT_NoCut": HT_Acc_NoCut,
-		# 			"MET_NoCrossClean": MET_NoCrossCleaning,
-		# 			"Acc_MET_NoCrossClean": MET_Acc_NoCrossClean,
-		# 			"HT_NoCrossClean": HT_NoCrossCleaning,
-		# 			"Acc_HT_NoCrossClean": HT_Acc_NoCrossClean
-		# 		}
-		# 	}
-
 	
 	def postprocess(self, accumulator):
 		pass	
@@ -471,9 +443,20 @@ if __name__ == "__main__":
 
 	for mass in mass_str_arr:
 		#Grand Unified Background + Signal Dictionary
-		file_dict = {"Background" : [background_base + "TTTo2L2Nu.root",background_base + "TTToSemiLeptonic.root",background_base + "TTToHadronic.root", background_base + "ZZ4l.root"], "Signal": [signal_bas + signal_base + mass_str + ".root"]}
+		file_dict = {"Background" : [background_base + "TTTo2L2Nu.root",background_base + "TTToSemiLeptonic.root",background_base + "TTToHadronic.root", background_base + "ZZ4l.root"], "Signal": [signal_base + mass + ".root"]}
+		#file_dict = {"Background" : [background_base + "TTTo2L2Nu.root",background_base + "TTToSemiLeptonic.root", background_base + "ZZ4l.root"], "Signal": [signal_base + mass + ".root"]}
 		for trigger_name, trigger_bit in trigger_dict.items():
-			trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=FourTauPlotting(trigger_bit))
+			fourtau_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=FourTauPlotting(trigger_bit))
+			fig,ax = plt.subplots()
+			fourtau_out["Background"]["FourTau_Mass_hist"].plot1d(ax=ax, label = "Background") #Draw Histogram
+			plt.text(x = 0.74,y = 0.7,s = "Background mean %.2f:"%fourtau_out["Background"]["FourTau_Mass_Acc"].value)
+			fourtau_out["Signal"]["FourTau_Mass_hist"].plot1d(ax=ax, label = "Signal") #Draw Histogram
+			plt.text(x = 0.74,y = 0.6,s = "Signal mean %.2f:"%fourtau_out["Signal"]["FourTau_Mass_Acc"].value)
+			plt.title(r"4$\tau$ Mass " + mass[0] + "." + mass[1] + " TeV Signal")
+			ax.legend(title="Legend")
+			plt.savefig("FourTau_Mass_" + mass + "TeV_" + trigger_name)
+			plt.close()
+			
 	
 	#Signal
 	# for mass_str in mass_str_arr:
