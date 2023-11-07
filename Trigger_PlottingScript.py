@@ -675,14 +675,14 @@ if __name__ == "__main__":
 			plt.title(hist_name_arr[1], wrap=True)
 			if (hist_name_arr[0] == "AllDitauMass_Plot"):
 				ax.legend(title=r"Di-$\tau$ Pair")
-				plt.text(x = 0.74,y = 0.7, s = r"Mean leading Di-$\tau$ mass: %.2f GeV"%out["boosted_tau"]["dimass_leading_acc"].value)
-				plt.text(x = 0.74,y = 0.6, s = r"Mean subleading Di-$\tau$ mass: %.2f GeV"%out["boosted_tau"]["dimass_subleading_acc"].value)
+				plt.text(x = 0.5,y = 0.7, s = r"Mean leading Di-$\tau$ mass: %.2f GeV"%out["boosted_tau"]["dimass_leading_acc"].value, transform = ax.transAxes, fontsize="small")
+				plt.text(x = 0.5,y = 0.65, s = r"Mean subleading Di-$\tau$ mass: %.2f GeV"%out["boosted_tau"]["dimass_subleading_acc"].value, transform = ax.transAxes, fontsize="small")
 			if (hist_name_arr[0] == "AllPt_Plot"):
 				ax.legend(title=r"$\tau$")
-				plt.text(x = 0.74, y = 0.7, s = r"Mean leading $\tau$ p_T: %.2f GeV"%out["boosted_tau"]["pt_leading_acc"].value)
-				plt.text(x = 0.74, y = 0.65, s = r"Mean subleading $\tau$ p_T: %.2f GeV"%out["boosted_tau"]["pt_subleading_acc"].value)
-				plt.text(x = 0.74, y = 0.6, s = r"Mean third-leading $\tau$ p_T: %.2f GeV"%out["boosted_tau"]["pt_thirdleading_acc"].value)
-				plt.text(x = 0.74, y = 0.55, s = r"Mean fourth-leading $\tau$ p_T: %.2f GeV"%out["boosted_tau"]["pt_fourthleading_acc"].value)
+				plt.text(x = 0.55, y = 0.65, s = r"Mean leading $\tau$ $p_T$: %.2f GeV"%out["boosted_tau"]["pt_leading_acc"].value, transform = ax.transAxes, fontsize="small")
+				plt.text(x = 0.55, y = 0.6, s = r"Mean subleading $\tau$ $p_T$: %.2f GeV"%out["boosted_tau"]["pt_subleading_acc"].value, transform = ax.transAxes, fontsize="small")
+				plt.text(x = 0.55, y = 0.55, s = r"Mean third-leading $\tau$ $p_T$: %.2f GeV"%out["boosted_tau"]["pt_thirdleading_acc"].value, transform = ax.transAxes, fontsize="small")
+				plt.text(x = 0.55, y = 0.5, s = r"Mean fourth-leading $\tau$ $p_T$: %.2f GeV"%out["boosted_tau"]["pt_fourthleading_acc"].value, transform = ax.transAxes, fontsize="small")
 			plt.savefig(hist_name_arr[0] + "-" + mass_str)
 			plt.close()
 
