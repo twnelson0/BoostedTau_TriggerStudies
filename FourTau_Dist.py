@@ -34,15 +34,25 @@ def bit_or(data):
 	cond_3 = np.bitwise_and(data.trigger,bit_mask([39,40])) == bit_mask([40])
 	return np.bitwise_or(cond_1, np.bitwise_or(cond_2,cond_3))
 
+#Dictionary of cross sections
+xSection_Dictionary = {"Signal": 1.5e3, "ZZ4l": 1.212, "TTTo2L2Nu": 0.1061*831.76, "TTToSemiLeptonic": 0.4392*831.76, "TTToHadronic": 0.4544*831.76}	
+Lumi_2018 = 59830
+
+def weight_calc(sample,events):
+	if (ak.num(events[ak.num(events,axis=1) > 0],axis=0) > 0):
+		return Lumi_2018*xSection_Dictionary[sample]/ak.num(events[ak.num(events,axis=1) > 0],axis=0)
+	else:
+		return 1
+
 class FourTauPlotting(processor.ProcessorABC):
-	def __init__(self, trigger_bit, trigger_cut = True, offline_cut = False, OrTrigger = False):
+	def __init__(self, trigger_bit, trigger_cut = True, offline_cut = False, or_trigger = False):
 		self.trigger_bit = trigger_bit
 		#self.signal = signal (This is useless now)
 		self.offline_cut = offline_cut
 		self.trigger_cut = trigger_cut
-		self.OrTrigger = OrTrigger
+		self.OrTrigger = or_trigger
 		#pass
-	
+
 	def process(self, events):
 		dataset = events.metadata['dataset']
 		tau = ak.zip( 
@@ -147,7 +157,10 @@ class FourTauPlotting(processor.ProcessorABC):
 			hist.axis.Regular(20, 0, 3500., name = "HT", label = r"HT [GeV]")
 		)
 
-		
+		print("!!!=====Dataset=====!!!!")	
+		print(type(dataset))
+		print(dataset)
+		print("!!!=====Dataset=====!!!!")	
 		#MHT
 		Jet_MHT = Jet[Jet.Pt > 30]
 		Jet_MHT = Jet[np.abs(Jet.eta) < 5]
@@ -216,22 +229,22 @@ class FourTauPlotting(processor.ProcessorABC):
 		#Jet["HT"] = ak.sum(Jet.Pt,axis = 1,keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
 		test_HT = ak.sum(Jet.Pt,axis = 1,keepdims=True)
 		HT_num = 0
-		print("Test 1:")
-		print(ak.sum(Jet.Pt,axis = 1,keepdims=False))
-		print("Test 2:")
-		print(ak.sum(Jet.Pt,axis = 1,keepdims=True))
-		print(ak.ravel(Jet.HT))
-		print(Jet.HT)
+		#print("Test 1:")
+		#print(ak.sum(Jet.Pt,axis = 1,keepdims=False))
+		#print("Test 2:")
+		#print(ak.sum(Jet.Pt,axis = 1,keepdims=True))
+		#print(ak.ravel(Jet.HT))
+		#print(Jet.HT)
 		for x in ak.ravel(Jet.HT):
 			#print(x)
 			HT_num += 1
 			#if x == 0:
 				#print("Anomolous zero (post-cross cleaning)")
-		print("HT Num (Cross Cleaning): %d"%HT_num)
-		print("HT Len: %d"%len(Jet.HT))
-		print("Pt Len: %d"%len(Jet.Pt))
-		print("Cross Cleaning Applied")
-		print("Len HT = %d"%len(Jet.HT))
+		#print("HT Num (Cross Cleaning): %d"%HT_num)
+		#print("HT Len: %d"%len(Jet.HT))
+		#print("Pt Len: %d"%len(Jet.Pt))
+		#print("Cross Cleaning Applied")
+		#print("Len HT = %d"%len(Jet.HT))
 
 		#Histograms of variables relavent to trigger 
 		if (self.trigger_bit == 40):
@@ -241,13 +254,13 @@ class FourTauPlotting(processor.ProcessorABC):
 			AK8SoftMass_NoCut.fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetDropMass))
 			AK8SoftMass_Acc = hist.accumulators.Mean().fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetDropMass))
 		if (self.trigger_bit == 39):
-			print("No Cut Accumulators updated")
+			#print("No Cut Accumulators updated")
 			HT_NoCut.fill(ak.ravel(HT_Val_NoCuts[HT_Val_NoCuts > 0]))
 			HT_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(HT_Val_NoCuts[HT_Val_NoCuts > 0]))
-			print("HT Mean: %f"%HT_Acc_NoCut.value)
+			#print("HT Mean: %f"%HT_Acc_NoCut.value)
 			MET_NoCut.fill(ak.ravel(Jet.pfMET))
 			MET_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(Jet.pfMET))
-			print("MET Mean: %f"%MET_Acc_NoCut.value)
+			#print("MET Mean: %f"%MET_Acc_NoCut.value)
 				
 
 		trigger_mask = bit_mask([self.trigger_bit])		
@@ -350,11 +363,13 @@ class FourTauPlotting(processor.ProcessorABC):
 		print(len(tau))
 		#FourTau_Mass_hist.fill(ak.ravel(four_mass(tau)))
 		FourTau_Mass_hist.fill(ak.ravel(tau.FourMass))
+		FourTau_Mass_Arr = ak.ravel(tau.FourMass)
 		#tau["FourTau_Mass"] = 
 		#FourTau_Mass_hist.fill(four_mass(tau))
-		if (FourTau_Mass_hist.sum() > 0):
-			FourTau_Mass_hist *= (1/FourTau_Mass_hist.sum()) #Normalize the histogram
+		#if (FourTau_Mass_hist.sum() > 0):
+			#FourTau_Mass_hist *= (1/FourTau_Mass_hist.sum()) #Normalize the histogram
 		FourTau_Mass_Acc = hist.accumulators.Mean().fill(ak.ravel(tau.FourMass))
+		weight_Val = weight_calc(dataset,tau) 
 		
 		#Efficiency Histograms
 		if (self.trigger_bit == 40):	
@@ -388,6 +403,8 @@ class FourTauPlotting(processor.ProcessorABC):
 		
 		return{
 			dataset: {
+				"Weight": weight_Val,
+				"FourTau_Mass_Arr": FourTau_Mass_Arr, 
 				"FourTau_Mass_hist": FourTau_Mass_hist,
 				"FourTau_Mass_Acc": FourTau_Mass_Acc
 			}
@@ -399,7 +416,6 @@ class FourTauPlotting(processor.ProcessorABC):
 if __name__ == "__main__":
 	mass_str_arr = ["1000","2000","3000"]
 	#mass_str_arr = ["2000"]
-	trigger_bit_list = [40]
 	#trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": [39], "AK8PFJet400_TrimMass30": [40]}
 
 	tau_hist_dict = {
@@ -430,10 +446,12 @@ if __name__ == "__main__":
 		"Jet_eff" : ["Jet_Eff_Plot", "MET and HT Efficiency Histogram Trigger"]
 	}
 	
-	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": 39, "AK8PFJet400_TrimMass30": 40}
+	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": (39,False), "AK8PFJet400_TrimMass30": (40,False), "EitherOr_Trigger": (41,True)}
+	#trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": (39,False)}
 
 	signal_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v1_Hadd/GluGluToRadionToHHTo4T_M-"
 	background_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v2_Hadd/"	
+
 
 	iterative_runner = processor.Runner(
 		executor = processor.IterativeExecutor(compression=None),
@@ -443,204 +461,37 @@ if __name__ == "__main__":
 
 	for mass in mass_str_arr:
 		#Grand Unified Background + Signal Dictionary
-		file_dict = {"Background" : [background_base + "TTTo2L2Nu.root",background_base + "TTToSemiLeptonic.root",background_base + "TTToHadronic.root", background_base + "ZZ4l.root"], "Signal": [signal_base + mass + ".root"]}
+		#file_dict = {"Background" : [background_base + "TTTo2L2Nu.root",background_base + "TTToSemiLeptonic.root",background_base + "TTToHadronic.root", background_base + "ZZ4l.root"], "Signal": [signal_base + mass + ".root"]}
 		#file_dict = {"Background" : [background_base + "TTTo2L2Nu.root",background_base + "TTToSemiLeptonic.root", background_base + "ZZ4l.root"], "Signal": [signal_base + mass + ".root"]}
-		for trigger_name, trigger_bit in trigger_dict.items():
-			fourtau_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=FourTauPlotting(trigger_bit))
+		file_dict = {
+			"TTToSemiLeptonic": [background_base + "TTToSemiLeptonic.root"], "TTTo2L2Nu": [background_base + "TTTo2L2Nu.root"], "TTToHadronic": [background_base + "TTToHadronic.root"],
+			"ZZ4l": [background_base + "ZZ4l.root"], "Signal": [signal_base + mass + ".root"]
+		
+		}
+		full_hist = hist.Hist.new.StrCat(["Background","Signal"]).Regular(40,0,3000, label = r"$m_{4\tau} [GeV]$").Double()
+		background_list = ["TTToSemiLeptonic","TTTo2L2Nu","TTToHadronic","ZZ4l"]
+		#file_dict = {"Background" : [background_base + "ZZ4l.root"], "Signal": [signal_base + mass + ".root"]}
+		for trigger_name, trigger_pair in trigger_dict.items():
+			fourtau_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=FourTauPlotting(trigger_bit=trigger_pair[0], or_trigger=trigger_pair[1]))
 			fig,ax = plt.subplots()
-			fourtau_out["Background"]["FourTau_Mass_hist"].plot1d(ax=ax, label = "Background") #Draw Histogram
-			plt.text(x = 0.74,y = 0.7,s = "Background mean %.2f:"%fourtau_out["Background"]["FourTau_Mass_Acc"].value)
-			fourtau_out["Signal"]["FourTau_Mass_hist"].plot1d(ax=ax, label = "Signal") #Draw Histogram
-			plt.text(x = 0.74,y = 0.6,s = "Signal mean %.2f:"%fourtau_out["Signal"]["FourTau_Mass_Acc"].value)
+			background_array = np.array([])
+			for background in background_list:
+				full_hist.fill("Background",fourtau_out[background]["FourTau_Mass_Arr"],weight=fourtau_out[background]["Weight"])
+				background_array = np.append(background_array,fourtau_out[background]["FourTau_Mass_Arr"])
+			full_hist.fill("Signal",fourtau_out["Signal"]["FourTau_Mass_Arr"],weight=fourtau_out["Signal"]["Weight"])
+			#print("Shouldn't be any signal...")
+			full_hist *= (1/full_hist.sum())
+			background_acc = hist.accumulators.Mean().fill(background_array)
+			signal_acc = hist.accumulators.Mean().fill(fourtau_out["Signal"]["FourTau_Mass_Arr"])
+			
+			#fourtau_out["Background"]["FourTau_Mass_hist"].plot1d(ax=ax, label = "Background") #Draw Histogram
+			full_hist.plot1d(ax=ax) #Draw Histogram
+			plt.text(x = 0.64,y = 0.7,s = "Background mean: %.2f"%background_acc.value, transform = ax.transAxes)
+			#fourtau_out["Signal"]["FourTau_Mass_hist"].plot1d(ax=ax, label = "Signal") #Draw Histogram
+			plt.text(x = 0.64,y = 0.6,s = "Signal mean: %.2f"%signal_acc.value, transform = ax.transAxes)
 			plt.title(r"4$\tau$ Mass " + mass[0] + "." + mass[1] + " TeV Signal")
 			ax.legend(title="Legend")
-			plt.savefig("FourTau_Mass_" + mass + "TeV_" + trigger_name)
+			plt.savefig("FourTau_Mass_" + mass + "-" + trigger_name)
 			plt.close()
 			
 	
-	#Signal
-	# for mass_str in mass_str_arr:
-	# 	fileName = signal_base + mass_str + ".root"
-	# 	events = NanoEventsFactory.from_root(
-	# 		fileName,
-	# 		treepath="/4tau_tree",
-	# 		schemaclass = BaseSchema,
-	# 		metadata={"dataset": "boosted_tau"},
-	# 	).events()
-	# 	p = TauPlotting()
-	# 	out = p.process(events)
-	# 	#Tau plotting
-	# 	for var_name, hist_name_arr in tau_hist_dict.items():
-	# 		fig, ax = plt.subplots()
-	# 		out["boosted_tau"][var_name].plot1d(ax=ax)
-	# 		plt.title(hist_name_arr[1], wrap=True)
-	# 		if (hist_name_arr[0] == "AllDitauMass_Plot"):
-	# 			ax.legend(title=r"Di-$\tau$ Pair")
-	# 		if (hist_name_arr[0] == "AllPt_Plot"):
-	# 			ax.legend(title=r"$\tau$")
-	# 		plt.savefig(hist_name_arr[0] + "-" + mass_str)
-	# 		plt.close()
-
-	# 	#Trigger Plotting
-	# 	print("Mass: " + mass_str[0] + "." + mass_str[1] + " TeV")
-	# 	for trigger_name, trigger_bit in trigger_dict.items():
-	# 		p2 = TriggerStudies(trigger_bit)
-	# 		trigger_out = p2.process(events)
-	# 		if (trigger_bit == 40):
-	# 			trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
-	# 			trigger_hist_dict_2d = trigger_AK8Jet_hist_dict_2d 
-	# 		if (trigger_bit == 39):
-	# 			trigger_hist_dict_1d = trigger_MTHTJet_hist_dict_1d  
-	# 			trigger_hist_dict_2d = trigger_MTHTJet_hist_dict_2d 
-			
-	# 		for var_name, hist_name_arr in trigger_hist_dict_1d.items():
-	# 			fig, ax = plt.subplots()
-	# 			trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
-
-	# 			if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
-	# 				plt.title(hist_name_arr[1] + " mass : " + mass_str[0] + " TeV", wrap=True)
-	# 			else:
-	# 				plt.title(hist_name_arr[1] + " (" + trigger_name + ") , mass : " + mass_str[0] + " TeV", wrap=True)
-			
-	# 			#Add Text with average and number of entries	
-	# 			if (var_name == "MET_NoCut"):
-	# 				plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_MET_NoCut"].count, transform = ax.transAxes)
-	# 				plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_MET_NoCut"].value, transform = ax.transAxes)
-	# 			if (var_name == "MET_NoCrossClean"):
-	# 				plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_MET_NoCrossClean"].count, transform = ax.transAxes)
-	# 				plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_MET_NoCrossClean"].value, transform = ax.transAxes)
-	# 			if (var_name == "HT_NoCut"):
-	# 				plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_HT_NoCut"].count, transform = ax.transAxes)
-	# 				plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_HT_NoCut"].value, transform = ax.transAxes)
-	# 			if (var_name == "HT_NoCrossClean"):
-	# 				plt.text(x = 0.14, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_HT_NoCrossClean"].count, transform = ax.transAxes)
-	# 				plt.text(x = 0.14, y = 0.74, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_HT_NoCrossClean"].value, transform = ax.transAxes)
-	# 			if (var_name == "AK8JetPt_NoCut"):
-	# 				plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_AK8JetPt_NoCut"].count, transform = ax.transAxes)
-	# 				plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_AK8JetPt_NoCut"].value, transform = ax.transAxes)
-	# 			if (var_name == "AK8JetSoftMass_NoCut"):
-	# 				plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out["boosted_tau"]["Acc_AK8JetSoftMass_NoCut"].count, transform = ax.transAxes)
-	# 				plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out["boosted_tau"]["Acc_AK8JetSoftMass_NoCut"].value, transform = ax.transAxes)
-	# 			plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
-	# 			plt.close()
-				  
-	# 		for var_name, hist_name_arr in trigger_hist_dict_2d.items():
-	# 			fig, ax = plt.subplots()
-	# 			trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
-
-	# 			if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
-	# 				plt.title(hist_name_arr[1] + " mass : " + mass_str[0] + " TeV", wrap=True)
-	# 			else:
-	# 				plt.title(hist_name_arr[1] + " (" +  trigger_name + "), mass : " + mass_str[0] + " TeV", wrap=True)
-	# 			plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
-	# 			plt.close()
-			
-	#Obtain background information
-	#background_array = ["ZZ4l",]
-	
-	#background_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedH3/2018/tt/v2_fast_Hadd/"
-	#background_dict = {"ZZ4l" : r"$ZZ \rightarrow 4l$", "top": "Top Background"}
-	#file_dict = {"top": [background_base + "TTTo2L2Nu.root",background_base + "TTToSemiLeptonic.root",background_base + "TTToHadronic.root"]}
-	#file_dict = {"top": [background_base + "TTTo2L2Nu.root"]} #Single top file
-
-
-	# for background_name, title in background_dict.items():
-	# 	if (background_name == "ZZ4l"):
-	# 		events = NanoEventsFactory.from_root(
-	# 			background_base + background_name + ".root",
-	# 			treepath="/4tau_tree",
-	# 			#treepath="/tautau_tree",
-	# 			schemaclass = BaseSchema,
-	# 			metadata={"dataset": "boosted_tau"},
-	# 		).events()
-		
-	# 	print("Background: " + background_name)	
-	# 	for trigger_name, trigger_bit in trigger_dict.items():
-	# 		if (background_name == "ZZ4l"):
-	# 			p2 = TriggerStudies(trigger_bit, False)
-	# 			trigger_out = p2.process(events)
-	# 			out_name = "boosted_tau"
-	# 		else:
-	# 			trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, False)) 
-	# 			out_name = background_name
-	# 			#trigger_out = iterative_runner(file_dict, treename="tautau_tree",processor_instance=TriggerStudies(trigger_bit, False)) 
-			
-	# 		if (trigger_bit == 40):
-	# 			trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
-	# 			trigger_hist_dict_2d = trigger_AK8Jet_hist_dict_2d 
-			
-	# 		if (trigger_bit == 39):
-	# 			trigger_hist_dict_1d = trigger_MTHTJet_hist_dict_1d  
-	# 			trigger_hist_dict_2d = trigger_MTHTJet_hist_dict_2d 
-			
-	# 		for var_name, hist_name_arr in trigger_hist_dict_1d.items():
-	# 			fig, ax = plt.subplots()
-	# 			if (background_name == "ZZ4l"):
-	# 				trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
-	# 				print("Efficiency = %f"%(trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]))
-	# 			else:
-	# 				#trigger_out[background_name]["boosted_tau"][var_name].plot1d(ax=ax)
-	# 				trigger_out[background_name][var_name].plot1d(ax=ax)
-	# 				print("Efficiency = %f"%(trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]))
-	
-	# 			if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
-	# 				plt.title(hist_name_arr[1] + title, wrap=True)
-	# 			else:
-	# 				plt.title(hist_name_arr[1] + " (" + trigger_name + r"), " + title, wrap=True)
-				
-	# 			#Add Text with average and number of entries	
-	# 			if (var_name == "MET_NoCut"):
-	# 				plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out[out_name]["Acc_MET_NoCut"].count, transform = ax.transAxes)
-	# 				plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out[out_name]["Acc_MET_NoCut"].value, transform = ax.transAxes)
-	# 			if (var_name == "MET_NoCrossClean"):
-	# 				plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out[out_name]["Acc_MET_NoCrossClean"].count, transform = ax.transAxes)
-	# 				plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out[out_name]["Acc_MET_NoCrossClean"].value, transform = ax.transAxes)
-	# 			if (var_name == "HT_NoCut"):
-	# 				plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out[out_name]["Acc_HT_NoCut"].count, transform = ax.transAxes)
-	# 				plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out[out_name]["Acc_HT_NoCut"].value, transform = ax.transAxes)
-	# 			if (var_name == "HT_NoCrossClean"):
-	# 				plt.text(x = 0.14, y = 0.8, s = "Entries: %d"%trigger_out[out_name]["Acc_HT_NoCrossClean"].count, transform = ax.transAxes)
-	# 				plt.text(x = 0.14, y = 0.74, s = "Mean: %.2f GeV"%trigger_out[out_name]["Acc_HT_NoCrossClean"].value, transform = ax.transAxes)
-	# 			if (var_name == "AK8JetPt_NoCut"):
-	# 				plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out[out_name]["Acc_AK8JetPt_NoCut"].count, transform = ax.transAxes)
-	# 				plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out[out_name]["Acc_AK8JetPt_NoCut"].value, transform = ax.transAxes)
-	# 			if (var_name == "AK8JetSoftMass_NoCut"):
-	# 				plt.text(x = 0.74, y = 0.8, s = "Entries: %d"%trigger_out[out_name]["Acc_AK8JetSoftMass_NoCut"].count, transform = ax.transAxes)
-	# 				plt.text(x = 0.74, y = 0.74, s = "Mean: %.2f GeV"%trigger_out[out_name]["Acc_AK8JetSoftMass_NoCut"].value, transform = ax.transAxes)
-				
-	# 			plt.savefig(hist_name_arr[0] + "-" + background_name + "-" + trigger_name)
-	# 			print(background_name)
-	# 			plt.close()
-				  
-	# 		for var_name, hist_name_arr in trigger_hist_dict_2d.items():
-	# 			fig, ax = plt.subplots()
-	# 			if (background_name == "ZZ4l"):
-	# 				trigger_out["boosted_tau"][var_name].plot2d(ax=ax)
-	# 			else:
-	# 				#trigger_out[background_name]["boosted_tau"][var_name].plot2d(ax=ax)
-	# 				if ("eff" not in var_name):
-	# 					trigger_out[background_name][var_name].plot2d(ax=ax)
-	# 				if (var_name == "Jet_eff"):
-	# 					#Set up efficiency histogram
-	# 					eff_Jet = hist.Hist(
-	# 						hist.axis.Regular(20, 0, 1200., name = "pfMET" , label = r"MET [GeV]"),
-	# 						hist.axis.Regular(20, 0, 3500., name = "HT", label = r"HT [GeV]")
-	# 					)
-	# 					eff_Jet = trigger_out[background_name]["Jet_Trigg"]/trigger_out[background_name]["Jet_PreTrigg"] 
-	# 					eff_Jet.plot2d(ax=ax)
-	# 				if (var_name == "AK8Jet_eff"):
-	# 					print("AK8Jet Stuff!!")
-	# 					eff_AK8Jet = hist.Hist(
-	# 						hist.axis.Regular(20, 0, 1100, name="JetPt", label=r"AK8Jet $p_T$ [GeV]"),
-	# 						hist.axis.Regular(10, 0, 300, name="SoftMass", label="AK8Jet Soft Mass [GeV]")
-	# 					)		
-	# 					eff_AK8Jet = trigger_out[background_name]["AK8Jet_Trigg"]/trigger_out[background_name]["AK8Jet_PreTrigg"]		
-	# 					eff_AK8Jet.plot2d(ax=ax)
-	
-	# 			if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
-	# 				plt.title(hist_name_arr[1] + title, wrap=True)
-	# 			else:
-	# 				plt.title(hist_name_arr[1] + trigger_name + "), " + title, wrap=True)
-	# 			plt.savefig(hist_name_arr[0] + "-" + background_name + "-" + trigger_name)
-	# 			plt.close()
-		
