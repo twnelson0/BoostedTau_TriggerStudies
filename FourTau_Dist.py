@@ -468,7 +468,7 @@ if __name__ == "__main__":
 			"ZZ4l": [background_base + "ZZ4l.root"], "Signal": [signal_base + mass + ".root"]
 		
 		}
-		full_hist = hist.Hist.new.StrCat(["Background","Signal"]).Regular(40,0,3000, label = r"$m_{4\tau} [GeV]$").Double()
+		full_hist = hist.Hist.new.StrCat(["Background","Signal"]).Regular(40,0,3000, label = r"$m_{4\tau}$ [GeV]").Double()
 		background_list = ["TTToSemiLeptonic","TTTo2L2Nu","TTToHadronic","ZZ4l"]
 		#file_dict = {"Background" : [background_base + "ZZ4l.root"], "Signal": [signal_base + mass + ".root"]}
 		for trigger_name, trigger_pair in trigger_dict.items():
@@ -486,9 +486,9 @@ if __name__ == "__main__":
 			
 			#fourtau_out["Background"]["FourTau_Mass_hist"].plot1d(ax=ax, label = "Background") #Draw Histogram
 			full_hist.plot1d(ax=ax) #Draw Histogram
-			plt.text(x = 0.64,y = 0.7,s = "Background mean: %.2f"%background_acc.value, transform = ax.transAxes)
+			plt.text(x = 0.6,y = 0.7,s = "Background mean: %.2f GeV"%background_acc.value, transform = ax.transAxes, fontsize="small")
 			#fourtau_out["Signal"]["FourTau_Mass_hist"].plot1d(ax=ax, label = "Signal") #Draw Histogram
-			plt.text(x = 0.64,y = 0.6,s = "Signal mean: %.2f"%signal_acc.value, transform = ax.transAxes)
+			plt.text(x = 0.6,y = 0.6,s = "Signal mean: %.2f GeV"%signal_acc.value, transform = ax.transAxes, fontsize="small")
 			plt.title(r"4$\tau$ Mass " + mass[0] + "." + mass[1] + " TeV Signal")
 			ax.legend(title="Legend")
 			plt.savefig("FourTau_Mass_" + mass + "-" + trigger_name)
