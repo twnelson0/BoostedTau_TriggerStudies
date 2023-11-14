@@ -383,6 +383,15 @@ class TriggerStudies(processor.ProcessorABC):
 			Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
 			Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
 			Jet["HT"] = ak.sum(Jet_HT.Pt, axis = 1, keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=False)
+			Jet = Jet[Jet.HT > 0] #Fix issue with zeros in HT
+			#print("0 HT: %d"%ak.sum(ak.num(Jet[Jet.HT == 0].HT,axis=0)))
+			#if (self.signal):
+			#	zeroNum = 0
+			#	for HT in ak.ravel(Jet.HT):
+			#		if (HT == 0):
+			#			zeroNum+=1
+			#	print("Events with 0 HT: %d"%zeroNum)
+			
 			HT_PreTrigg.fill(ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0]))
 			#HT_NoTrigg_Arr = ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0])
 			HT_NoTrigg_Arr = ak.ravel(Jet.HT)
@@ -399,11 +408,14 @@ class TriggerStudies(processor.ProcessorABC):
 		if (self.offline_cut):
 			if (self.trigger_bit == 40 and self.cut_num == 0):
 				print("Offline Cut 40")
+				print("No Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 				tau = tau[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
+				print("AK8 Jet Pt Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 				Jet = Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
 				AK8Jet = AK8Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
 				
 				tau = tau[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+				print("Soft Drop Mass Seleciton: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 				Jet = Jet[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
 				AK8Jet = AK8Jet[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
 				print("Trigger Cuts applied to all")
@@ -422,16 +434,24 @@ class TriggerStudies(processor.ProcessorABC):
 			
 			if (self.trigger_bit == 39):
 				print("Offline Cut 39")
+				print("No Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
+				
 				tau = tau[ak.all(Jet.PFLooseId, axis = 1)]
+				print("Loose ID: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 				AK8Jet = AK8Jet[ak.all(Jet.PFLooseId, axis = 1)]
 				Jet = Jet[ak.all(Jet.PFLooseId, axis = 1)]
 				tau = tau[ak.all(Jet.MHT > 100, axis = 1)]
+				print("MHT Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 				AK8Jet = AK8Jet[ak.all(Jet.MHT > 100, axis = 1)]
 				Jet = Jet[ak.all(Jet.MHT > 100, axis = 1)]
+				
 				tau = tau[ak.all(Jet.HT > 500, axis = 1)]
+				print("HT Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 				AK8Jet = AK8Jet[ak.all(Jet.HT > 500, axis = 1)]
 				Jet = Jet[ak.all(Jet.HT > 500, axis = 1)]
+				
 				tau = tau[ak.all(Jet.pfMET > 100, axis = 1)]
+				print("pfMet Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 				AK8Jet = AK8Jet[ak.all(Jet.pfMET > 100, axis = 1)]
 				Jet = Jet[ak.all(Jet.pfMET > 100, axis = 1)]
 				print("Trigger Cuts applied to all")
@@ -571,6 +591,7 @@ if __name__ == "__main__":
 	
 	for i in range(3):
 		if (i == 0):
+			continue
 			use_trigger = True
 			use_offline= False
 			table_title = "Online Trigger Efficiency Table"
@@ -582,6 +603,7 @@ if __name__ == "__main__":
 			table_file_name = "NoTrigger_Cuts"
 			#break
 		if (i == 2):
+			#continue
 			use_trigger = True
 			use_offline = True
 			table_title = "Online Trigger and Offline Cuts Efficiency Table"
