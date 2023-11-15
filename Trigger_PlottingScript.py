@@ -124,6 +124,9 @@ class TriggerStudies(processor.ProcessorABC):
 		AK8SoftMass_PreTrigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()
 		AK8SoftMass_NoCut = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_NoCut", label = "AK8Jet Soft Mass [GeV]").Double()
 		AK8SoftMass_Trigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()		
+		AK8JetMult_NoCut = hist.Hist.new.Reg(8,0,7, name = "AK8 Jet Multiplicity", label = "AK8 Jet Multiplicity").Double()
+		AK8JetMult_PreTrigg = hist.Hist.new.Reg(8,0,7, name = "AK8 Jet Multiplicity", label = "AK8 Jet Multiplicity").Double()
+		AK8JetMult_Trigg = hist.Hist.new.Reg(8,0,7, name = "AK8 Jet Multiplicity", label = "AK8 Jet Multiplicity").Double()
 		
 		#2D Histograms
 		AK8Jet_PreTrigger = hist.Hist(
@@ -256,6 +259,8 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8Pt_Acc = hist.accumulators.Mean().fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetPt))
 			AK8SoftMass_NoCut.fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetDropMass))
 			AK8SoftMass_Acc = hist.accumulators.Mean().fill(ak.ravel(AK8Jet_Temp[:,0].AK8JetDropMass))
+			AK8JetMult_NoCut.fill(ak.num(AK8Jet, axis=1))
+			
 		if (self.trigger_bit == 39):
 			print("No Cut Accumulators updated")
 			HT_NoCut.fill(ak.ravel(HT_Val_NoCuts[HT_Val_NoCuts > 0]))
@@ -324,6 +329,7 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8SoftMass_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
 			AK8SoftMass_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
 			AK8Pt_all.fill("No Trigger",ak.ravel(AK8Jet.AK8JetPt))
+			AK8JetMult_PreTrigg.fill(ak.num(AK8Jet,axis=1))
 		
 		if (self.trigger_bit == 39):
 			#Fill Histograms
@@ -365,7 +371,8 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8SoftMass_Trigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
 			pre_triggernum = ak.num(AK8Pt_NoTrigg_Arr,axis=0)
 			post_triggernum = ak.num(AK8Pt_Trigg_Arr,axis=0)
-            
+			AK8JetMult_Trigg.fill(ak.num(AK8Jet,axis=1))
+	
 			if (self.signal):
 				print("Efficiency (AK8Jet Trigger): %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
 			AK8Jet_PreTrigger.fill(AK8Pt_NoTrigg_Arr, AK8SoftMass_NoTrigg_Arr)
@@ -402,7 +409,10 @@ class TriggerStudies(processor.ProcessorABC):
 					"AK8JetPt_NoCut": AK8Pt_NoCut, 
 					"AK8JetSoftMass_NoCut": AK8SoftMass_NoCut,
 					"Acc_AK8JetPt_NoCut": AK8Pt_Acc,
-					"Acc_AK8JetSoftMass_NoCut": AK8SoftMass_Acc
+					"Acc_AK8JetSoftMass_NoCut": AK8SoftMass_Acc,
+					"AK8JetMult_NoCut": AK8JetMult_NoCut,
+					"AK8JetMult_PreTrigg": AK8JetMult_PreTrigg,
+					"AK8JetMult_Trigg": AK8JetMult_Trigg
 				}
 			}
 		if (self.trigger_bit == 39):
@@ -634,7 +644,9 @@ if __name__ == "__main__":
 	trigger_AK8Jet_hist_dict_1d = {
 		"AK8JetSoftMass_Trigg" : ["AK8SoftMass_Trigger_Plot","AK8SoftDrop Mass Trigger"] , "AK8JetSoftMass_PreTrigg" : ["AK8SoftMass_NoTrigger_Plot","AK8SoftDrop Mass No Trigger"], 
 		"AK8JetPt_Trigg" : ["AK8Pt_Trigger_Plot",r"AK8Jet $p_T$ Trigger"], "AK8JetPt_PreTrigg" : ["AK8Pt_NoTrigger_Plot",r"AK8Jet $p_T$ No Trigger"],
-		"AK8JetPt_NoCut" : ["AK8Pt_NoCut_Plot", r"AK8Jet $p_T$ No Cuts"], "AK8JetSoftMass_NoCut" : ["AK8SoftMass_NoCut_Plot", "AK8SoftDrop Mass No Cut"]
+		"AK8JetPt_NoCut" : ["AK8Pt_NoCut_Plot", r"AK8Jet $p_T$ No Cuts"], "AK8JetSoftMass_NoCut" : ["AK8SoftMass_NoCut_Plot", "AK8SoftDrop Mass No Cut"],
+		"AK8JetMult_PreTrigg" : ["AK8JetMult_NoTrigger_Plot", "AK8Jet Multiplicity"], "AK8JetMult_Trigg" : ["AK8JetMult_Trigger_Plot", "AK8Jet Multiplicity"],
+		"AK8JetMult_NoCut" : ["AK8JetMult_NoCut_Plot", "AK8Jet Multiplicity"]
 	}
 	
 	trigger_AK8Jet_hist_dict_2d = {
