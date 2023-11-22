@@ -8,7 +8,13 @@ import mplhep as hep
 from coffea import processor, nanoevents
 from coffea.nanoevents import NanoEventsFactory, NanoAODSchema, BaseSchema
 from coffea.nanoevents.methods import candidate
-from math import pi	
+from math import pi
+
+#Global Variables
+WScaleFactor = 1.21
+TT_FullLep_BR = 0.1061
+TT_SemiLep_BR = 0.4392
+TT_Had_BR = 0.4544	
 
 def deltaR(part1, part2):
 	return np.sqrt((part2.eta - part1.eta)**2 + (part2.phi - part1.phi)**2)
@@ -35,7 +41,23 @@ def bit_or(data):
 	return np.bitwise_or(cond_1, np.bitwise_or(cond_2,cond_3))
 
 #Dictionary of cross sections
-xSection_Dictionary = {"Signal": 1.5e3, "ZZ4l": 1.212, "TTTo2L2Nu": 0.1061*831.76, "TTToSemiLeptonic": 0.4392*831.76, "TTToHadronic": 0.4544*831.76}	
+xSection_Dictionary = {"Signal": 1.5e3, 
+						#TTBar Background
+						"TTTo2L2Nu": 0.1061*831.76, "TTToSemiLeptonic": 0.4392*831.76, "TTToHadronic": 0.4544*831.76,
+						#DiBoson Backgroiund
+						"ZZ4l": 1.212, "ZZ2l2q": 3.22, "WZ3l1nu": 4.708, "WZ2l2Q": 5.595, "WZ2l2q": 5.595, "WZ1l1nu2q": 10.71, "VV2l2nu": 11.95,
+						#DiBoson continued
+						"ZZTo2L2Nu_powheg": 0.564, "ZZTo2L2Q_amcNLO": 3.22, "ZZTo4L_powheg": 1.212, "WWTo2L2Nu_powheg": 12.178, "WWTo4Q_powheg": 51.723, "WWTo1LNuQQ_powheg": 49.997, 
+						"WZTo1L3Nu_amcatnloFXFX": 3.033, "WZTo2L2Q_amcNLO": 5.595, "WZTo3LNu_amcNLO": 4.42965, "WZTo1L1Nu2Q_amcNLO": 10.71, "WW1l1nu2q": 49.997, "WZ1l3nu": 3.05,
+						#Single Top Background
+						"Tbar-tchan": 26.23, "T-tchan": 44.07, "Tbar-tW": 35.6, "T-tW": 35.6, "toptopH125": 0.5033*0.062,
+						#Drell-Yan Jets
+						"DYJetsToLL_Pt-50To100": 387.130778, "DYJetsToLL_Pt-100To250": 89.395097,"DYJetsToLL_Pt-250To400": 3.435181, "DYJetsToLL_Pt-400To650": 0.464024, "DYJetsToLL_Pt-650ToInf": 0.043602,
+						#WJets
+						"WJetsToLNu_Pt-0To50": 57297.39, "WJetsToLNu_Pt-50To100": 3298.37, "WJetsToLNu_Pt-100To250": 698.75, "WJetsToLNu_Pt-250To400": 24.507, "WJetsToLNu_Pt-400To600":3.1101, "WJetsToLNu_Pt-600ToInf": 0.46832,
+						#ZH 
+						"ZH125": 0.7544*0.0621, "ggZHLL125":0.1223 * 0.062 * 3 * 0.033658, "ggZHNuNu125": 0.1223*0.062*0.2,"ggZHQQ125": 0.1223*0.062*0.6991, 
+						}	
 Lumi_2018 = 59830
 
 def weight_calc(sample,events):
@@ -107,9 +129,10 @@ class FourTauPlotting(processor.ProcessorABC):
 		)
 		
 		#Histograms (AK8Jet) (Trigger bit = 40)
+		AK8Pt_PreTrigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
 		AK8Pt_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8Pt_hist").Reg(40,0,1100, name="AK8Pt", label = "AK8 Jet r$p_T$ [GeV]").Double()	
 		AK8SoftMass_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8SoftMass_hist").Reg(40,0,400, name="AK8SoftMass", label = "AK8 Jet Soft Drop Mass [GeV]").Double()
-		AK8Pt_PreTrigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
+
 		AK8Pt_NoCut = hist.Hist.new.Reg(40, 0, 1800, name = "JetPt_NoCut", label = r"AK8Jet $p_T$ [GeV]").Double()
 		AK8Pt_Trigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
 		AK8SoftMass_PreTrigg = hist.Hist.new.Reg(40, 0, 300, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()
@@ -142,6 +165,7 @@ class FourTauPlotting(processor.ProcessorABC):
 
 		#Histograms 4 tau
 		FourTau_Mass_hist = hist.Hist.new.Reg(40,0,3000, label = r"$m_{4\tau} [GeV]$").Double()
+		Higgs_DeltaPhi = hist.Hist.new.Reg(40,0,2*pi, label = r"Higgs $\Delta \phi$").Double()
 
 		#2D Histograms
 		Jet_PreTrigger = hist.Hist(
@@ -221,9 +245,9 @@ class FourTauPlotting(processor.ProcessorABC):
 		JetDown_HT["dR"] = mval_temp
 
 		#print("Pre dR Length %d"%len(Jet))
-		Jet_HT = Jet_HT[ak.all(Jet_HT.dR == True, axis = 2)] #Lepton cuts
-		JetUp_HT = JetUp_HT[ak.all(JetUp_HT.dR == True, axis = 2)]
-		JetDown_HT = JetDown_HT[ak.all(JetDown_HT.dR == True, axis = 2)]
+		#Jet_HT = Jet_HT[ak.all(Jet_HT.dR == True, axis = 2)] #Lepton cuts
+		#JetUp_HT = JetUp_HT[ak.all(JetUp_HT.dR == True, axis = 2)]
+		#JetDown_HT = JetDown_HT[ak.all(JetDown_HT.dR == True, axis = 2)]
 		#print("Post dR Length %d"%len(Jet))
 		HT_Val_NoCuts = ak.sum(Jet_HT.Pt,axis = 1,keepdims=True) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
 		#Jet["HT"] = ak.sum(Jet.Pt,axis = 1,keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
@@ -309,17 +333,6 @@ class FourTauPlotting(processor.ProcessorABC):
 		JetDown_HT = JetDown_HT[ak.num(tau) >= 4]
 		Jet = Jet[ak.num(tau) >= 4]
 		tau = tau[ak.num(tau) >= 4] #4 tau events
-		
-		#Construct all possible valid ditau pairs
-		tau_plus = tau[tau.charge > 0]		
-		tau_minus = tau[tau.charge < 0]
-		tau_plus1, tau_plus2 = ak.unzip(ak.combinations(tau_plus,2))
-		tau_minus1, tau_minus2 = ak.unzip(ak.combinations(tau_minus,2))
-		
-		deltaR11 = deltaR(tau_plus1, tau_minus1)
-		deltaR12 = deltaR(tau_plus1, tau_minus2)
-		deltaR22 = deltaR(tau_plus2, tau_minus2)
-		deltaR21 = deltaR(tau_plus2, tau_minus1)
 
 		tau["FourMass"] = four_mass([tau[:,0],tau[:,1],tau[:,2],tau[:,3]])
 		
@@ -355,12 +368,50 @@ class FourTauPlotting(processor.ProcessorABC):
 			Jet = Jet[np.bitwise_and(Jet.trigger,trigger_mask) == trigger_mask]
 			Jet_HT = Jet_HT[np.bitwise_and(Jet_HT.trigger,trigger_mask) == trigger_mask]
 			Jet_MHT = Jet_MHT[np.bitwise_and(Jet_MHT.trigger,trigger_mask) == trigger_mask]		
+		
+		
+		#Construct all possible valid ditau pairs
+		tau_plus = tau[tau.charge > 0]		
+		tau_minus = tau[tau.charge < 0]
+		tau_plus1, tau_plus2 = ak.unzip(ak.combinations(tau_plus,2))
+		tau_minus1, tau_minus2 = ak.unzip(ak.combinations(tau_minus,2))
+		
+		deltaR11 = deltaR(tau_plus1, tau_minus1)
+		deltaR12 = deltaR(tau_plus1, tau_minus2)
+		deltaR22 = deltaR(tau_plus2, tau_minus2)
+		deltaR21 = deltaR(tau_plus2, tau_minus1)
 
-
+		#Get leading, subleading and fourth leading taus
+		tau = tau[ak.num(tau) > 0] #Handle trigger
+		leading_tau = tau[:,0]
+		subleading_tau = tau[:,1]
+		thirdleading_tau = tau[:,2]
+		fourthleading_tau = tau[:,3]
+		
+		#Construct each Higgs' transverse momenta
+		#leadingHiggs_vec = ak.zip(
+		#		{
+		#			"Px": (tau_plus1[(deltaR11 < deltaR21)].Px + tau_minus1[(deltaR11 < deltaR21)].Px)*(deltaR11 < deltaR21) + (tau_plus2[(deltaR21 < deltaR11)].Px + tau_minus1[(deltaR21 < deltaR11)].Px)*(deltaR21 < deltaR11),
+		#			"Py": (tau_plus1[(deltaR11 < deltaR21)].Py + tau_minus1[(deltaR11 < deltaR21)].Py)*(deltaR11 < deltaR21) + (tau_plus2[(deltaR21 < deltaR11)].Py + tau_minus1[(deltaR21 < deltaR11)].Py)*(deltaR21 < deltaR11)
+		#		}
+		#)	
+		#subleadingHiggs_vec = ak.zip(
+		#		{
+		#			"Px": (tau_plus1[(deltaR12 < deltaR22)].Px + tau_minus2[(deltaR12 < deltaR22)].Px)*(deltaR12 < deltaR22) + (tau_plus2[(deltaR22 < deltaR12)].Px + tau_minus2[(deltaR22 < deltaR12)].Px)*(deltaR22 < deltaR12),
+		#			"Py": (tau_plus1[(deltaR12 < deltaR22)].Py + tau_minus2[(deltaR12 < deltaR22)].Py)*(deltaR12 < deltaR22) + (tau_plus2[(deltaR22 < deltaR12)].Py + tau_minus2[(deltaR22 < deltaR12)].Py)*(deltaR22 < deltaR12)
+		#		}
+		#)
+		PxLeading = np.append(ak.ravel(tau_plus1[(deltaR11 < deltaR21)].Px) + ak.ravel(tau_minus1[(deltaR11 < deltaR21)].Px) , ak.ravel(tau_plus2[(deltaR21 < deltaR11)].Px) + ak.ravel(tau_minus1[(deltaR21 < deltaR11)].Px))
+		PyLeading = np.append(ak.ravel(tau_plus1[(deltaR11 < deltaR21)].Py) + ak.ravel(tau_minus1[(deltaR11 < deltaR21)].Py) , ak.ravel(tau_plus2[(deltaR21 < deltaR11)].Py) + ak.ravel(tau_minus1[(deltaR21 < deltaR11)].Py))
+		PxSubLeading = np.append(ak.ravel(tau_plus1[(deltaR12 < deltaR22)].Px) + ak.ravel(tau_minus2[(deltaR12 < deltaR22)].Px) , ak.ravel(tau_plus2[(deltaR22 < deltaR12)].Px) + ak.ravel(tau_minus2[(deltaR22 < deltaR12)].Px))
+		PySubLeading = np.append(ak.ravel(tau_plus1[(deltaR12 < deltaR22)].Py) + ak.ravel(tau_minus2[(deltaR12 < deltaR22)].Py) , ak.ravel(tau_plus2[(deltaR22 < deltaR12)].Py) + ak.ravel(tau_minus2[(deltaR22 < deltaR12)].Py))
+		
+		#Fill Higgs Delta Phi
+		Higgs_DeltaPhi.fill(np.abs(np.arctan(PyLeading/PxLeading) - np.arctan(PySubLeading/PxSubLeading)))
+		Higgs_DeltaPhi_Arr = ak.ravel(np.abs(np.arctan(PyLeading/PxLeading) - np.arctan(PySubLeading/PxSubLeading)))
 
 		#Fill 4tau Mass Histogram
-		tau = tau[ak.num(tau) > 0] #Handle trigger
-		print(len(tau))
+		#print(len(tau))
 		#FourTau_Mass_hist.fill(ak.ravel(four_mass(tau)))
 		FourTau_Mass_hist.fill(ak.ravel(tau.FourMass))
 		FourTau_Mass_Arr = ak.ravel(tau.FourMass)
@@ -406,7 +457,8 @@ class FourTauPlotting(processor.ProcessorABC):
 				"Weight": weight_Val,
 				"FourTau_Mass_Arr": FourTau_Mass_Arr, 
 				"FourTau_Mass_hist": FourTau_Mass_hist,
-				"FourTau_Mass_Acc": FourTau_Mass_Acc
+				"FourTau_Mass_Acc": FourTau_Mass_Acc,
+				"HiggsDeltaPhi_Arr": Higgs_DeltaPhi_Arr
 			}
 		}
 	
@@ -457,6 +509,8 @@ if __name__ == "__main__":
 		executor = processor.IterativeExecutor(compression=None),
 		schema=BaseSchema
 	)
+	four_tau_hist_list = ["FourTau_Mass_Arr","HiggsDeltaPhi_Arr"]
+
 
 
 	for mass in mass_str_arr:
@@ -468,30 +522,33 @@ if __name__ == "__main__":
 			"ZZ4l": [background_base + "ZZ4l.root"], "Signal": [signal_base + mass + ".root"]
 		
 		}
-		full_hist = hist.Hist.new.StrCat(["Background","Signal"]).Regular(40,0,3000, label = r"$m_{4\tau}$ [GeV]").Double()
+		hist_dict = {"FourTau_Mass_Arr": hist.Hist.new.StrCat(["Background","Signal"]).Regular(40,0,3000, label = r"$m_{4\tau}$ [GeV]").Double(),"HiggsDeltaPhi_Arr": hist.Hist.new.StrCat(["Background","Signal"]).Reg(40,0,2*pi, label = r"Higgs $\Delta \phi$").Double()}
+		#full_hist = hist.Hist.new.StrCat(["Background","Signal"]).Regular(40,0,3000, label = r"$m_{4\tau}$ [GeV]").Double()
 		background_list = ["TTToSemiLeptonic","TTTo2L2Nu","TTToHadronic","ZZ4l"]
 		#file_dict = {"Background" : [background_base + "ZZ4l.root"], "Signal": [signal_base + mass + ".root"]}
 		for trigger_name, trigger_pair in trigger_dict.items():
-			fourtau_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=FourTauPlotting(trigger_bit=trigger_pair[0], or_trigger=trigger_pair[1]))
-			fig,ax = plt.subplots()
-			background_array = np.array([])
-			for background in background_list:
-				full_hist.fill("Background",fourtau_out[background]["FourTau_Mass_Arr"],weight=fourtau_out[background]["Weight"])
-				background_array = np.append(background_array,fourtau_out[background]["FourTau_Mass_Arr"])
-			full_hist.fill("Signal",fourtau_out["Signal"]["FourTau_Mass_Arr"],weight=fourtau_out["Signal"]["Weight"])
-			#print("Shouldn't be any signal...")
-			full_hist *= (1/full_hist.sum())
-			background_acc = hist.accumulators.Mean().fill(background_array)
-			signal_acc = hist.accumulators.Mean().fill(fourtau_out["Signal"]["FourTau_Mass_Arr"])
+			four_tau_names = {"FourTau_Mass_Arr": "FourTauMass_" + mass + "-" + trigger_name, "HiggsDeltaPhi_Arr": "HiggsDeltaPhi_" + mass + "-" + trigger_name}
+			for hist_name in four_tau_hist_list: #Loop over all histograms
+				fourtau_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=FourTauPlotting(trigger_bit=trigger_pair[0], or_trigger=trigger_pair[1]))
+				fig,ax = plt.subplots()
+				background_array = np.array([])
+				for background in background_list:
+					hist_dict[hist_name].fill("Background",fourtau_out[background][hist_name],weight=fourtau_out[background]["Weight"])
+					background_array = np.append(background_array,fourtau_out[background][hist_name])
+				hist_dict[hist_name].fill("Signal",fourtau_out["Signal"][hist_name],weight=fourtau_out["Signal"]["Weight"])
+				#print("Shouldn't be any signal...")
+				hist_dict[hist_name] *= (1/hist_dict[hist_name].sum())
+				background_acc = hist.accumulators.Mean().fill(background_array)
+				signal_acc = hist.accumulators.Mean().fill(fourtau_out["Signal"][hist_name])
 			
 			#fourtau_out["Background"]["FourTau_Mass_hist"].plot1d(ax=ax, label = "Background") #Draw Histogram
-			full_hist.plot1d(ax=ax) #Draw Histogram
+			hist_dict[hist_name].plot1d(ax=ax) #Draw Histogram
 			plt.text(x = 0.6,y = 0.7,s = "Background mean: %.2f GeV"%background_acc.value, transform = ax.transAxes, fontsize="small")
 			#fourtau_out["Signal"]["FourTau_Mass_hist"].plot1d(ax=ax, label = "Signal") #Draw Histogram
 			plt.text(x = 0.6,y = 0.6,s = "Signal mean: %.2f GeV"%signal_acc.value, transform = ax.transAxes, fontsize="small")
 			plt.title(r"4$\tau$ Mass " + mass[0] + "." + mass[1] + " TeV Signal")
 			ax.legend(title="Legend")
-			plt.savefig("FourTau_Mass_" + mass + "-" + trigger_name)
+			plt.savefig(four_tau_names[hist_name])
 			plt.close()
 			
 	

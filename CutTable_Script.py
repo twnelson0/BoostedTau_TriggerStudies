@@ -40,7 +40,7 @@ def DrawTable(table_title, table_name, table_dict):
 	file.write("\\hline \n")
 	file.write("\\multicolumn{3}{|c|}{" + table_title  + "} \\\\ \n")
 	file.write("\\hline \n")
-	file.write("Sample File(s) & PFMET500\\_PFMET100 PFMHT100\\_IDTight Efficiency & AK8PFJet400\\_TrimMass30 Efficiency \\\\ \n")
+	file.write("Sample File(s) & PFHT500\\_PFMET100 PFMHT100\\_IDTight Efficiency & AK8PFJet400\\_TrimMass30 Efficiency \\\\ \n")
 	file.write("\\hline \n")
 	
 	#Fill table
@@ -222,14 +222,14 @@ class TriggerStudies(processor.ProcessorABC):
 		Jet_MHT = Jet[Jet.Pt > 30]
 		Jet_MHT = Jet[np.abs(Jet.eta) < 5]
 		Jet_MHT = Jet_MHT[Jet_MHT.PFLooseId > 0.5]
-		JetUp_MHT = Jet[Jet.PtTotUncUp > 30]
-		JetUp_MHT = JetUp_MHT[np.abs(JetUp_MHT.eta) < 5]
-		JetUp_MHT = JetUp_MHT[JetUp_MHT.PFLooseId > 0.5]
-		JetDown_MHT = Jet[Jet.PtTotUncDown > 30]
-		JetDown_MHT = JetDown_MHT[np.abs(JetDown_MHT.eta) < 5]
-		JetDown_MHT = JetDown_MHT[JetDown_MHT.PFLooseId > 0.5]
-		Jet_MHT["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
-		Jet_MHT["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
+		#JetUp_MHT = Jet[Jet.PtTotUncUp > 30]
+		#JetUp_MHT = JetUp_MHT[np.abs(JetUp_MHT.eta) < 5]
+		#JetUp_MHT = JetUp_MHT[JetUp_MHT.PFLooseId > 0.5]
+		#JetDown_MHT = Jet[Jet.PtTotUncDown > 30]
+		#JetDown_MHT = JetDown_MHT[np.abs(JetDown_MHT.eta) < 5]
+		#JetDown_MHT = JetDown_MHT[JetDown_MHT.PFLooseId > 0.5]
+		Jet_MHT["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) #+ ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
+		Jet_MHT["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) #+ ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
 		Jet_MHT["MHT"] = np.sqrt(Jet_MHT.MHT_x**2 + Jet_MHT.MHT_y**2)
 		print("Jet MHT Defined:")
 		
@@ -238,21 +238,21 @@ class TriggerStudies(processor.ProcessorABC):
 		Jet_HT = Jet[Jet.Pt > 30]
 		Jet_HT = Jet_HT[np.abs(Jet_HT.eta) < 3]
 		Jet_HT = Jet_HT[Jet_HT.PFLooseId > 0.5]
-		JetUp_HT = Jet[Jet.PtTotUncUp > 30]
-		JetUp_HT = JetUp_HT[np.abs(JetUp_HT.eta) < 3]
-		JetUp_HT = JetUp_HT[JetUp_HT.PFLooseId > 0.5]
-		JetDown_HT = Jet[Jet.PtTotUncDown > 30]
-		JetUp_HT = JetDown_HT[np.abs(JetDown_HT.eta) < 3]
-		JetDown_HT = JetDown_HT[JetDown_HT.PFLooseId > 0.5]
+		#JetUp_HT = Jet[Jet.PtTotUncUp > 30]
+		#JetUp_HT = JetUp_HT[np.abs(JetUp_HT.eta) < 3]
+		#JetUp_HT = JetUp_HT[JetUp_HT.PFLooseId > 0.5]
+		#JetDown_HT = Jet[Jet.PtTotUncDown > 30]
+		#JetUp_HT = JetDown_HT[np.abs(JetDown_HT.eta) < 3]
+		#JetDown_HT = JetDown_HT[JetDown_HT.PFLooseId > 0.5]
 		HT,tau_temp1 = ak.unzip(ak.cartesian([Jet_HT,tau], axis = 1, nested = True))
-		HT_up,tau_temp2 = ak.unzip(ak.cartesian([JetUp_HT,tau], axis = 1, nested = True))
-		HT_down,tau_temp3 = ak.unzip(ak.cartesian([JetDown_HT,tau], axis = 1, nested = True))
+		#HT_up,tau_temp2 = ak.unzip(ak.cartesian([JetUp_HT,tau], axis = 1, nested = True))
+		#HT_down,tau_temp3 = ak.unzip(ak.cartesian([JetDown_HT,tau], axis = 1, nested = True))
 		
 		#Get Cross clean free histograms
-		#HT_Var_NoCrossClean = ak.sum(Jet_HT.Pt,axis = 1,keepdims=True) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
+		HT_Var_NoCrossClean = ak.sum(Jet_HT.Pt,axis = 1,keepdims=True) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
 		#MET_NoCrossCleaning.fill(ak.ravel(Jet.pfMET))
-		#MET_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
-		#HT_NoCrossCleaning.fill(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False))	
+		MET_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
+		#HT_NoCrossCleaning.fill(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False)) #+ ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False))	
 		#HT_NoCrossCleaning.fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
 		#HT_num = 0
 		#for x in ak.sum(Jet.Pt,axis = 1,keepdims=False):
@@ -260,7 +260,7 @@ class TriggerStudies(processor.ProcessorABC):
 			
 		#print(ak.sum(Jet.Pt,axis = 1,keepdims=True))
 		#print("HT Num (No Cross Cleaning): %d"%HT_num)
-		#HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
+		HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
 	
 		mval_temp = deltaR(tau_temp1,HT) >= 0.5
 		#print(mval_temp)
@@ -272,19 +272,29 @@ class TriggerStudies(processor.ProcessorABC):
 		#		print("Fewer entries in Jets than mval_temp")
 
 		Jet_HT["dR"] = mval_temp
-		mval_temp = deltaR(tau_temp2,HT_up) >= 0.5
-		JetUp_HT["dR"] = mval_temp 
-		mval_temp = deltaR(tau_temp3,HT_down) >= 0.5
-		JetDown_HT["dR"] = mval_temp
+		#mval_temp = deltaR(tau_temp2,HT_up) >= 0.5
+		#JetUp_HT["dR"] = mval_temp 
+		#mval_temp = deltaR(tau_temp3,HT_down) >= 0.5
+		#JetDown_HT["dR"] = mval_temp
 
 		#print("Pre dR Length %d"%len(Jet))
-		Jet_HT = Jet_HT[ak.all(Jet_HT.dR == True, axis = 2)] #Lepton cuts
-		JetUp_HT = JetUp_HT[ak.all(JetUp_HT.dR == True, axis = 2)]
-		JetDown_HT = JetDown_HT[ak.all(JetDown_HT.dR == True, axis = 2)]
+		#Jet_HT = Jet_HT[ak.all(Jet_HT.dR == True, axis = 2)] #Lepton cuts
+		#JetUp_HT = JetUp_HT[ak.all(JetUp_HT.dR == True, axis = 2)]
+		#JetDown_HT = JetDown_HT[ak.all(JetDown_HT.dR == True, axis = 2)]
 		#print("Post dR Length %d"%len(Jet))
-		HT_Val_NoCuts = ak.sum(Jet_HT.Pt,axis = 1,keepdims=True) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
-		#Jet["HT"] = ak.sum(Jet.Pt,axis = 1,keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
+		HT_Val_NoCuts = ak.sum(Jet_HT.Pt,axis = 1,keepdims=True) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
+		Jet["HT"] = ak.sum(Jet.Pt,axis = 1,keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
+		Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) #+ ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
+		Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) #+ ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
+		Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
 		test_HT = ak.sum(Jet.Pt,axis = 1,keepdims=True)
+		if (self.trigger_bit == 39):
+			if (self.signal):
+				zeroNum = 0
+				for HT in ak.ravel(Jet.HT):
+					if (HT == 0):
+						zeroNum+=1
+				print("Before cut Events with 0 HT: %d"%zeroNum)
 		#HT_num = 0
 		#print("Test 1:")
 		#print(ak.sum(Jet.Pt,axis = 1,keepdims=False))
@@ -334,11 +344,11 @@ class TriggerStudies(processor.ProcessorABC):
 		Electron = Electron[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		Jet = Jet[(ak.sum(tau.charge,axis=1) == 0)]
 		Jet_HT = Jet_HT[(ak.sum(tau.charge,axis=1) == 0)]
-		JetUp_HT = JetUp_HT[(ak.sum(tau.charge,axis=1) == 0)]
-		JetDown_HT = JetDown_HT[(ak.sum(tau.charge,axis=1) == 0)]
+		#JetUp_HT = JetUp_HT[(ak.sum(tau.charge,axis=1) == 0)]
+		#JetDown_HT = JetDown_HT[(ak.sum(tau.charge,axis=1) == 0)]
 		Jet_MHT = Jet_MHT[(ak.sum(tau.charge,axis=1) == 0)]
-		JetUp_MHT = JetUp_MHT[(ak.sum(tau.charge,axis=1) == 0)]
-		JetDown_MHT = JetDown_MHT[(ak.sum(tau.charge,axis=1) == 0)]
+		#JetUp_MHT = JetUp_MHT[(ak.sum(tau.charge,axis=1) == 0)]
+		#JetDown_MHT = JetDown_MHT[(ak.sum(tau.charge,axis=1) == 0)]
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		CutFlow_Table.fill(6*np.ones([len(ak.ravel(tau.pt))]))
 		print("Taus after Charge Conservation cut: %d"%len(tau.pt))
@@ -347,11 +357,11 @@ class TriggerStudies(processor.ProcessorABC):
 		Electron = Electron[ak.num(tau) >= 4]
 		Muon = Muon[ak.num(tau) >= 4]
 		Jet_MHT = Jet_MHT[ak.num(tau) >= 4]
-		JetUp_MHT = JetUp_MHT[ak.num(tau) >= 4]
-		JetDown_MHT = JetDown_MHT[ak.num(tau) >= 4]
+		#JetUp_MHT = JetUp_MHT[ak.num(tau) >= 4]
+		#JetDown_MHT = JetDown_MHT[ak.num(tau) >= 4]
 		Jet_HT = Jet_HT[ak.num(tau) >= 4]
-		JetUp_HT = JetUp_HT[ak.num(tau) >= 4]
-		JetDown_HT = JetDown_HT[ak.num(tau) >= 4]
+		#JetUp_HT = JetUp_HT[ak.num(tau) >= 4]
+		#JetDown_HT = JetDown_HT[ak.num(tau) >= 4]
 		Jet = Jet[ak.num(tau) >= 4]
 		tau = tau[ak.num(tau) >= 4] #4 tau events
 		CutFlow_Table.fill(7*np.ones([len(ak.ravel(tau.pt))]))
@@ -368,7 +378,7 @@ class TriggerStudies(processor.ProcessorABC):
 		if (self.trigger_bit == 39):
 			#Fill Histograms
 			Pt_PreTrigg_Arr = ak.ravel(tau.pt)
-			HT_Val_PreTrigger = ak.sum(Jet_HT.Pt, axis = 1, keepdims=True) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
+			HT_Val_PreTrigger = ak.sum(Jet_HT.Pt, axis = 1, keepdims=True) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
 			#print(len(Jet_MHT) ==)
 			#if (len(Jet_MHT) != len(Jet)):
 			#	print("Length mismatch")
@@ -379,18 +389,34 @@ class TriggerStudies(processor.ProcessorABC):
 			#			print("len(x) = %d"%len(x))
 			#			print("len(y) = %d"%len(y))
 			
-			Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
-			Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
-			Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
-			Jet["HT"] = ak.sum(Jet_HT.Pt, axis = 1, keepdims=False) + ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=False)
-			Jet = Jet[Jet.HT > 0] #Fix issue with zeros in HT
+			#Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
+			#Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
+			JetMHT = Jet
+			JetHT = Jet
+			JetMHT["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
+			JetHT["HT"] = ak.sum(Jet_HT.Pt, axis = 1, keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=False)
+			JetHT = JetHT[JetHT.HT > 0] #Fix issue with zeros in HT
+			JetMHT = JetMHT[JetMHT.MHT > 0] #Fix issue with zeros in HT
+			if (self.signal):
+				zeroNum = 0
+				for HT in ak.ravel(Jet.HT):
+					if (HT == 0):
+						zeroNum+=1
+				print("After cut Events with 0 HT: %d"%zeroNum)
+
+			Jet = Jet[Jet.HT > 0] #Remove 0 HT events (??)
+			if (self.signal):
+				offVal = 0
+				for (HT1,HT2) in zip(ak.ravel(Jet.HT),ak.ravel(JetHT.HT)):
+					if (HT1 != HT2):
+						offVal += 1
+				print("Number of disagreeing HT terms = %d"%offVal)
+			#if (JetHT.HT != Jet.HT):
+			#	print("Huh???")
+
+			#Jet["MHT"] = Jet[Jet.MHT > 0] #Fix issue with zeros in HT
 			#print("0 HT: %d"%ak.sum(ak.num(Jet[Jet.HT == 0].HT,axis=0)))
-			#if (self.signal):
-			#	zeroNum = 0
-			#	for HT in ak.ravel(Jet.HT):
-			#		if (HT == 0):
-			#			zeroNum+=1
-			#	print("Events with 0 HT: %d"%zeroNum)
+
 			
 			HT_PreTrigg.fill(ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0]))
 			#HT_NoTrigg_Arr = ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0])
@@ -436,24 +462,32 @@ class TriggerStudies(processor.ProcessorABC):
 				print("Offline Cut 39")
 				print("No Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 				
-				tau = tau[ak.all(Jet.PFLooseId, axis = 1)]
-				print("Loose ID: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				AK8Jet = AK8Jet[ak.all(Jet.PFLooseId, axis = 1)]
-				Jet = Jet[ak.all(Jet.PFLooseId, axis = 1)]
-				tau = tau[ak.all(Jet.MHT > 100, axis = 1)]
-				print("MHT Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				AK8Jet = AK8Jet[ak.all(Jet.MHT > 100, axis = 1)]
-				Jet = Jet[ak.all(Jet.MHT > 100, axis = 1)]
-				
 				tau = tau[ak.all(Jet.HT > 500, axis = 1)]
 				print("HT Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 				AK8Jet = AK8Jet[ak.all(Jet.HT > 500, axis = 1)]
 				Jet = Jet[ak.all(Jet.HT > 500, axis = 1)]
+				#JetMHT = JetMHT[ak.all(JetHT.HT > 500, axis = 1)]
 				
 				tau = tau[ak.all(Jet.pfMET > 100, axis = 1)]
 				print("pfMet Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 				AK8Jet = AK8Jet[ak.all(Jet.pfMET > 100, axis = 1)]
+				#JetMHT = JetMHT[ak.all(Jet.pfMET > 100, axis = 1)]
 				Jet = Jet[ak.all(Jet.pfMET > 100, axis = 1)]
+
+				tau = tau[ak.all(Jet.MHT > 100, axis = 1)]
+				print("MHT Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
+				AK8Jet = AK8Jet[ak.all(Jet.MHT > 100, axis = 1)]
+				Jet = Jet[ak.all(Jet.MHT > 100, axis = 1)]
+				#JetHT = JetHT[ak.all(JetMHT.MHT > 100, axis = 1)]
+				#JetMHT = JetMHT[ak.all(Jet.MHT > 100, axis = 1)]
+				
+				tau = tau[ak.all(Jet.PFLooseId, axis = 1)]
+				print("Loose ID: %d"%ak.num(ak.ravel(tau.pt),axis=0))
+				AK8Jet = AK8Jet[ak.all(Jet.PFLooseId, axis = 1)]
+				#JetHT = JetHT[ak.all(Jet.PFLooseId, axis = 1)]
+				#JetMHT = JetMHT[ak.all(Jet.PFLooseId, axis = 1)]
+				Jet = Jet[ak.all(Jet.PFLooseId, axis = 1)]
+
 				print("Trigger Cuts applied to all")
 
 			
@@ -591,7 +625,7 @@ if __name__ == "__main__":
 	
 	for i in range(3):
 		if (i == 0):
-			continue
+			#continue
 			use_trigger = True
 			use_offline= False
 			table_title = "Online Trigger Efficiency Table"
