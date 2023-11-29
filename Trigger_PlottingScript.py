@@ -106,7 +106,7 @@ class TriggerStudies(processor.ProcessorABC):
 				"PtTotUncDown": events.jetPtTotUncDown,
 				"PtTotUncUp": events.jetPtTotUncUp,
 				"PFLooseId": events.jetPFLooseId,
-				"HT": ak.sum(events.jetPt, axis=1),
+				#"HT": ak.sum(events.jetPt, axis=1),
 				"eta": events.jetEta,
 				"phi": events.jetPhi,
 				"trigger": events.HLTJet,
@@ -151,6 +151,10 @@ class TriggerStudies(processor.ProcessorABC):
 		MET_NoCut = hist.Hist.new.Reg(30, 0, 1200., name="MET", label="MET [GeV]").Double()
 		MET_NoCrossCleaning = hist.Hist.new.Reg(30, 0, 1200., name="MET", label="MET [GeV]").Double()
 		MET_Trigg = hist.Hist.new.Reg(30, 0, 1200., name="MET", label="MET [GeV]").Double()
+		MHT_PreTrigg = hist.Hist.new.Reg(30, 0, 1200., name="MHT", label="MHT [GeV]").Double()
+		MHT_NoCut = hist.Hist.new.Reg(30, 0, 1200., name="MHT", label="MHT [GeV]").Double()
+		MHT_NoCrossCleaning = hist.Hist.new.Reg(30, 0, 1200., name="MHT", label="MHT [GeV]").Double()
+		MHT_Trigg = hist.Hist.new.Reg(30, 0, 1200., name="MHT", label="MHT [GeV]").Double()
 
 		#2D Histograms
 		Jet_PreTrigger = hist.Hist(
@@ -180,6 +184,8 @@ class TriggerStudies(processor.ProcessorABC):
 		Jet_MHT["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) #+ ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
 		Jet_MHT["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) #+ ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
 		Jet_MHT["MHT"] = np.sqrt(Jet_MHT.MHT_x**2 + Jet_MHT.MHT_y**2)
+		MHT_NoCrossCleaning.fill(ak.ravel(Jet_MHT.MHT))
+		MHT_Acc_NoCrossingClean = hist.accumulators.Mean().fill(ak.ravel(Jet_MHT.MHT))
 		print("Jet MHT Defined:")
 		
 		#HT Seleciton (new)
@@ -200,16 +206,18 @@ class TriggerStudies(processor.ProcessorABC):
 		#Get Cross clean free histograms
 		HT_Var_NoCrossClean = ak.sum(Jet_HT.Pt,axis = 1,keepdims=True) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
 		MET_NoCrossCleaning.fill(ak.ravel(Jet.pfMET))
-		MET_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
+		MET_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(Jet.pfMET))
 		#HT_NoCrossCleaning.fill(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False))	
-		HT_NoCrossCleaning.fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
+		#HT_NoCrossCleaning.fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
+		HT_NoCrossCleaning.fill(ak.ravel(HT_Var_NoCrossClean))
 		HT_num = 0
 		for x in ak.sum(Jet.Pt,axis = 1,keepdims=False):
 			HT_num += 1
 			
 		print(ak.sum(Jet.Pt,axis = 1,keepdims=True))
 		print("HT Num (No Cross Cleaning): %d"%HT_num)
-		HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
+		#HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
+		HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(HT_Var_NoCrossClean))
 	
 		mval_temp = deltaR(tau_temp1,HT) >= 0.5
 		print(mval_temp)
@@ -233,7 +241,8 @@ class TriggerStudies(processor.ProcessorABC):
 		#JetDown_HT = JetDown_HT[ak.all(JetDown_HT.dR == True, axis = 2)]
 		#print("Post dR Length %d"%len(Jet))
 		HT_Val_NoCuts = ak.sum(Jet_HT.Pt,axis = 1,keepdims=True) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
-		#Jet["HT"] = ak.sum(Jet.Pt,axis = 1,keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
+		Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
+		#Jet["MHT"] = Jet_MHT.MHT
 		test_HT = ak.sum(Jet.Pt,axis = 1,keepdims=True)
 		HT_num = 0
 		print("Test 1:")
@@ -242,16 +251,16 @@ class TriggerStudies(processor.ProcessorABC):
 		print(ak.sum(Jet.Pt,axis = 1,keepdims=True))
 		print(ak.ravel(Jet.HT))
 		print(Jet.HT)
-		for x in ak.ravel(Jet.HT):
+		#for x in ak.ravel(Jet.HT):
 			#print(x)
-			HT_num += 1
+			#HT_num += 1
 			#if x == 0:
 				#print("Anomolous zero (post-cross cleaning)")
-		print("HT Num (Cross Cleaning): %d"%HT_num)
-		print("HT Len: %d"%len(Jet.HT))
-		print("Pt Len: %d"%len(Jet.Pt))
-		print("Cross Cleaning Applied")
-		print("Len HT = %d"%len(Jet.HT))
+		#print("HT Num (Cross Cleaning): %d"%HT_num)
+		#print("HT Len: %d"%len(Jet.HT))
+		#print("Pt Len: %d"%len(Jet.Pt))
+		#print("Cross Cleaning Applied")
+		#print("Len HT = %d"%len(Jet.HT))
 
 		#Histograms of variables relavent to trigger 
 		if (self.trigger_bit == 40):
@@ -264,8 +273,10 @@ class TriggerStudies(processor.ProcessorABC):
 			
 		if (self.trigger_bit == 39):
 			print("No Cut Accumulators updated")
-			HT_NoCut.fill(ak.ravel(HT_Val_NoCuts[HT_Val_NoCuts > 0]))
-			HT_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(HT_Val_NoCuts[HT_Val_NoCuts > 0]))
+			#HT_NoCut.fill(ak.ravel(HT_Val_NoCuts[HT_Val_NoCuts > 0]))
+			#HT_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(HT_Val_NoCuts[HT_Val_NoCuts > 0]))
+			HT_NoCut.fill(ak.ravel(HT_Val_NoCuts))
+			HT_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(HT_Val_NoCuts))
 			print("HT Mean: %f"%HT_Acc_NoCut.value)
 			MET_NoCut.fill(ak.ravel(Jet.pfMET))
 			MET_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(Jet.pfMET))
@@ -337,14 +348,15 @@ class TriggerStudies(processor.ProcessorABC):
 			HT_Val_PreTrigger = ak.sum(Jet_HT.Pt, axis = 1, keepdims=True) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
 			Jet["HT"] = ak.sum(Jet_HT.Pt, axis = 1, keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=False)
 			HT_PreTrigg.fill(ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0]))
-			#HT_NoTrigg_Arr = ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0])
+			HT_PreTrigg.fill(ak.ravel(HT_Val_PreTrigger))
 			HT_NoTrigg_Arr = ak.ravel(Jet.HT)
 			MET_PreTrigg.fill(ak.ravel(Jet.pfMET))
+			MHT_PreTrigg.fill(ak.ravel(Jet_MHT.MHT))
 			MET_NoTrigg_Arr = ak.ravel(Jet.pfMET)
 			print("MET Len: %d"%len(MET_NoTrigg_Arr))	
 			print("HT Len: %d"%len(HT_NoTrigg_Arr))	
 
-
+		#Apply Online trigger
 		tau = tau[np.bitwise_and(tau.trigger,trigger_mask) == trigger_mask]
 		AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,trigger_mask) == trigger_mask]
 		Jet = Jet[np.bitwise_and(Jet.trigger,trigger_mask) == trigger_mask]
@@ -362,7 +374,7 @@ class TriggerStudies(processor.ProcessorABC):
 		deltaR22 = deltaR(tau_plus2, tau_minus2)
 		deltaR21 = deltaR(tau_plus2, tau_minus1)
 		
-		#Efficiency Histograms (How do I do these??)
+		#Efficiency Histograms 
 		if (self.trigger_bit == 40):	
 			AK8Pt_Trigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 			AK8SoftMass_Trigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
@@ -381,11 +393,14 @@ class TriggerStudies(processor.ProcessorABC):
 			eff_AK8Jet = AK8Jet_Trigger/AK8Jet_PreTrigger
 		
 		if (self.trigger_bit == 39):
-			HT_Val_PreTrigger = ak.sum(Jet_HT.Pt, axis = 1, keepdims=True)
-			HT_Trigg.fill(ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0]))
-			#HT_Trigg_Arr = ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0])
+			HT_Val_PostTrigger = ak.sum(Jet_HT.Pt, axis = 1, keepdims=True)
+			HT_Trigg.fill(ak.ravel(HT_Val_PostTrigger[HT_Val_PostTrigger > 0]))
+			HT_Trigg_Arr = ak.ravel(HT_Val_PostTrigger[HT_Val_PostTrigger > 0])
+			#HT_Trigg.fill(ak.ravel(HT_Val_PostTrigger))
+			#HT_Trigg_Arr = ak.ravel(HT_Val_PostTrigger)
 			HT_Trigg_Arr = ak.ravel(Jet.HT)
 			MET_Trigg.fill(ak.ravel(Jet.pfMET))
+			MHT_Trigg.fill(ak.ravel(Jet_MHT.MHT))
 			MET_Trigg_Arr = ak.ravel(Jet.pfMET)
 			pre_triggernum = ak.num(MET_NoTrigg_Arr,axis=0)
 			post_triggernum = ak.num(MET_Trigg_Arr,axis=0)	
@@ -420,7 +435,9 @@ class TriggerStudies(processor.ProcessorABC):
 			return{
 				 dataset: {
 					"MET_PreTrigg": MET_PreTrigg,
+					"MHT_PreTrigg": MHT_PreTrigg,
 					"MET_Trigg": MET_Trigg,
+					"MHT_Trigg": MHT_Trigg,
 					"HT_PreTrigg": HT_PreTrigg,
 					"HT_Trigg": HT_Trigg,
 					"Jet_PreTrigg": Jet_PreTrigger,
@@ -433,7 +450,9 @@ class TriggerStudies(processor.ProcessorABC):
 					"HT_NoCut": HT_NoCut,
 					"Acc_HT_NoCut": HT_Acc_NoCut,
 					"MET_NoCrossClean": MET_NoCrossCleaning,
+					"MHT_NoCrossClean": MHT_NoCrossCleaning,
 					"Acc_MET_NoCrossClean": MET_Acc_NoCrossClean,
+					"Acc_MHT_NoCrossClean": MHT_Acc_NoCrossingClean,
 					"HT_NoCrossClean": HT_NoCrossCleaning,
 					"Acc_HT_NoCrossClean": HT_Acc_NoCrossClean
 				}
@@ -657,8 +676,9 @@ if __name__ == "__main__":
 
 	trigger_MTHTJet_hist_dict_1d = {
 		"MET_Trigg" : ["MET_Trigger_Plot","pfMET Trigger"] , "MET_PreTrigg" : ["MET_NoTrigger_Plot","pfMET No Trigger"], "MET_NoCut": ["MET_NoCut_Plot", "pfMET No Cuts/Selections"], 
+		"MHT_Trigg" : ["MHT_Trigger_Plot","MHT Trigger"] , "MHT_PreTrigg" : ["MHT_NoTrigger_Plot","MHT No Trigger"],
 		"HT_Trigg" : ["HT_Trigger_Plot",r"HT Trigger"], "HT_PreTrigg" : ["HT_NoTrigger_Plot", r"HT No Trigger"], "HT_NoCut" : ["HT_NoCut_Plot", "HT No Cuts/Selections"],
-		"MET_NoCrossClean" : ["MET_NoCrossClean_Plot", "pfMET No Cross Cleaning Applied"], "HT_NoCrossClean" : ["HT_NoCrossComp_Plot", "HT No Cross Cleaing Applied"]
+		"MET_NoCrossClean" : ["MET_NoCrossClean_Plot", "pfMET No Cross Cleaning Applied"], "MHT_NoCrossClean" : ["MHT_NoCrossClean_Plot", "MHT No Cross Cleaning Applied"], "HT_NoCrossClean" : ["HT_NoCrossComp_Plot", "HT No Cross Cleaing Applied"]
 	}
 	
 	trigger_MTHTJet_hist_dict_2d = {

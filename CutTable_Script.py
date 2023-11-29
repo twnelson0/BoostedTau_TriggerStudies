@@ -393,10 +393,11 @@ class TriggerStudies(processor.ProcessorABC):
 			#Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
 			JetMHT = Jet
 			JetHT = Jet
-			JetMHT["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
-			JetHT["HT"] = ak.sum(Jet_HT.Pt, axis = 1, keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=False)
+			Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
+			Jet["HT"] = ak.sum(Jet_HT.Pt, axis = 1, keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=False)
+			Jet = Jet[Jet.HT > 0] #Fix issue with zeros in HT
 			JetHT = JetHT[JetHT.HT > 0] #Fix issue with zeros in HT
-			JetMHT = JetMHT[JetMHT.MHT > 0] #Fix issue with zeros in HT
+			#Jet = JetMHT[JetMHT.MHT > 0] #Fix issue with zeros in HT
 			if (self.signal):
 				zeroNum = 0
 				for HT in ak.ravel(Jet.HT):
