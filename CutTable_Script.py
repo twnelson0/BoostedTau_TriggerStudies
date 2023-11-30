@@ -30,8 +30,6 @@ def DrawTable(table_title, table_name, table_dict):
 	file.write("\\documentclass{article} \n")
 	file.write("\\usepackage{multirow} \n")
 	file.write("\\usepackage{multirow} \n")
-	#file.write("\\usepackage{lscape}\n")
-	#file.write("\\usepacke")
 	file.write("\\begin{document} \n")
 	file.write("\\centering \n")
 	
@@ -295,23 +293,6 @@ class TriggerStudies(processor.ProcessorABC):
 					if (HT == 0):
 						zeroNum+=1
 				print("Before cut Events with 0 HT: %d"%zeroNum)
-		#HT_num = 0
-		#print("Test 1:")
-		#print(ak.sum(Jet.Pt,axis = 1,keepdims=False))
-		#print("Test 2:")
-		#print(ak.sum(Jet.Pt,axis = 1,keepdims=True))
-		#print(ak.ravel(Jet.HT))
-		#print(Jet.HT)
-		#for x in ak.ravel(Jet.HT):
-			#print(x)
-		#	HT_num += 1
-			#if x == 0:
-				#print("Anomolous zero (post-cross cleaning)")
-		#print("HT Num (Cross Cleaning): %d"%HT_num)
-		#print("HT Len: %d"%len(Jet.HT))
-		#print("Pt Len: %d"%len(Jet.Pt))
-		#print("Cross Cleaning Applied")
-		#print("Len HT = %d"%len(Jet.HT))
 
 		trigger_mask = bit_mask([self.trigger_bit])		
 		
@@ -379,15 +360,6 @@ class TriggerStudies(processor.ProcessorABC):
 			#Fill Histograms
 			Pt_PreTrigg_Arr = ak.ravel(tau.pt)
 			HT_Val_PreTrigger = ak.sum(Jet_HT.Pt, axis = 1, keepdims=True) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
-			#print(len(Jet_MHT) ==)
-			#if (len(Jet_MHT) != len(Jet)):
-			#	print("Length mismatch")
-			#else:
-			#	for x,y in zip(Jet.Pt,Jet_MHT[np.abs(Jet_MHT.eta) < 3.0].Pt):
-			#		if (len(x) != len(y)):
-			#			print("Dimension mismatch")
-			#			print("len(x) = %d"%len(x))
-			#			print("len(y) = %d"%len(y))
 			
 			#Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
 			#Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp*np.sin(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.sin(JetDown_MHT.phi),axis=1,keepdims=False)
@@ -412,12 +384,6 @@ class TriggerStudies(processor.ProcessorABC):
 					if (HT1 != HT2):
 						offVal += 1
 				print("Number of disagreeing HT terms = %d"%offVal)
-			#if (JetHT.HT != Jet.HT):
-			#	print("Huh???")
-
-			#Jet["MHT"] = Jet[Jet.MHT > 0] #Fix issue with zeros in HT
-			#print("0 HT: %d"%ak.sum(ak.num(Jet[Jet.HT == 0].HT,axis=0)))
-
 			
 			HT_PreTrigg.fill(ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0]))
 			#HT_NoTrigg_Arr = ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0])

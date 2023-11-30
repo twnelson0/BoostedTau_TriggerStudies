@@ -229,20 +229,9 @@ class TriggerStudies(processor.ProcessorABC):
 				print("Fewer entries in Jets than mval_temp")
 
 		Jet_HT["dR"] = mval_temp
-		#mval_temp = deltaR(tau_temp2,HT_up) >= 0.5
-		#JetUp_HT["dR"] = mval_temp 
-		#mval_temp = deltaR(tau_temp3,HT_down) >= 0.5
-		#JetDown_HT["dR"] = mval_temp
-
-		#print("Pre dR Length %d"%len(Jet))
-		#Jet_HT = Jet_HT[ak.all(Jet_HT.dR == True, axis = 2)] #Lepton cuts ??Has Removing this fixed my issues??
-		
-		#JetUp_HT = JetUp_HT[ak.all(JetUp_HT.dR == True, axis = 2)]
-		#JetDown_HT = JetDown_HT[ak.all(JetDown_HT.dR == True, axis = 2)]
-		#print("Post dR Length %d"%len(Jet))
 		HT_Val_NoCuts = ak.sum(Jet_HT.Pt,axis = 1,keepdims=True) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
 		Jet["HT"] = ak.sum(Jet_HT.Pt,axis = 1,keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis = 1,keepdims=False)
-		#Jet["MHT"] = Jet_MHT.MHT
+
 		test_HT = ak.sum(Jet.Pt,axis = 1,keepdims=True)
 		HT_num = 0
 		print("Test 1:")
@@ -251,16 +240,6 @@ class TriggerStudies(processor.ProcessorABC):
 		print(ak.sum(Jet.Pt,axis = 1,keepdims=True))
 		print(ak.ravel(Jet.HT))
 		print(Jet.HT)
-		#for x in ak.ravel(Jet.HT):
-			#print(x)
-			#HT_num += 1
-			#if x == 0:
-				#print("Anomolous zero (post-cross cleaning)")
-		#print("HT Num (Cross Cleaning): %d"%HT_num)
-		#print("HT Len: %d"%len(Jet.HT))
-		#print("Pt Len: %d"%len(Jet.Pt))
-		#print("Cross Cleaning Applied")
-		#print("Len HT = %d"%len(Jet.HT))
 
 		#Histograms of variables relavent to trigger 
 		if (self.trigger_bit == 40):
@@ -292,7 +271,7 @@ class TriggerStudies(processor.ProcessorABC):
 		tau = tau[tau.iso >= 0.5]
 
 
-		#Delta R Cut on taus
+		#Delta R Cut on taus (Based on metric table https://github.com/CoffeaTeam/coffea/blob/f7e9119ba4567ba6a5e593da77627af475eae8e9/coffea/nanoevents/methods/vector.py#L668)
 		a,b = ak.unzip(ak.cartesian([tau,tau], axis = 1, nested = True))
 		mval = deltaR(a,b) < 0.8 
 		tau["dRCut"] = mval
