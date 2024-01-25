@@ -10,6 +10,9 @@ from coffea.nanoevents import NanoEventsFactory, NanoAODSchema, BaseSchema
 from coffea.nanoevents.methods import candidate
 from math import pi	
 
+def pdf(x,a=1,x0=0):
+	return (1 + np.exp(a/(x-x0)))**-1
+
 def delta_phi(vec1,vec2):
 	return (vec1.phi - vec2.phi + pi) % (2*pi) - pi	
 
@@ -166,15 +169,15 @@ class TriggerStudies(processor.ProcessorABC):
 
 		#2D Histograms
 		Jet_PreTrigger = hist.Hist(
-			hist.axis.Regular(20, 0, 1200., name = "pfMET + MHT [GeV]" , label = r"MET [GeV]"),
+			hist.axis.Regular(20, 0, 1200., name = "pfMET + MHT [GeV]" , label = r"pfMET + MHT [GeV]"),
 			hist.axis.Regular(20, 0, 4000., name = "HT", label = r"HT [GeV]")
 		)
 		Jet_Trigger = hist.Hist(
-			hist.axis.Regular(20, 0, 1200., name = "pfMET + MHT [GeV]" , label = r"MET [GeV]"),
+			hist.axis.Regular(20, 0, 1200., name = "pfMET + MHT [GeV]" , label = r"pfMET + MHT [GeV]"),
 			hist.axis.Regular(20, 0, 4000., name = "HT", label = r"HT [GeV]")
 		)
 		eff_Jet = hist.Hist(
-			hist.axis.Regular(20, 0, 1200., name = "pfMET + MHT [GeV]" , label = r"MET [GeV]"),
+			hist.axis.Regular(20, 0, 1200., name = "pfMET + MHT [GeV]" , label = r"pfMET + MHT [GeV]"),
 			hist.axis.Regular(20, 0, 4000., name = "HT", label = r"HT [GeV]")
 		)
 
@@ -725,9 +728,11 @@ if __name__ == "__main__":
 			
 			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
 				fig, ax = plt.subplots()
-				#trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 				if (var_name[-6:] == "TurnOn"):
-					trigger_out["boosted_tau"][var_name].plot1d(ax=ax, ls = ':')
+					hist.plot.histplot(trigger_out["boosted_tau"][var_name],histtype="errorbar")
+					#plt.plot(trigger_out["boosted_tau"][var_name].axes[0].centers, trigger_out["boosted_tau"][var_name].values(), 'o')
+					#trigger_out["boosted_tau"][var_name].plot1d(ax=ax).centers
+					#trigger_out["boosted_tau"][var_name].plot_pull(pdf)
 				else:
 					trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 
