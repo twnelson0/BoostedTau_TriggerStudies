@@ -124,30 +124,32 @@ class TriggerStudies(processor.ProcessorABC):
 		#Histograms (AK8Jet) (Trigger bit = 40)
 		AK8Pt_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8Pt_hist").Reg(40,0,1600, name="AK8Pt", label = "AK8 Jet r$p_T$ [GeV]").Double()	
 		AK8SoftMass_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8SoftMass_hist").Reg(40,0,400, name="AK8SoftMass", label = "AK8 Jet Soft Drop Mass [GeV]").Double()
-		AK8Pt_PreTrigg = hist.Hist.new.Reg(40, 0, 1600, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
-		AK8Pt_NoCut = hist.Hist.new.Reg(40, 0, 1600, name = "JetPt_NoCut", label = r"AK8Jet $p_T$ [GeV]").Double()
-		AK8Pt_Trigg = hist.Hist.new.Reg(40, 0, 1600, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
-		AK8Pt_TurnOn = hist.Hist.new.Reg(40, 0, 1600, name = "JetPt_TO", label = r"AK8Jet $p_T$ [GeV]").Double()
-		AK8SoftMass_PreTrigg = hist.Hist.new.Reg(40, 0, 800, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()
-		AK8SoftMass_NoCut = hist.Hist.new.Reg(40, 0, 800, name = "SoftMass_NoCut", label = "AK8Jet Soft Mass [GeV]").Double()
-		AK8SoftMass_Trigg = hist.Hist.new.Reg(40, 0, 800, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()		
-		AK8SoftMass_TurnOn = hist.Hist.new.Reg(40, 0, 800, name = "SoftMass_TO", label = "AK8Jet Soft Mass [GeV]").Double()		
+		AK8Pt_PreTrigg = hist.Hist.new.Reg(40, 0, 1500, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
+		AK8Pt_NoCut = hist.Hist.new.Reg(40, 0, 1500, name = "JetPt_NoCut", label = r"AK8Jet $p_T$ [GeV]").Double()
+		AK8Pt_Trigg = hist.Hist.new.Reg(40, 0, 1500, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
+		AK8Pt_TurnOn = hist.Hist.new.Reg(40, 0, 1500, name = "JetPt_TO", label = r"AK8Jet $p_T$ [GeV]").Double()
+		AK8Pt_Debug = hist.Hist.new.Reg(40, 0, 1500, name = "JetPt_Debug", label = r"AK8Jet $p_T$ [GeV]").Double()
+		AK8Eta_Debug = hist.Hist.new.Reg(40, -4, 4, name = "JetEta_Debug", label = r"AK8Jet $\eta$").Double()
+		AK8SoftMass_PreTrigg = hist.Hist.new.Reg(50, 0, 250, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()
+		AK8SoftMass_NoCut = hist.Hist.new.Reg(50, 0, 250, name = "SoftMass_NoCut", label = "AK8Jet Soft Mass [GeV]").Double()
+		AK8SoftMass_Trigg = hist.Hist.new.Reg(50, 0, 250, name = "SoftMass_Trigg", label = "AK8Jet Soft Mass [GeV]").Double()		
+		AK8SoftMass_TurnOn = hist.Hist.new.Reg(50, 0, 250, name = "SoftMass_TO", label = "AK8Jet Soft Mass [GeV]").Double()		
 		AK8JetMult_NoCut = hist.Hist.new.Reg(8,0,7, name = "AK8 Jet Multiplicity", label = "AK8 Jet Multiplicity").Double()
 		AK8JetMult_PreTrigg = hist.Hist.new.Reg(8,0,7, name = "AK8 Jet Multiplicity", label = "AK8 Jet Multiplicity").Double()
 		AK8JetMult_Trigg = hist.Hist.new.Reg(8,0,7, name = "AK8 Jet Multiplicity", label = "AK8 Jet Multiplicity").Double()
 		
 		#2D Histograms
 		AK8Jet_PreTrigger = hist.Hist(
-						hist.axis.Regular(20, 0, 1600, name="JetPt", label=r"AK8Jet $p_T$ [GeV]"),
-						hist.axis.Regular(10, 0, 800, name="SoftMass", label=r"AK8Jet Soft Mass [GeV]")
+						hist.axis.Regular(50, 0, 1500, name="JetPt", label=r"AK8Jet $p_T$ [GeV]"),
+						hist.axis.Regular(25, 0, 250, name="SoftMass", label=r"AK8Jet Soft Mass [GeV]")
 					)		
 		AK8Jet_Trigger = hist.Hist(
-						hist.axis.Regular(20, 0, 1600, name="JetPt", label=r"AK8Jet $p_T$ [GeV]"),
-						hist.axis.Regular(10, 0, 800, name="SoftMass", label="AK8Jet Soft Mass [GeV]")
+						hist.axis.Regular(50, 0, 1500, name="JetPt", label=r"AK8Jet $p_T$ [GeV]"),
+						hist.axis.Regular(25, 0, 250, name="SoftMass", label="AK8Jet Soft Mass [GeV]")
 					)		
 		eff_AK8Jet = hist.Hist(
-						hist.axis.Regular(20, 0, 1600, name="JetPt", label=r"AK8Jet $p_T$ [GeV]"),
-						hist.axis.Regular(10, 0, 800, name="SoftMass", label="AK8Jet Soft Mass [GeV]")
+						hist.axis.Regular(50, 0, 1500, name="JetPt", label=r"AK8Jet $p_T$ [GeV]"),
+						hist.axis.Regular(25, 0, 250, name="SoftMass", label="AK8Jet Soft Mass [GeV]")
 					)		
 
 		#Histograms (MET and HT) (Trigger bit = 39)
@@ -169,16 +171,16 @@ class TriggerStudies(processor.ProcessorABC):
 
 		#2D Histograms
 		Jet_PreTrigger = hist.Hist(
-			hist.axis.Regular(20, 0, 1200., name = "pfMET + MHT [GeV]" , label = r"pfMET + MHT [GeV]"),
-			hist.axis.Regular(20, 0, 4000., name = "HT", label = r"HT [GeV]")
+			hist.axis.Regular(20, 0, 1000., name = "pfMET + MHT [GeV]" , label = r"pfMET + MHT [GeV]"),
+			hist.axis.Regular(10, 0, 3000., name = "HT", label = r"HT [GeV]")
 		)
 		Jet_Trigger = hist.Hist(
-			hist.axis.Regular(20, 0, 1200., name = "pfMET + MHT [GeV]" , label = r"pfMET + MHT [GeV]"),
-			hist.axis.Regular(20, 0, 4000., name = "HT", label = r"HT [GeV]")
+			hist.axis.Regular(20, 0, 1000., name = "pfMET + MHT [GeV]" , label = r"pfMET + MHT [GeV]"),
+			hist.axis.Regular(10, 0, 3000., name = "HT", label = r"HT [GeV]")
 		)
 		eff_Jet = hist.Hist(
-			hist.axis.Regular(20, 0, 1200., name = "pfMET + MHT [GeV]" , label = r"pfMET + MHT [GeV]"),
-			hist.axis.Regular(20, 0, 4000., name = "HT", label = r"HT [GeV]")
+			hist.axis.Regular(20, 0, 1000., name = "pfMET + MHT [GeV]" , label = r"pfMET + MHT [GeV]"),
+			hist.axis.Regular(10, 0, 3000., name = "HT", label = r"HT [GeV]")
 		)
 
 		
@@ -320,12 +322,22 @@ class TriggerStudies(processor.ProcessorABC):
 		
 
 		if (self.trigger_bit == 40):
+			AK8JetMult_PreTrigg.fill(ak.num(AK8Jet,axis=1))
+			#num1 = len(ak.ravel(AK8Jet.AK8JetPt))
+			AK8Jet = AK8Jet[ak.num(AK8Jet,axis=1) > 0] #Remove 0 multiplicity events
+			#num2 = len(ak.ravel(AK8Jet.AK8JetPt))
+			#for evnt in AK8Jet.AK8JetPt:
+			#	if len(evnt) == 0:
+			#		print("!!Something didn't work!!")
+			#if (num1 == num2):
+			#	print("Something is wrong")
 			AK8Pt_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 			AK8Pt_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
 			AK8SoftMass_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
 			AK8SoftMass_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
 			AK8Pt_all.fill("No Trigger",ak.ravel(AK8Jet.AK8JetPt))
-			AK8JetMult_PreTrigg.fill(ak.num(AK8Jet,axis=1))
+			AK8Pt_Debug.fill(ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass == 0].AK8JetPt))
+			AK8Eta_Debug.fill(ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass == 0].eta))
 		
 		if (self.trigger_bit == 39):
 			#Fill Histograms
@@ -378,7 +390,9 @@ class TriggerStudies(processor.ProcessorABC):
 			
 			#Make 1d Turn on Plots
 			AK8Pt_TurnOn = AK8Pt_Trigg/AK8Pt_PreTrigg
+			AK8Pt_ErrorBars = hist.intervals.ratio_uncertainty(AK8Pt_Trigg, AK8Pt_PreTrigg) 
 			AK8SoftMass_TurnOn = AK8SoftMass_Trigg/AK8SoftMass_PreTrigg
+			AK8SoftMass_ErrorBars = hist.intervals.ratio_uncertainty(AK8SoftMass_Trigg, AK8SoftMass_PreTrigg) 
 	
 			if (self.signal):
 				print("Efficiency (AK8Jet Trigger): %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
@@ -402,9 +416,12 @@ class TriggerStudies(processor.ProcessorABC):
 			post_triggernum = ak.num(MET_Trigg_Arr,axis=0)
 
 			#1-d turn on plots
-			HT_TurnOn = HT_Trigg/HT_PreTrigg	
+			HT_TurnOn = HT_Trigg/HT_PreTrigg
+			HT_ErrorBars = hist.intervals.ratio_uncertainty(HT_Trigg, HT_PreTrigg)
 			MHT_TurnOn = MHT_Trigg/MHT_PreTrigg	
+			MHT_ErrorBars = hist.intervals.ratio_uncertainty(MHT_Trigg, MHT_PreTrigg)	
 			MET_TurnOn = MET_Trigg/MET_PreTrigg	
+			MET_ErrorBars = hist.intervals.ratio_uncertainty(MET_Trigg, MET_PreTrigg)	
 			
 			print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
 			Jet_PreTrigger.fill(MET_NoTrigg_Arr + MHT_NoTrigg_Arr, HT_NoTrigg_Arr)
@@ -431,7 +448,11 @@ class TriggerStudies(processor.ProcessorABC):
 					"AK8JetMult_PreTrigg": AK8JetMult_PreTrigg,
 					"AK8JetMult_Trigg": AK8JetMult_Trigg,
 					"AK8JetPt_TurnOn": AK8Pt_TurnOn,
-					"AK8JetSoftMass_TurnOn": AK8SoftMass_TurnOn
+					"AK8JetSoftMass_TurnOn": AK8SoftMass_TurnOn,
+					"AK8JetPt_ErrorBars": AK8Pt_ErrorBars,
+					"AK8JetSoftMass_ErrorBars": AK8SoftMass_ErrorBars,
+					"AK8JetPt_Debug": AK8Pt_Debug,
+					"AK8JetEta_Debug": AK8Eta_Debug
 				}
 			}
 		if (self.trigger_bit == 39):
@@ -462,7 +483,10 @@ class TriggerStudies(processor.ProcessorABC):
 					"Acc_HT_Trigg": HT_Acc_Trigg,
 					"HT_TurnOn" : HT_TurnOn,
 					"MHT_TurnOn" : MHT_TurnOn,
-					"MET_TurnOn" : MET_TurnOn
+					"MET_TurnOn" : MET_TurnOn,
+					"HT_ErrorBars" : HT_ErrorBars,
+					"MHT_ErrorBars" : MHT_ErrorBars,
+					"MET_ErrorBars" : MET_ErrorBars
 				}
 			}
 
@@ -659,7 +683,8 @@ if __name__ == "__main__":
 		"AK8JetPt_NoCut" : ["AK8Pt_NoCut_Plot", r"AK8Jet $p_T$ No Cuts"], "AK8JetSoftMass_NoCut" : ["AK8SoftMass_NoCut_Plot", "AK8SoftDrop Mass No Cut"],
 		"AK8JetMult_PreTrigg" : ["AK8JetMult_NoTrigger_Plot", "AK8Jet Multiplicity"], "AK8JetMult_Trigg" : ["AK8JetMult_Trigger_Plot", "AK8Jet Multiplicity"],
 		"AK8JetMult_NoCut" : ["AK8JetMult_NoCut_Plot", "AK8Jet Multiplicity"], "AK8JetPt_TurnOn" : ["AK8JetPt_TurnOn_Plot","AK8 Jet $p_T$ Turn-on Plot"], 
-		"AK8JetSoftMass_TurnOn" : ["AK8JetSoftMass_TurnOn", "AK8 Jet Soft Drop Mass Turn-on Plot"]
+		"AK8JetSoftMass_TurnOn" : ["AK8JetSoftMass_TurnOn", "AK8 Jet Soft Drop Mass Turn-on Plot"], "AK8JetPt_Debug" : ["AK8JetPt_Debug", "AK8Jet $p_T$ dubug plot, no trigger applied"],
+		"AK8JetEta_Debug" : ["AK8JetEta_Debug", "AK8Jet $\eta$ dubug plot, no trigger applied"]
 	}
 	
 	trigger_AK8Jet_hist_dict_2d = {
@@ -680,6 +705,8 @@ if __name__ == "__main__":
 		"Jet_PreTrigg" : ["Jet_PreTriggerHist_Plot", "MET and HT 2D Histogram No Trigger"], "Jet_Trigg" : ["Jet_TriggerHist_Plot", "MET and HT 2D Histogram Trigger"],
 		"Jet_eff" : ["Jet_Eff_Plot", "MET and HT Efficiency Histogram Trigger"]
 	}
+
+	errorBar_dict = {"AK8JetPt_TurnOn": "AK8JetPt_ErrorBars", "AK8JetSoftMass_TurnOn":"AK8JetSoftMass_ErrorBars", "HT_TurnOn" :"HT_ErrorBars", "MET_TurnOn" :"MET_ErrorBars", "MHT_TurnOn" :"MHT_ErrorBars"}
 	
 	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": 39, "AK8PFJet400_TrimMass30": 40}
 
@@ -729,7 +756,7 @@ if __name__ == "__main__":
 			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
 				fig, ax = plt.subplots()
 				if (var_name[-6:] == "TurnOn"):
-					hist.plot.histplot(trigger_out["boosted_tau"][var_name],histtype="errorbar")
+					hist.plot.histplot(trigger_out["boosted_tau"][var_name],histtype="errorbar", yerr = trigger_out["boosted_tau"][errorBar_dict[var_name]])
 					#plt.plot(trigger_out["boosted_tau"][var_name].axes[0].centers, trigger_out["boosted_tau"][var_name].values(), 'o')
 					#trigger_out["boosted_tau"][var_name].plot1d(ax=ax).centers
 					#trigger_out["boosted_tau"][var_name].plot_pull(pdf)
@@ -828,11 +855,20 @@ if __name__ == "__main__":
 			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
 				fig, ax = plt.subplots()
 				if (background_name == "ZZ4l"):
-					trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
+					if (var_name[-6:] == "TurnOn"):
+						hist.plot.histplot(trigger_out["boosted_tau"][var_name],histtype="errorbar", yerr = trigger_out["boosted_tau"][errorBar_dict[var_name]])
+					else:
+						trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
+					#trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 					print("Efficiency = %f"%(trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]))
 				else:
 					#trigger_out[background_name]["boosted_tau"][var_name].plot1d(ax=ax)
-					trigger_out[background_name][var_name].plot1d(ax=ax)
+					if (var_name[-6:] == "TurnOn"):
+						hist.plot.histplot(trigger_out[background_name][var_name],histtype="errorbar", yerr = trigger_out[background_name][errorBar_dict[var_name]])
+					else:
+						trigger_out[background_name][var_name].plot1d(ax=ax)
+					
+					#trigger_out[background_name][var_name].plot1d(ax=ax)
 					print("Efficiency = %f"%(trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]))
 	
 				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
