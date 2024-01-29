@@ -324,20 +324,14 @@ class TriggerStudies(processor.ProcessorABC):
 		if (self.trigger_bit == 40):
 			AK8JetMult_PreTrigg.fill(ak.num(AK8Jet,axis=1))
 			#num1 = len(ak.ravel(AK8Jet.AK8JetPt))
-			AK8Jet = AK8Jet[ak.num(AK8Jet,axis=1) > 0] #Remove 0 multiplicity events
-			#num2 = len(ak.ravel(AK8Jet.AK8JetPt))
-			#for evnt in AK8Jet.AK8JetPt:
-			#	if len(evnt) == 0:
-			#		print("!!Something didn't work!!")
-			#if (num1 == num2):
-			#	print("Something is wrong")
+			#AK8Jet = AK8Jet[ak.num(AK8Jet,axis=1) > 0] #Remove 0 multiplicity events
 			AK8Pt_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetPt))
 			AK8Pt_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
 			AK8SoftMass_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
 			AK8SoftMass_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
 			AK8Pt_all.fill("No Trigger",ak.ravel(AK8Jet.AK8JetPt))
-			AK8Pt_Debug.fill(ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass == 0].AK8JetPt))
-			AK8Eta_Debug.fill(ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass == 0].eta))
+			AK8Pt_Debug.fill(ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass <= 30].AK8JetPt))
+			AK8Eta_Debug.fill(ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass <= 30].eta))
 		
 		if (self.trigger_bit == 39):
 			#Fill Histograms
@@ -378,7 +372,10 @@ class TriggerStudies(processor.ProcessorABC):
 		
 		#Efficiency Histograms 
 		if (self.trigger_bit == 40):	
+			#AK8Jet = AK8Jet[ak.num(AK8Jet,axis=1) > 0] #Remove 0 multiplicity events
 			AK8Pt_Trigg.fill(ak.ravel(AK8Jet.AK8JetPt))
+			AK8Pt_Test = ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass < 30].AK8JetPt)
+			print("Number of Jets with Soft Drop Mass < 30 = %d"%len(AK8Pt_Test))
 			AK8SoftMass_Trigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
 			AK8Pt_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetPt))	
 			AK8Pt_Trigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
@@ -625,19 +622,37 @@ class TauPlotting(processor.ProcessorABC):
 		pt4_hist.fill(fourthleading_tau.pt)
 		
 		#Ditau mass plots 
-		dimass_all_hist.fill("Leading pair", ak.ravel(di_mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))
-		dimass_all_hist.fill("Leading pair", ak.ravel(di_mass(tau_plus2[(deltaR21 < deltaR11)], tau_minus1[(deltaR21 < deltaR11)])))
-		dimass_leading_acc = hist.accumulators.Mean().fill(ak.concatenate([ak.ravel(di_mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])), ak.ravel(di_mass(tau_plus2[(deltaR21 < deltaR11)], tau_minus1[(deltaR21 < deltaR11)]))]))
-		dimass_all_hist.fill("Subleading pair", ak.ravel(di_mass(tau_plus1[(deltaR12 < deltaR22)], tau_minus2[(deltaR12 < deltaR22)])))
-		dimass_all_hist.fill("Subleading pair", ak.ravel(di_mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))
-		dimass_subleading_acc = hist.accumulators.Mean().fill(ak.concatenate([ak.ravel(di_mass(tau_plus1[(deltaR12 < deltaR22)], tau_minus2[(deltaR12 < deltaR22)])), ak.ravel(di_mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)]))]))
+		lead_cond1 = np.bitwise_and(tau_plus1.pt > tau_minus1.pt, deltaR11 < deltaR12)
+		lead_cond2 = np.bitwise_and(tau_plus1.pt > tau_minus1.pt, deltaR12 < deltaR11)
+		lead_cond3 = np.bitwise_and(tau_plus1.pt < tau_minus1.pt, deltaR22 < deltaR21)
+		lead_cond4 = np.bitwise_and(tau_plus1.pt < tau_minus1.pt, deltaR21 < deltaR22)
+		
+		dimass_all_hist.fill("Leading pair", ak.ravel(di_mass(tau_plus1[lead_cond1], tau_minus1[lead_cond1])))
+		dimass_all_hist.fill("Leading pair", ak.ravel(di_mass(tau_plus2[lead_cond2], tau_minus1[lead_cond2])))
+		dimass_leading_acc = hist.accumulators.Mean().fill(ak.concatenate([ak.ravel(di_mass(tau_plus1[lead_cond1], tau_minus1[lead_cond1])), ak.ravel(di_mass(tau_plus2[lead_cond2], tau_minus1[lead_cond2]))]))
+		dimass_all_hist.fill("Subleading pair", ak.ravel(di_mass(tau_plus1[lead_cond4], tau_minus2[lead_cond4])))
+		dimass_all_hist.fill("Subleading pair", ak.ravel(di_mass(tau_plus2[lead_cond3], tau_minus2[lead_cond3])))
+		
+		#dimass_all_hist.fill("Leading pair", ak.ravel(di_mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))
+		#dimass_all_hist.fill("Leading pair", ak.ravel(di_mass(tau_plus2[(deltaR21 < deltaR11)], tau_minus1[(deltaR21 < deltaR11)])))
+		#dimass_leading_acc = hist.accumulators.Mean().fill(ak.concatenate([ak.ravel(di_mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])), ak.ravel(di_mass(tau_plus2[(deltaR21 < deltaR11)], tau_minus1[(deltaR21 < deltaR11)]))]))
+		#dimass_all_hist.fill("Subleading pair", ak.ravel(di_mass(tau_plus1[(deltaR12 < deltaR22)], tau_minus2[(deltaR12 < deltaR22)])))
+		#dimass_all_hist.fill("Subleading pair", ak.ravel(di_mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))
+		dimass_subleading_acc = hist.accumulators.Mean().fill(ak.concatenate([ak.ravel(di_mass(tau_plus1[lead_cond4], tau_minus2[lead_cond4])), ak.ravel(di_mass(tau_plus2[lead_cond3], tau_minus2[lead_cond3]))]))
 		dimass_all_hist *= 1/(dimass_all_hist.sum())		
 	
-		ditau_mass1_hist.fill(ak.ravel(di_mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))	
-		ditau_mass1_hist.fill(ak.ravel(di_mass(tau_plus1[(deltaR21 < deltaR11)], tau_minus2[(deltaR21 < deltaR11)])))
+		#ditau_mass1_hist.fill(ak.ravel(di_mass(tau_plus1[(deltaR11 < deltaR21)], tau_minus1[(deltaR11 < deltaR21)])))	
+		#ditau_mass1_hist.fill(ak.ravel(di_mass(tau_plus1[(deltaR21 < deltaR11)], tau_minus2[(deltaR21 < deltaR11)])))
+		#ditau_mass1_hist *= (1/ditau_mass1_hist.sum())
+		#ditau_mass2_hist.fill(ak.ravel(di_mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))	
+		#ditau_mass2_hist.fill(ak.ravel(di_mass(tau_plus2[(deltaR12 < deltaR22)], tau_minus1[(deltaR12 < deltaR22)])))
+		#ditau_mass2_hist *= (1/ditau_mass2_hist.sum())	
+		
+		ditau_mass1_hist.fill(ak.ravel(di_mass(tau_plus1[lead_cond1], tau_minus1[lead_cond1])))	
+		ditau_mass1_hist.fill(ak.ravel(di_mass(tau_plus1[lead_cond2], tau_minus2[lead_cond2])))
 		ditau_mass1_hist *= (1/ditau_mass1_hist.sum())
-		ditau_mass2_hist.fill(ak.ravel(di_mass(tau_plus2[(deltaR22 < deltaR12)], tau_minus2[(deltaR22 < deltaR12)])))	
-		ditau_mass2_hist.fill(ak.ravel(di_mass(tau_plus2[(deltaR12 < deltaR22)], tau_minus1[(deltaR12 < deltaR22)])))
+		ditau_mass2_hist.fill(ak.ravel(di_mass(tau_plus2[lead_cond3], tau_minus2[lead_cond3])))	
+		ditau_mass2_hist.fill(ak.ravel(di_mass(tau_plus2[lead_cond4], tau_minus1[lead_cond4])))
 		ditau_mass2_hist *= (1/ditau_mass2_hist.sum())	
 
 		return{

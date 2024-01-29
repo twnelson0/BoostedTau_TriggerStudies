@@ -44,7 +44,7 @@ def bit_or(data):
 	return np.bitwise_or(cond_1, np.bitwise_or(cond_2,cond_3))
 
 #Dictionary of cross sections
-xSection_Dictionary = {"Signal": 1.5e3, 
+xSection_Dictionary = {"Signal": 5e2, #Chosen to make plots readable 
 						#TTBar Background
 						"TTTo2L2Nu": 0.1061*831.76, "TTToSemiLeptonic": 0.4392*831.76, "TTToHadronic": 0.4544*831.76,
 						#DiBoson Backgroiund
@@ -442,8 +442,8 @@ class FourTauPlotting(processor.ProcessorABC):
 		#Construct each Higgs' transverse momenta
 		lead_cond1 = np.bitwise_and(tau_plus1.pt > tau_minus1.pt, deltaR11 < deltaR12)
 		lead_cond2 = np.bitwise_and(tau_plus1.pt > tau_minus1.pt, deltaR12 < deltaR11)
-		lead_cond3 = np.bitwise_and(tau_plus1.pt < tau_minus1.pt, deltaR11 < deltaR21)
-		lead_cond4 = np.bitwise_and(tau_plus1.pt < tau_minus1.pt, deltaR21 < deltaR11)
+		lead_cond3 = np.bitwise_and(tau_plus1.pt < tau_minus1.pt, deltaR22 < deltaR21)
+		lead_cond4 = np.bitwise_and(tau_plus1.pt < tau_minus1.pt, deltaR21 < deltaR22)
 		#sublead_cond1 = tau_plus1.pT > tau_minus1.pT and deltaR11 < deltaR21
 		PxLeading = np.append(ak.ravel(tau_plus1[lead_cond1].Px + tau_minus1[lead_cond1].Px),ak.ravel(tau_plus1[lead_cond2].Px + tau_minus2[lead_cond2].Px))
 		PxLeading = np.append(PxLeading,ak.ravel(tau_plus1[lead_cond3].Px + tau_minus1[lead_cond3].Px))
