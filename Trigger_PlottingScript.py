@@ -200,29 +200,19 @@ class TriggerStudies(processor.ProcessorABC):
 		Jet_HT = Jet[Jet.Pt > 30]
 		Jet_HT = Jet_HT[np.abs(Jet_HT.eta) < 3]
 		Jet_HT = Jet_HT[Jet_HT.PFLooseId > 0.5]
-		#JetUp_HT = Jet[Jet.PtTotUncUp > 30]
-		#JetUp_HT = JetUp_HT[np.abs(JetUp_HT.eta) < 3]
-		#JetUp_HT = JetUp_HT[JetUp_HT.PFLooseId > 0.5]
-		#JetDown_HT = Jet[Jet.PtTotUncDown > 30]
-		#JetUp_HT = JetDown_HT[np.abs(JetDown_HT.eta) < 3]
-		#JetDown_HT = JetDown_HT[JetDown_HT.PFLooseId > 0.5]
 		HT,tau_temp1 = ak.unzip(ak.cartesian([Jet_HT,tau], axis = 1, nested = True))
-		#HT_up,tau_temp2 = ak.unzip(ak.cartesian([JetUp_HT,tau], axis = 1, nested = True))
-		#HT_down,tau_temp3 = ak.unzip(ak.cartesian([JetDown_HT,tau], axis = 1, nested = True))
 		
 		#Get Cross clean free histograms
 		HT_Var_NoCrossClean = ak.sum(Jet.Pt,axis = 1,keepdims=True) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
 		MET_NoCrossCleaning.fill(ak.ravel(Jet.pfMET))
 		MET_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(Jet.pfMET))
-		#HT_NoCrossCleaning.fill(ak.sum(Jet_MHT.Pt,axis = 1,keepdims=False) + ak.sum(JetUp_MHT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown,axis = 1,keepdims=False))	
-		#HT_NoCrossCleaning.fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
 		HT_NoCrossCleaning.fill(ak.ravel(HT_Var_NoCrossClean))
 		HT_num = 0
 		for x in ak.sum(Jet.Pt,axis = 1,keepdims=False):
 			HT_num += 1
 			
-		print(ak.sum(Jet.Pt,axis = 1,keepdims=True))
-		print("HT Num (No Cross Cleaning): %d"%HT_num)
+		#print(ak.sum(Jet.Pt,axis = 1,keepdims=True))
+		#print("HT Num (No Cross Cleaning): %d"%HT_num)
 		#HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
 		HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(HT_Var_NoCrossClean))
 	
@@ -241,12 +231,6 @@ class TriggerStudies(processor.ProcessorABC):
 
 		test_HT = ak.sum(Jet.Pt,axis = 1,keepdims=True)
 		HT_num = 0
-		print("Test 1:")
-		print(ak.sum(Jet.Pt,axis = 1,keepdims=False))
-		print("Test 2:")
-		print(ak.sum(Jet.Pt,axis = 1,keepdims=True))
-		print(ak.ravel(Jet.HT))
-		print(Jet.HT)
 
 		#Histograms of variables relavent to trigger 
 		if (self.trigger_bit == 40):
@@ -259,8 +243,6 @@ class TriggerStudies(processor.ProcessorABC):
 			
 		if (self.trigger_bit == 39):
 			print("No Cut Accumulators updated")
-			#HT_NoCut.fill(ak.ravel(HT_Val_NoCuts[HT_Val_NoCuts > 0]))
-			#HT_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(HT_Val_NoCuts[HT_Val_NoCuts > 0]))
 			HT_NoCut.fill(ak.ravel(HT_Val_NoCuts))
 			HT_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(HT_Val_NoCuts))
 			print("HT Mean: %f"%HT_Acc_NoCut.value)
@@ -330,8 +312,8 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8SoftMass_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
 			AK8SoftMass_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
 			AK8Pt_all.fill("No Trigger",ak.ravel(AK8Jet.AK8JetPt))
-			AK8Pt_Debug.fill(ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass <= 30].AK8JetPt))
-			AK8Eta_Debug.fill(ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass <= 30].eta))
+			AK8Pt_Debug.fill(ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass <= 10].AK8JetPt))
+			AK8Eta_Debug.fill(ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass <= 10].eta))
 		
 		if (self.trigger_bit == 39):
 			#Fill Histograms
@@ -374,8 +356,8 @@ class TriggerStudies(processor.ProcessorABC):
 		if (self.trigger_bit == 40):	
 			#AK8Jet = AK8Jet[ak.num(AK8Jet,axis=1) > 0] #Remove 0 multiplicity events
 			AK8Pt_Trigg.fill(ak.ravel(AK8Jet.AK8JetPt))
-			AK8Pt_Test = ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass < 30].AK8JetPt)
-			print("Number of Jets with Soft Drop Mass < 30 = %d"%len(AK8Pt_Test))
+			AK8Pt_Test = ak.ravel(AK8Jet[AK8Jet.AK8JetDropMass < 10].AK8JetPt)
+			print("Number of Jets with Soft Drop Mass < 10 GeV = %d"%len(AK8Pt_Test))
 			AK8SoftMass_Trigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
 			AK8Pt_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetPt))	
 			AK8Pt_Trigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
@@ -384,12 +366,16 @@ class TriggerStudies(processor.ProcessorABC):
 			pre_triggernum = ak.num(AK8Pt_NoTrigg_Arr,axis=0)
 			post_triggernum = ak.num(AK8Pt_Trigg_Arr,axis=0)
 			AK8JetMult_Trigg.fill(ak.num(AK8Jet,axis=1))
+			if (len(AK8Pt_Trigg_Arr) == 0):
+				print("!!=================NO AK8 Jet PT========================!!")
 			
 			#Make 1d Turn on Plots
 			AK8Pt_TurnOn = AK8Pt_Trigg/AK8Pt_PreTrigg
-			AK8Pt_ErrorBars = hist.intervals.ratio_uncertainty(AK8Pt_Trigg, AK8Pt_PreTrigg) 
+			#AK8Pt_TurnOn = AK8Pt_Trigg.plot_ratio(AK8Pt_PreTrigg, rp_uncertainty_type="efficiency")
+			AK8Pt_ErrorBars = hist.intervals.ratio_uncertainty(AK8Pt_Trigg.view(), AK8Pt_PreTrigg.view(), uncertainty_type = "efficiency") 
 			AK8SoftMass_TurnOn = AK8SoftMass_Trigg/AK8SoftMass_PreTrigg
-			AK8SoftMass_ErrorBars = hist.intervals.ratio_uncertainty(AK8SoftMass_Trigg, AK8SoftMass_PreTrigg) 
+			AK8SoftMass_ErrorBars = hist.intervals.ratio_uncertainty(AK8SoftMass_Trigg.view(), AK8SoftMass_PreTrigg.view(), uncertainty_type = "efficiency") 
+			#AK8SoftMass_TurnOn = AK8SoftMass_Trigg.plot_ratio(AK8SoftMass_PreTrigg, rp_uncertainty_type="efficiency")
 	
 			if (self.signal):
 				print("Efficiency (AK8Jet Trigger): %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
@@ -414,11 +400,14 @@ class TriggerStudies(processor.ProcessorABC):
 
 			#1-d turn on plots
 			HT_TurnOn = HT_Trigg/HT_PreTrigg
-			HT_ErrorBars = hist.intervals.ratio_uncertainty(HT_Trigg, HT_PreTrigg)
+			#HT_TurnOn = HT_Trigg.plot_ratio(HT_PreTrigg, rp_uncertainty_type="efficiency")
+			HT_ErrorBars = hist.intervals.ratio_uncertainty(HT_Trigg.view(), HT_PreTrigg.view(), uncertainty_type = "efficiency")
 			MHT_TurnOn = MHT_Trigg/MHT_PreTrigg	
-			MHT_ErrorBars = hist.intervals.ratio_uncertainty(MHT_Trigg, MHT_PreTrigg)	
+			#MHT_TurnOn = MHT_Trigg.plot_ratio(MHT_PreTrigg, rp_uncertainty_type="efficiency")
+			MHT_ErrorBars = hist.intervals.ratio_uncertainty(MHT_Trigg.view(), MHT_PreTrigg.view(), uncertainty_type = "efficiency")	
 			MET_TurnOn = MET_Trigg/MET_PreTrigg	
-			MET_ErrorBars = hist.intervals.ratio_uncertainty(MET_Trigg, MET_PreTrigg)	
+			#MET_TurnOn = MET_Trigg.plot_ratio(MET_PreTrigg, rp_uncertainty_type="efficiency")
+			MET_ErrorBars = hist.intervals.ratio_uncertainty(MET_Trigg.view(), MET_PreTrigg.view(), uncertainty_type = "efficiency")	
 			
 			print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
 			Jet_PreTrigger.fill(MET_NoTrigg_Arr + MHT_NoTrigg_Arr, HT_NoTrigg_Arr)
@@ -717,8 +706,8 @@ if __name__ == "__main__":
 	}
 	
 	trigger_MTHTJet_hist_dict_2d = {
-		"Jet_PreTrigg" : ["Jet_PreTriggerHist_Plot", "MET and HT 2D Histogram No Trigger"], "Jet_Trigg" : ["Jet_TriggerHist_Plot", "MET and HT 2D Histogram Trigger"],
-		"Jet_eff" : ["Jet_Eff_Plot", "MET and HT Efficiency Histogram Trigger"]
+		"Jet_PreTrigg" : ["Jet_PreTriggerHist_Plot", "MET + MHT and HT 2D Histogram No Trigger"], "Jet_Trigg" : ["Jet_TriggerHist_Plot", "MET + MHT and HT 2D Histogram Trigger"],
+		"Jet_eff" : ["Jet_Eff_Plot", "MET + MHT and HT Efficiency Histogram Trigger"]
 	}
 
 	errorBar_dict = {"AK8JetPt_TurnOn": "AK8JetPt_ErrorBars", "AK8JetSoftMass_TurnOn":"AK8JetSoftMass_ErrorBars", "HT_TurnOn" :"HT_ErrorBars", "MET_TurnOn" :"MET_ErrorBars", "MHT_TurnOn" :"MHT_ErrorBars"}
@@ -771,17 +760,19 @@ if __name__ == "__main__":
 			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
 				fig, ax = plt.subplots()
 				if (var_name[-6:] == "TurnOn"):
+					#hist.plot.histplot(trigger_out["boosted_tau"][var_name])
 					hist.plot.histplot(trigger_out["boosted_tau"][var_name],histtype="errorbar", yerr = trigger_out["boosted_tau"][errorBar_dict[var_name]])
 					#plt.plot(trigger_out["boosted_tau"][var_name].axes[0].centers, trigger_out["boosted_tau"][var_name].values(), 'o')
 					#trigger_out["boosted_tau"][var_name].plot1d(ax=ax).centers
 					#trigger_out["boosted_tau"][var_name].plot_pull(pdf)
+					#trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 				else:
 					trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 
 				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
 					plt.title(hist_name_arr[1] + " mass : " + mass_str[0] + " TeV", wrap=True)
 				else:
-					plt.title(hist_name_arr[1] + " (" + trigger_name + ") , mass : " + mass_str[0] + " TeV", wrap=True)
+					plt.title(hist_name_arr[1] + " (" + trigger_name + ")\n mass : " + mass_str[0] + " TeV", wrap=True)
 			
 				#Add Text with average and number of entries	
 				if (var_name == "MET_NoCut"):
@@ -818,7 +809,7 @@ if __name__ == "__main__":
 				if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
 					plt.title(hist_name_arr[1] + " mass : " + mass_str[0] + " TeV", wrap=True)
 				else:
-					plt.title(hist_name_arr[1] + " (" +  trigger_name + "), mass : " + mass_str[0] + " TeV", wrap=True)
+					plt.title(hist_name_arr[1] + " (" +  trigger_name + ")\n mass : " + mass_str[0] + " TeV", wrap=True)
 				plt.savefig(hist_name_arr[0] + "-" + mass_str + "-" + trigger_name)
 				plt.close()
 			
@@ -871,7 +862,9 @@ if __name__ == "__main__":
 				fig, ax = plt.subplots()
 				if (background_name == "ZZ4l"):
 					if (var_name[-6:] == "TurnOn"):
+						#hist.plot.histplot(trigger_out["boosted_tau"][var_name])
 						hist.plot.histplot(trigger_out["boosted_tau"][var_name],histtype="errorbar", yerr = trigger_out["boosted_tau"][errorBar_dict[var_name]])
+						#trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 					else:
 						trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 					#trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
@@ -879,7 +872,9 @@ if __name__ == "__main__":
 				else:
 					#trigger_out[background_name]["boosted_tau"][var_name].plot1d(ax=ax)
 					if (var_name[-6:] == "TurnOn"):
+						#hist.plot.histplot(trigger_out[background_name][var_name])
 						hist.plot.histplot(trigger_out[background_name][var_name],histtype="errorbar", yerr = trigger_out[background_name][errorBar_dict[var_name]])
+						#trigger_out[background_name][var_name].plot1d(ax=ax)
 					else:
 						trigger_out[background_name][var_name].plot1d(ax=ax)
 					
@@ -889,7 +884,7 @@ if __name__ == "__main__":
 				if (hist_name_arr[0][-14:] == "NoTrigger_Plot"):
 					plt.title(hist_name_arr[1] + title, wrap=True)
 				else:
-					plt.title(hist_name_arr[1] + " (" + trigger_name + r"), " + title, wrap=True)
+					plt.title(hist_name_arr[1] + "\n(" + trigger_name + ") " + title, wrap=True)
 				
 				#Add Text with average and number of entries	
 				if (var_name == "MET_NoCut"):
@@ -949,7 +944,7 @@ if __name__ == "__main__":
 				if (hist_name_arr[0][-19:] == "PreTriggerHist_Plot"):
 					plt.title(hist_name_arr[1] + title, wrap=True)
 				else:
-					plt.title(hist_name_arr[1] + trigger_name + "), " + title, wrap=True)
+					plt.title(hist_name_arr[1] + "\n(" +  trigger_name + ") " + title, wrap=True)
 				plt.savefig(hist_name_arr[0] + "-" + background_name + "-" + trigger_name)
 				plt.close()
 		
