@@ -164,22 +164,6 @@ class PlottingObj(processor.ProcessorABC):
 		Jet_MHT = Jet_MHT[(ak.sum(tau.charge,axis=1) == 0)]
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		
-		#Investegate entries with more than 4 taus
-		# n_more = len(tau[ak.num(tau) > 4])
-		# print("Events with more than 4 taus: %d"%n_more)
-		
-		# if (n_more > 0):
-		# 	print("========!!Important information about events with more than 4 tau!!========")
-		# 	diff_num = n_more
-		# 	test_obj = tau[ak.num(tau) > 4] 
-		# 	n = 5
-		# 	while(n_more > 0):
-		# 		N_events = len(test_obj[ak.num(test_obj) == 5])
-		# 		print("Number of events with %d taus: %d"%(n,N_events))
-		# 		n +=1
-		# 		diff_num -= N_events
-		
-
 		AK8Jet = AK8Jet[ak.num(tau) >= 4]
 		Jet_MHT = Jet_MHT[ak.num(tau) >= 4]
 		Jet_HT = Jet_HT[ak.num(tau) >= 4]
@@ -233,7 +217,7 @@ if __name__ == "__main__":
 	hist_dict = {"HT_Arr": hist.Hist.new.StrCat([r"$m_\phi$ = 1 TeV",r"$m_\phi$ = 3 TeV"]).Reg(40,0, 4000., label = "HT (GeV)").Double(), 
 				"MET_Arr": hist.Hist.new.StrCat([r"$m_\phi$ = 1 TeV",r"$m_\phi$ = 3 TeV"]).Reg(30,0,1200., label = "MET (GeV)").Double(),
 				"MHT_Arr":hist.Hist.new.StrCat([r"$m_\phi$ = 1 TeV",r"$m_\phi$ = 3 TeV"]).Reg(30,0,1200., label = "MHT (GeV)").Double(),
-				"AK8PT_Arr": hist.Hist.new.StrCat([r"$m_\phi$ = 1 TeV",r"$m_\phi$ = 3 TeV"]).Reg(40,0,400.,label = r"AK8 Jet $p_T$ (GeV)").Double() 
+				"AK8PT_Arr": hist.Hist.new.StrCat([r"$m_\phi$ = 1 TeV",r"$m_\phi$ = 3 TeV"]).Reg(40,0,1000.,label = r"AK8 Jet $p_T$ (GeV)").Double() 
 				}
 
 	iterative_runner = processor.Runner(
