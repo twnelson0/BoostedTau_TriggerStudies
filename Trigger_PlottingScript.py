@@ -112,7 +112,6 @@ class TriggerStudies(processor.ProcessorABC):
 				"PtTotUncDown": events.jetPtTotUncDown,
 				"PtTotUncUp": events.jetPtTotUncUp,
 				"PFLooseId": events.jetPFLooseId,
-				#"HT": ak.sum(events.jetPt, axis=1),
 				"eta": events.jetEta,
 				"phi": events.jetPhi,
 				"trigger": events.HLTJet,
@@ -196,7 +195,6 @@ class TriggerStudies(processor.ProcessorABC):
 		print("Jet MHT Defined:")
 		
 		#HT Seleciton (new)
-		#tau_temp1,HT = ak.unzip(ak.cartesian([tau,Jet_MHT], axis = 1, nested = True))
 		Jet_HT = Jet[Jet.Pt > 30]
 		Jet_HT = Jet_HT[np.abs(Jet_HT.eta) < 3]
 		Jet_HT = Jet_HT[Jet_HT.PFLooseId > 0.5]
@@ -211,9 +209,6 @@ class TriggerStudies(processor.ProcessorABC):
 		for x in ak.sum(Jet.Pt,axis = 1,keepdims=False):
 			HT_num += 1
 			
-		#print(ak.sum(Jet.Pt,axis = 1,keepdims=True))
-		#print("HT Num (No Cross Cleaning): %d"%HT_num)
-		#HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(HT_Var_NoCrossClean[HT_Var_NoCrossClean > 0]))
 		HT_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(HT_Var_NoCrossClean))
 	
 		mval_temp = deltaR(tau_temp1,HT) >= 0.5
@@ -271,34 +266,14 @@ class TriggerStudies(processor.ProcessorABC):
 		Electron = Electron[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		Jet = Jet[(ak.sum(tau.charge,axis=1) == 0)]
 		Jet_HT = Jet_HT[(ak.sum(tau.charge,axis=1) == 0)]
-		#JetUp_HT = JetUp_HT[(ak.sum(tau.charge,axis=1) == 0)]
-		#JetDown_HT = JetDown_HT[(ak.sum(tau.charge,axis=1) == 0)]
 		Jet_MHT = Jet_MHT[(ak.sum(tau.charge,axis=1) == 0)]
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
-		
-		#Investegate entries with more than 4 taus
-		# n_more = len(tau[ak.num(tau) > 4])
-		# print("Events with more than 4 taus: %d"%n_more)
-		
-		# if (n_more > 0):
-		# 	print("========!!Important information about events with more than 4 tau!!========")
-		# 	diff_num = n_more
-		# 	test_obj = tau[ak.num(tau) > 4] 
-		# 	n = 5
-		# 	while(n_more > 0):
-		# 		N_events = len(test_obj[ak.num(test_obj) == 5])
-		# 		print("Number of events with %d taus: %d"%(n,N_events))
-		# 		n +=1
-		# 		diff_num -= N_events
-		
 
 		AK8Jet = AK8Jet[ak.num(tau) >= 4]
 		Electron = Electron[ak.num(tau) >= 4]
 		Muon = Muon[ak.num(tau) >= 4]
 		Jet_MHT = Jet_MHT[ak.num(tau) >= 4]
 		Jet_HT = Jet_HT[ak.num(tau) >= 4]
-		#JetUp_HT = JetUp_HT[ak.num(tau) >= 4]
-		#JetDown_HT = JetDown_HT[ak.num(tau) >= 4]
 		Jet = Jet[ak.num(tau) >= 4]
 		tau = tau[ak.num(tau) >= 4] #4 tau events
 		
@@ -762,6 +737,7 @@ if __name__ == "__main__":
 				if (var_name[-6:] == "TurnOn"):
 					#hist.plot.histplot(trigger_out["boosted_tau"][var_name])
 					hist.plot.histplot(trigger_out["boosted_tau"][var_name],histtype="errorbar", yerr = trigger_out["boosted_tau"][errorBar_dict[var_name]])
+					plt.ylabel("Efficiency")
 					#plt.plot(trigger_out["boosted_tau"][var_name].axes[0].centers, trigger_out["boosted_tau"][var_name].values(), 'o')
 					#trigger_out["boosted_tau"][var_name].plot1d(ax=ax).centers
 					#trigger_out["boosted_tau"][var_name].plot_pull(pdf)
@@ -864,6 +840,7 @@ if __name__ == "__main__":
 					if (var_name[-6:] == "TurnOn"):
 						#hist.plot.histplot(trigger_out["boosted_tau"][var_name])
 						hist.plot.histplot(trigger_out["boosted_tau"][var_name],histtype="errorbar", yerr = trigger_out["boosted_tau"][errorBar_dict[var_name]])
+						plt.ylabel("Efficiency")
 						#trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
 					else:
 						trigger_out["boosted_tau"][var_name].plot1d(ax=ax)
@@ -874,6 +851,7 @@ if __name__ == "__main__":
 					if (var_name[-6:] == "TurnOn"):
 						#hist.plot.histplot(trigger_out[background_name][var_name])
 						hist.plot.histplot(trigger_out[background_name][var_name],histtype="errorbar", yerr = trigger_out[background_name][errorBar_dict[var_name]])
+						plt.ylabel("Efficiency")
 						#trigger_out[background_name][var_name].plot1d(ax=ax)
 					else:
 						trigger_out[background_name][var_name].plot1d(ax=ax)
