@@ -52,7 +52,7 @@ def DrawTable(table_title, table_name, table_dict):
 	file.write("\\hline \n")
 	file.write("\\multicolumn{4}{|c|}{" + table_title  + "} \\\\ \n")
 	file.write("\\hline \n")
-	file.write("Sample File(s) & PFMET125\\_PFMHT125\\_IDTight Efficiency & AK8PFJet400\\_TrimMass30 Efficiency & PFMET125\\_PFMHT125\\_IDTight or \\ AK8PFJet400\\_TrimMass30 Efficiency  \\\\ \n")
+	file.write("Sample File(s) & PFMET120\\_PFMHT120\\_IDTight Efficiency & AK8PFJet400\\_TrimMass30 Efficiency & PFMET120\\_PFMHT120\\_IDTight or \\ AK8PFJet400\\_TrimMass30 Efficiency  \\\\ \n")
 	file.write("\\hline \n")
 	
 	#Fill table
@@ -220,7 +220,6 @@ class TriggerStudies(processor.ProcessorABC):
 
 		AK8Jet = AK8Jet[(ak.sum(tau.charge,axis=1) == 0)] #Apply charge conservation cut to AK8Jets
 		Jet = Jet[(ak.sum(tau.charge,axis=1) == 0)]
-		Jet_HT = Jet_HT[(ak.sum(tau.charge,axis=1) == 0)]
 		Jet_MHT = Jet_MHT[(ak.sum(tau.charge,axis=1) == 0)]
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		CutFlow_Table.fill(6*np.ones([len(ak.ravel(tau.pt))]))
@@ -228,7 +227,6 @@ class TriggerStudies(processor.ProcessorABC):
 		
 		AK8Jet = AK8Jet[ak.num(tau) >= 4]
 		Jet_MHT = Jet_MHT[ak.num(tau) >= 4]
-		Jet_HT = Jet_HT[ak.num(tau) >= 4]
 		Jet = Jet[ak.num(tau) >= 4]
 		tau = tau[ak.num(tau) >= 4] #4 tau events
 		CutFlow_Table.fill(7*np.ones([len(ak.ravel(tau.pt))]))
@@ -298,22 +296,16 @@ class TriggerStudies(processor.ProcessorABC):
 				print("Offline Cut 27")
 				print("No Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 
-				tau = tau[ak.any(Jet.HT > 600, axis = 1)]
-				print("HT Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				AK8Jet = AK8Jet[ak.any(Jet.HT > 600, axis = 1)]
-				Jet = Jet[ak.any(Jet.HT > 600, axis = 1)]
-				#JetMHT = JetMHT[ak.any(JetHT.HT > 500, axis = 1)]
-				
-				tau = tau[ak.any(Jet.pfMET > 125, axis = 1)]
+				tau = tau[ak.any(Jet.pfMET > 120, axis = 1)]
 				print("pfMet Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				AK8Jet = AK8Jet[ak.any(Jet.pfMET > 125, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(Jet.pfMET > 120, axis = 1)]
 				#JetMHT = JetMHT[ak.any(Jet.pfMET > 125, axis = 1)]
-				Jet = Jet[ak.any(Jet.pfMET > 125, axis = 1)]
+				Jet = Jet[ak.any(Jet.pfMET > 120, axis = 1)]
 
-				tau = tau[ak.any(Jet.MHT > 125, axis = 1)]
+				tau = tau[ak.any(Jet.MHT > 120, axis = 1)]
 				print("MHT Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				AK8Jet = AK8Jet[ak.any(Jet.MHT > 125, axis = 1)]
-				Jet = Jet[ak.any(Jet.MHT > 125, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(Jet.MHT > 120, axis = 1)]
+				Jet = Jet[ak.any(Jet.MHT > 120, axis = 1)]
 				#JetHT = JetHT[ak.any(JetMHT.MHT > 100, axis = 1)]
 				#JetMHT = JetMHT[ak.any(Jet.MHT > 100, axis = 1)]
 				
@@ -334,13 +326,13 @@ class TriggerStudies(processor.ProcessorABC):
 			Jet_fail27 = Jet[np.bitwise_and(Jet.trigger,bit_mask([27])) != bit_mask([27])]
 
 			#Apply offline cuts	
-			tau_pass27 = tau_pass27[ak.any(Jet_pass27.pfMET > 125, axis = 1)]
-			AK8Jet_pass27 = AK8Jet_pass27[ak.any(Jet_pass27.pfMET > 125, axis = 1)]
-			Jet_pass27 = Jet_pass27[ak.any(Jet_pass27.pfMET > 125, axis = 1)]
+			tau_pass27 = tau_pass27[ak.any(Jet_pass27.pfMET > 120, axis = 1)]
+			AK8Jet_pass27 = AK8Jet_pass27[ak.any(Jet_pass27.pfMET > 120, axis = 1)]
+			Jet_pass27 = Jet_pass27[ak.any(Jet_pass27.pfMET > 120, axis = 1)]
 
-			tau_pass27 = tau_pass27[ak.any(Jet_pass27.MHT > 125, axis = 1)]
-			AK8Jet_pass27 = AK8Jet_pass27[ak.any(Jet_pass27.MHT > 125, axis = 1)]
-			Jet_pass27 = Jet_pass27[ak.any(Jet_pass27.MHT > 125, axis = 1)]
+			tau_pass27 = tau_pass27[ak.any(Jet_pass27.MHT > 120, axis = 1)]
+			AK8Jet_pass27 = AK8Jet_pass27[ak.any(Jet_pass27.MHT > 120, axis = 1)]
+			Jet_pass27 = Jet_pass27[ak.any(Jet_pass27.MHT > 120, axis = 1)]
 				
 			tau_pass27 = tau_pass27[ak.any(Jet_pass27.PFLooseId, axis = 1)]
 			AK8Jet_pass27 = AK8Jet_pass27[ak.any(Jet_pass27.PFLooseId, axis = 1)]
@@ -388,8 +380,6 @@ class TriggerStudies(processor.ProcessorABC):
 		
 		if (self.trigger_bit == 27):
 			Pt_PostTrigg_Arr = ak.ravel(tau.pt)
-			HT_Trigg.fill(ak.ravel(Jet.HT))
-			HT_Trigg_Arr = ak.ravel(Jet.HT)
 			MET_Trigg.fill(ak.ravel(Jet.pfMET))
 			MET_Trigg_Arr = ak.ravel(Jet.pfMET)
 			pre_triggernum = ak.num(Pt_PreTrigg_Arr,axis=0)
@@ -580,7 +570,7 @@ if __name__ == "__main__":
 		
 			if (trigger_bit == 27):
 				trigger_hist_dict_1d = trigger_MTHTJet_hist_dict_1d  
-				trigger_hist_dict_2d = trigger_MTHTJet_hist_dict_2d 
+				#trigger_hist_dict_2d = trigger_MTHTJet_hist_dict_2d 
 		
 			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
 				if (background_name == "ZZ4l"):
