@@ -62,7 +62,7 @@ def DrawTable(table_title, table_name, table_dict, lepton_flavor):
 	
 	#Fill table
 	for sample, eff_arr in table_dict.items():
-		file.write(sample + " & " + "%.3f"%eff_arr[0] + " & " + "%.3f"%eff_arr[1] + " & " +  " & " + "%.3f"%eff_arr[2] + " & " + "%.3f"%eff_arr[3] +"\\\\")
+		file.write(sample + " & " + "%.3f"%eff_arr[0] + " & " + "%.3f"%eff_arr[1] + " & " + "%.3f"%eff_arr[2] + " & " + "%.3f"%eff_arr[3] +"\\\\")
 		file.write("\n")
 	file.write("\\hline \n")
 	file.write("\\end{tabular} \n")
