@@ -156,9 +156,13 @@ cython_debug/
 *.png
 *.root
 *.tex
+*.txt
 
 #Singularity files
 shell
+
+#.out files
+.out
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
