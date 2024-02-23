@@ -1,0 +1,2382 @@
+====================Radion Mass = 1.0 TeV====================
+Preprocessing 100% ━━━━━━━━━━━━━━━━━━━━━━ 2/2 [ 0:00:03 < 0:00:00 | 0.9 file/s ]
+!!!=====Dataset=====!!!!
+<class 'str'>
+Signal
+!!!=====Dataset=====!!!!
+[[613], [548], [898], [903], [397], [461, ... [456], [531], [836], [839], [946]]
+HT Num (No Cross Cleaning): 8216
+[[[False, True, True, True], [True, False, ... [True, True, True, True, True, True]]]
+MET Len: 20731
+HT Len: 20731
+Positively charged tau
+Negetively charged tau
+[15.2, -71.9, -11.6, -430, 225, 332, -302, ... -48, -12.5, -51.5, -171, -140, -45]
+
+Leading Px[0] = 15.1901
+Leading Py[0] = 233.8356
+Leading Higgs p_T = 234.3285
+Subleading Px[0] = -50.4464
+Subleading Py[0] = -180.4207
+Subleading Higgs p_T = 187.3405
+Radion pT = 133.1607
+Higgs reconstructed Radion pT = 64.0013
+Higgs delta phi = -2.9338
+Higgs 1 phi = 1.5059
+Higgs 2 phi = -1.8434
+
+Leading Px[1] = -71.9459
+Leading Py[1] = 202.6352
+Leading Higgs p_T = 215.0284
+Subleading Px[1] = 26.2172
+Subleading Py[1] = -101.3138
+Subleading Higgs p_T = 104.6510
+Radion pT = 64.0013
+Higgs reconstructed Radion pT = 111.1627
+Higgs delta phi = -3.0536
+Higgs 1 phi = 1.9120
+Higgs 2 phi = -1.3176
+
+Leading Px[2] = -11.6392
+Leading Py[2] = -347.8807
+Leading Higgs p_T = 348.0753
+Subleading Px[2] = -109.2434
+Subleading Py[2] = 133.9628
+Subleading Higgs p_T = 172.8587
+Radion pT = 111.1627
+Higgs reconstructed Radion pT = 245.7101
+Higgs delta phi = 2.4240
+Higgs 1 phi = -1.6042
+Higgs 2 phi = 2.2549
+
+Leading Px[3] = -429.5494
+Leading Py[3] = -44.7362
+Leading Higgs p_T = 431.8727
+Subleading Px[3] = 108.8232
+Subleading Py[3] = 58.4626
+Subleading Higgs p_T = 123.5329
+Radion pT = 340.8778
+Higgs reconstructed Radion pT = 321.0198
+Higgs delta phi = 2.7524
+Higgs 1 phi = -3.0378
+Higgs 2 phi = 0.4930
+
+Leading Px[4] = 225.1409
+Leading Py[4] = 349.9613
+Leading Higgs p_T = 416.1266
+Subleading Px[4] = -132.8632
+Subleading Py[4] = -162.5377
+Subleading Higgs p_T = 209.9312
+Radion pT = 245.7101
+Higgs reconstructed Radion pT = 208.9086
+Higgs delta phi = -3.0280
+Higgs 1 phi = 0.9991
+Higgs 2 phi = -2.2561
+
+Leading Px[5] = 331.9323
+Leading Py[5] = -141.3985
+Leading Higgs p_T = 360.7944
+Subleading Px[5] = -80.8442
+Subleading Py[5] = 159.3578
+Subleading Higgs p_T = 178.6917
+Radion pT = 56.6947
+Higgs reconstructed Radion pT = 251.7295
+Higgs delta phi = -2.4430
+Higgs 1 phi = -0.4027
+Higgs 2 phi = 2.0403
+
+Leading Px[6] = -302.2859
+Leading Py[6] = 346.0492
+Leading Higgs p_T = 459.4854
+Subleading Px[6] = 3.9591
+Subleading Py[6] = 242.2031
+Subleading Higgs p_T = 242.2354
+Radion pT = 191.4211
+Higgs reconstructed Radion pT = 659.5753
+Higgs delta phi = 0.7343
+Higgs 1 phi = 2.2888
+Higgs 2 phi = 1.5545
+
+Leading Px[7] = -275.1201
+Leading Py[7] = -38.2594
+Leading Higgs p_T = 277.7677
+Subleading Px[7] = 184.0609
+Subleading Py[7] = -36.1175
+Subleading Higgs p_T = 187.5710
+Radion pT = 161.7527
+Higgs reconstructed Radion pT = 117.5743
+Higgs delta phi = -2.8097
+Higgs 1 phi = -3.0034
+Higgs 2 phi = -0.1938
+
+Leading Px[8] = 351.0269
+Leading Py[8] = -33.6143
+Leading Higgs p_T = 352.6327
+Subleading Px[8] = -167.5759
+Subleading Py[8] = 13.3343
+Subleading Higgs p_T = 168.1056
+Radion pT = 321.0198
+Higgs reconstructed Radion pT = 184.5686
+Higgs delta phi = 3.1255
+Higgs 1 phi = -0.0955
+Higgs 2 phi = 3.0622
+
+Leading Px[9] = 56.9619
+Leading Py[9] = 137.9906
+Leading Higgs p_T = 149.2851
+Subleading Px[9] = -2.1318
+Subleading Py[9] = -129.2654
+Subleading Higgs p_T = 129.2830
+Radion pT = 208.9086
+Higgs reconstructed Radion pT = 55.5200
+Higgs delta phi = 2.7666
+Higgs 1 phi = 1.1793
+Higgs 2 phi = -1.5873
+Efficiency (HT+MET Trigger): 0.377599
+!!!=====Dataset=====!!!!
+<class 'str'>
+ZZ4l
+!!!=====Dataset=====!!!!
+[[324], [290], [1.08e+03], [1.51e+03], [831], ... [162], [267], [394], [585], [342]]
+HT Num (No Cross Cleaning): 29065
+[[[False, True, True, True], [True, False, ... True], [True, True, True, True]]]
+MET Len: 55545
+HT Len: 55545
+Positively charged tau
+Negetively charged tau
+[344, 206, 75.4, -94, -177, -141, -115, ... 276, 307, -785, 134, -320, 76.9, -595]
+
+Leading Px[0] = 344.1927
+Leading Py[0] = -171.7734
+Leading Higgs p_T = 384.6748
+Subleading Px[0] = -85.4973
+Subleading Py[0] = -96.6140
+Subleading Higgs p_T = 129.0118
+Radion pT = 372.7669
+Higgs reconstructed Radion pT = 372.7669
+Higgs delta phi = 1.8323
+Higgs 1 phi = -0.4629
+Higgs 2 phi = -2.2952
+
+Leading Px[1] = 206.4676
+Leading Py[1] = 231.2331
+Leading Higgs p_T = 309.9962
+Subleading Px[1] = -73.1368
+Subleading Py[1] = -108.6111
+Subleading Higgs p_T = 130.9403
+Radion pT = 181.1443
+Higgs reconstructed Radion pT = 181.1443
+Higgs delta phi = 3.0054
+Higgs 1 phi = 0.8419
+Higgs 2 phi = -2.1634
+
+Leading Px[2] = 75.3527
+Leading Py[2] = -260.2332
+Leading Higgs p_T = 270.9232
+Subleading Px[2] = -26.0648
+Subleading Py[2] = 152.3154
+Subleading Higgs p_T = 154.5294
+Radion pT = 377.3505
+Higgs reconstructed Radion pT = 118.6405
+Higgs delta phi = -3.0292
+Higgs 1 phi = -1.2889
+Higgs 2 phi = 1.7403
+
+Leading Px[3] = -94.0455
+Leading Py[3] = -461.8629
+Leading Higgs p_T = 471.3405
+Subleading Px[3] = 25.0314
+Subleading Py[3] = 178.7149
+Subleading Higgs p_T = 180.4594
+Radion pT = 295.2159
+Higgs reconstructed Radion pT = 291.4373
+Higgs delta phi = 3.0799
+Higgs 1 phi = -1.7717
+Higgs 2 phi = 1.4316
+
+Leading Px[4] = -177.3827
+Leading Py[4] = 687.1563
+Leading Higgs p_T = 709.6819
+Subleading Px[4] = 95.9529
+Subleading Py[4] = 33.9736
+Subleading Higgs p_T = 101.7898
+Radion pT = 135.9360
+Higgs reconstructed Radion pT = 725.7129
+Higgs delta phi = 1.4831
+Higgs 1 phi = 1.8234
+Higgs 2 phi = 0.3403
+
+Leading Px[5] = -140.5108
+Leading Py[5] = 283.1813
+Leading Higgs p_T = 316.1249
+Subleading Px[5] = 38.4241
+Subleading Py[5] = -116.5238
+Subleading Higgs p_T = 122.6956
+Radion pT = 118.6405
+Higgs reconstructed Radion pT = 195.4391
+Higgs delta phi = -2.9995
+Higgs 1 phi = 2.0314
+Higgs 2 phi = -1.2523
+
+Leading Px[6] = -115.1868
+Leading Py[6] = 398.5056
+Leading Higgs p_T = 414.8188
+Subleading Px[6] = -151.3848
+Subleading Py[6] = -44.0072
+Subleading Higgs p_T = 157.6515
+Radion pT = 291.4373
+Higgs reconstructed Radion pT = 443.5420
+Higgs delta phi = -1.5723
+Higgs 1 phi = 1.8522
+Higgs 2 phi = -2.8587
+
+Leading Px[7] = 518.8343
+Leading Py[7] = -62.4373
+Leading Higgs p_T = 522.5777
+Subleading Px[7] = -243.4606
+Subleading Py[7] = 14.8181
+Subleading Higgs p_T = 243.9111
+Radion pT = 246.7383
+Higgs reconstructed Radion pT = 279.4607
+Higgs delta phi = 3.0826
+Higgs 1 phi = -0.1198
+Higgs 2 phi = 3.0808
+
+Leading Px[8] = -49.5048
+Leading Py[8] = 249.6384
+Leading Higgs p_T = 254.4996
+Subleading Px[8] = -97.0531
+Subleading Py[8] = -34.9824
+Subleading Higgs p_T = 103.1652
+Radion pT = 204.2331
+Higgs reconstructed Radion pT = 259.9162
+Higgs delta phi = -1.7210
+Higgs 1 phi = 1.7666
+Higgs 2 phi = -2.7956
+
+Leading Px[9] = -193.0783
+Leading Py[9] = -52.3779
+Leading Higgs p_T = 200.0567
+Subleading Px[9] = 99.2880
+Subleading Py[9] = 14.5948
+Subleading Higgs p_T = 100.3549
+Radion pT = 257.1923
+Higgs reconstructed Radion pT = 101.1147
+Higgs delta phi = -3.0226
+Higgs 1 phi = -2.8767
+Higgs 2 phi = 0.1459
+Efficiency (HT+MET Trigger): 0.051364
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━ 2/2 [ 0:00:14 < 0:00:00 | 0.1 chunk/s ]
+Pair_DeltaPhi_Hist
+!!!=====Dataset=====!!!!
+<class 'str'>
+Signal
+!!!=====Dataset=====!!!!
+[[613], [548], [898], [903], [397], [461, ... [456], [531], [836], [839], [946]]
+HT Num (No Cross Cleaning): 8216
+[[[False, True, True, True], [True, False, ... [True, True, True, True, True, True]]]
+Positively charged tau
+Negetively charged tau
+[-446, -11.6, -430, 225, 332, 162, -302, ... -319, -171, 250, -157, 158, -140, 389]
+
+Leading Px[0] = -446.2859
+Leading Py[0] = 216.4659
+Leading Higgs p_T = 496.0127
+Subleading Px[0] = 153.0882
+Subleading Py[0] = -109.4518
+Subleading Higgs p_T = 188.1906
+Radion pT = 182.1716
+Higgs reconstructed Radion pT = 312.1168
+Higgs delta phi = -2.9725
+Higgs 1 phi = 2.6900
+Higgs 2 phi = -0.6207
+
+Leading Px[1] = -11.6392
+Leading Py[1] = -347.8807
+Leading Higgs p_T = 348.0753
+Subleading Px[1] = -109.2434
+Subleading Py[1] = 133.9628
+Subleading Higgs p_T = 172.8587
+Radion pT = 86.7953
+Higgs reconstructed Radion pT = 245.7101
+Higgs delta phi = 2.4240
+Higgs 1 phi = -1.6042
+Higgs 2 phi = 2.2549
+
+Leading Px[2] = -429.5494
+Leading Py[2] = -44.7362
+Leading Higgs p_T = 431.8727
+Subleading Px[2] = 108.8232
+Subleading Py[2] = 58.4626
+Subleading Higgs p_T = 123.5329
+Radion pT = 447.8262
+Higgs reconstructed Radion pT = 321.0198
+Higgs delta phi = 2.7524
+Higgs 1 phi = -3.0378
+Higgs 2 phi = 0.4930
+
+Leading Px[3] = 225.1409
+Leading Py[3] = 349.9613
+Leading Higgs p_T = 416.1266
+Subleading Px[3] = -132.8632
+Subleading Py[3] = -162.5377
+Subleading Higgs p_T = 209.9312
+Radion pT = 312.1168
+Higgs reconstructed Radion pT = 208.9086
+Higgs delta phi = -3.0280
+Higgs 1 phi = 0.9991
+Higgs 2 phi = -2.2561
+
+Leading Px[4] = 331.9323
+Leading Py[4] = -141.3985
+Leading Higgs p_T = 360.7944
+Subleading Px[4] = -80.8442
+Subleading Py[4] = 159.3578
+Subleading Higgs p_T = 178.6917
+Radion pT = 340.8778
+Higgs reconstructed Radion pT = 251.7295
+Higgs delta phi = -2.4430
+Higgs 1 phi = -0.4027
+Higgs 2 phi = 2.0403
+
+Leading Px[5] = 162.0259
+Leading Py[5] = 308.1815
+Leading Higgs p_T = 348.1785
+Subleading Px[5] = -111.6360
+Subleading Py[5] = -221.9942
+Subleading Higgs p_T = 248.4835
+Radion pT = 245.7101
+Higgs reconstructed Radion pT = 99.8368
+Higgs delta phi = 3.1235
+Higgs 1 phi = 1.0868
+Higgs 2 phi = -2.0367
+
+Leading Px[6] = -302.2859
+Leading Py[6] = 346.0492
+Leading Higgs p_T = 459.4854
+Subleading Px[6] = 3.9591
+Subleading Py[6] = 242.2031
+Subleading Higgs p_T = 242.2354
+Radion pT = 321.0198
+Higgs reconstructed Radion pT = 659.5753
+Higgs delta phi = 0.7343
+Higgs 1 phi = 2.2888
+Higgs 2 phi = 1.5545
+
+Leading Px[7] = 355.4413
+Leading Py[7] = -197.8424
+Leading Higgs p_T = 406.7925
+Subleading Px[7] = -128.7698
+Subleading Py[7] = 34.1061
+Subleading Higgs p_T = 133.2099
+Radion pT = 208.9086
+Higgs reconstructed Radion pT = 279.6240
+Higgs delta phi = 2.8926
+Higgs 1 phi = -0.5079
+Higgs 2 phi = 2.8827
+
+Leading Px[8] = 330.2907
+Leading Py[8] = 192.8339
+Leading Higgs p_T = 382.4616
+Subleading Px[8] = -315.1949
+Subleading Py[8] = -153.8687
+Subleading Higgs p_T = 350.7469
+Radion pT = 251.7295
+Higgs reconstructed Radion pT = 41.7872
+Higgs delta phi = -3.0673
+Higgs 1 phi = 0.5284
+Higgs 2 phi = -2.6875
+
+Leading Px[9] = 277.3105
+Leading Py[9] = 251.5785
+Leading Higgs p_T = 374.4233
+Subleading Px[9] = -213.0589
+Subleading Py[9] = -9.8273
+Subleading Higgs p_T = 213.2854
+Radion pT = 99.8369
+Higgs reconstructed Radion pT = 250.1437
+Higgs delta phi = -2.4509
+Higgs 1 phi = 0.7368
+Higgs 2 phi = -3.0955
+!!!=====Dataset=====!!!!
+<class 'str'>
+ZZ4l
+!!!=====Dataset=====!!!!
+[[324], [290], [1.08e+03], [1.51e+03], [831], ... [162], [267], [394], [585], [342]]
+HT Num (No Cross Cleaning): 29065
+[[[False, True, True, True], [True, False, ... True], [True, True, True, True]]]
+Positively charged tau
+Negetively charged tau
+[344, 562, -357, -94, -253, -417, -265, ... 250, -541, 76.9, 237, -621, -595, -235]
+
+Leading Px[0] = 344.1927
+Leading Py[0] = -171.7734
+Leading Higgs p_T = 384.6748
+Subleading Px[0] = -85.4973
+Subleading Py[0] = -96.6140
+Subleading Higgs p_T = 129.0118
+Radion pT = 372.7669
+Higgs reconstructed Radion pT = 372.7669
+Higgs delta phi = 1.8323
+Higgs 1 phi = -0.4629
+Higgs 2 phi = -2.2952
+
+Leading Px[1] = 562.2172
+Leading Py[1] = -32.2176
+Leading Higgs p_T = 563.1396
+Subleading Px[1] = -419.7888
+Subleading Py[1] = 5.5852
+Subleading Higgs p_T = 419.8260
+Radion pT = 144.8969
+Higgs reconstructed Radion pT = 144.8970
+Higgs delta phi = 3.0977
+Higgs 1 phi = -0.0572
+Higgs 2 phi = 3.1283
+
+Leading Px[2] = -356.7308
+Leading Py[2] = -251.1933
+Leading Higgs p_T = 436.2968
+Subleading Px[2] = -4.8368
+Subleading Py[2] = -352.1459
+Subleading Higgs p_T = 352.1792
+Radion pT = 153.1283
+Higgs reconstructed Radion pT = 703.3842
+Higgs delta phi = -0.9436
+Higgs 1 phi = -2.5281
+Higgs 2 phi = -1.5845
+
+Leading Px[3] = -94.0455
+Leading Py[3] = -461.8629
+Leading Higgs p_T = 471.3405
+Subleading Px[3] = 25.0314
+Subleading Py[3] = 178.7149
+Subleading Higgs p_T = 180.4594
+Radion pT = 51.1959
+Higgs reconstructed Radion pT = 291.4373
+Higgs delta phi = 3.0799
+Higgs 1 phi = -1.7717
+Higgs 2 phi = 1.4316
+
+Leading Px[4] = -253.3680
+Leading Py[4] = 548.6251
+Leading Higgs p_T = 604.3053
+Subleading Px[4] = 121.8413
+Subleading Py[4] = -238.5214
+Subleading Higgs p_T = 267.8390
+Radion pT = 160.5389
+Higgs reconstructed Radion pT = 336.8436
+Higgs delta phi = 3.1020
+Higgs 1 phi = 2.0034
+Higgs 2 phi = -1.0985
+
+Leading Px[5] = -416.5074
+Leading Py[5] = -60.8971
+Leading Higgs p_T = 420.9357
+Subleading Px[5] = 144.8241
+Subleading Py[5] = 54.9275
+Subleading Higgs p_T = 154.8905
+Radion pT = 50.9669
+Higgs reconstructed Radion pT = 271.7489
+Higgs delta phi = 2.9243
+Higgs 1 phi = -2.9964
+Higgs 2 phi = 0.3625
+
+Leading Px[6] = -264.6002
+Leading Py[6] = 355.9315
+Leading Higgs p_T = 443.5093
+Subleading Px[6] = -11.0196
+Subleading Py[6] = -164.6102
+Subleading Higgs p_T = 164.9787
+Radion pT = 703.3842
+Higgs reconstructed Radion pT = 335.5146
+Higgs delta phi = -2.4355
+Higgs 1 phi = 2.2101
+Higgs 2 phi = -1.6376
+
+Leading Px[7] = -177.3827
+Leading Py[7] = 687.1563
+Leading Higgs p_T = 709.6819
+Subleading Px[7] = 95.9529
+Subleading Py[7] = 33.9736
+Subleading Higgs p_T = 101.7898
+Radion pT = 17.5589
+Higgs reconstructed Radion pT = 725.7129
+Higgs delta phi = 1.4831
+Higgs 1 phi = 1.8234
+Higgs 2 phi = 0.3403
+
+Leading Px[8] = -571.8105
+Leading Py[8] = -313.4340
+Leading Higgs p_T = 652.0799
+Subleading Px[8] = 194.3957
+Subleading Py[8] = 304.0333
+Subleading Higgs p_T = 360.8683
+Radion pT = 27.6331
+Higgs reconstructed Radion pT = 377.5319
+Higgs delta phi = 2.6411
+Higgs 1 phi = -2.6402
+Higgs 2 phi = 1.0019
+
+Leading Px[9] = -340.7116
+Leading Py[9] = 318.1012
+Leading Higgs p_T = 466.1253
+Subleading Px[9] = 131.8248
+Subleading Py[9] = 29.1375
+Subleading Higgs p_T = 135.0066
+Radion pT = 377.3505
+Higgs reconstructed Radion pT = 405.2263
+Higgs delta phi = 2.1730
+Higgs 1 phi = 2.3905
+Higgs 2 phi = 0.2175
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━ 2/2 [ 0:00:14 < 0:00:00 | 0.1 chunk/s ]
+Pair_DeltaPhi_Hist
+!!!=====Dataset=====!!!!
+<class 'str'>
+Signal
+!!!=====Dataset=====!!!!
+[[613], [548], [898], [903], [397], [461, ... [456], [531], [836], [839], [946]]
+HT Num (No Cross Cleaning): 8216
+[[[False, True, True, True], [True, False, ... [True, True, True, True, True, True]]]
+Positively charged tau
+Negetively charged tau
+[15.2, -71.9, -446, -11.6, -430, 225, 332, ... -171, 250, -157, 158, -140, 389, -45]
+
+Leading Px[0] = 15.1901
+Leading Py[0] = 233.8356
+Leading Higgs p_T = 234.3285
+Subleading Px[0] = -50.4464
+Subleading Py[0] = -180.4207
+Subleading Higgs p_T = 187.3405
+Radion pT = 133.1607
+Higgs reconstructed Radion pT = 64.0013
+Higgs delta phi = -2.9338
+Higgs 1 phi = 1.5059
+Higgs 2 phi = -1.8434
+
+Leading Px[1] = -71.9459
+Leading Py[1] = 202.6352
+Leading Higgs p_T = 215.0284
+Subleading Px[1] = 26.2172
+Subleading Py[1] = -101.3138
+Subleading Higgs p_T = 104.6510
+Radion pT = 64.0013
+Higgs reconstructed Radion pT = 111.1627
+Higgs delta phi = -3.0536
+Higgs 1 phi = 1.9120
+Higgs 2 phi = -1.3176
+
+Leading Px[2] = -446.2859
+Leading Py[2] = 216.4659
+Leading Higgs p_T = 496.0127
+Subleading Px[2] = 153.0882
+Subleading Py[2] = -109.4518
+Subleading Higgs p_T = 188.1906
+Radion pT = 111.1627
+Higgs reconstructed Radion pT = 312.1168
+Higgs delta phi = -2.9725
+Higgs 1 phi = 2.6900
+Higgs 2 phi = -0.6207
+
+Leading Px[3] = -11.6392
+Leading Py[3] = -347.8807
+Leading Higgs p_T = 348.0753
+Subleading Px[3] = -109.2434
+Subleading Py[3] = 133.9628
+Subleading Higgs p_T = 172.8587
+Radion pT = 182.1716
+Higgs reconstructed Radion pT = 245.7101
+Higgs delta phi = 2.4240
+Higgs 1 phi = -1.6042
+Higgs 2 phi = 2.2549
+
+Leading Px[4] = -429.5494
+Leading Py[4] = -44.7362
+Leading Higgs p_T = 431.8727
+Subleading Px[4] = 108.8232
+Subleading Py[4] = 58.4626
+Subleading Higgs p_T = 123.5329
+Radion pT = 86.7953
+Higgs reconstructed Radion pT = 321.0198
+Higgs delta phi = 2.7524
+Higgs 1 phi = -3.0378
+Higgs 2 phi = 0.4930
+
+Leading Px[5] = 225.1409
+Leading Py[5] = 349.9613
+Leading Higgs p_T = 416.1266
+Subleading Px[5] = -132.8632
+Subleading Py[5] = -162.5377
+Subleading Higgs p_T = 209.9312
+Radion pT = 447.8262
+Higgs reconstructed Radion pT = 208.9086
+Higgs delta phi = -3.0280
+Higgs 1 phi = 0.9991
+Higgs 2 phi = -2.2561
+
+Leading Px[6] = 331.9323
+Leading Py[6] = -141.3985
+Leading Higgs p_T = 360.7944
+Subleading Px[6] = -80.8442
+Subleading Py[6] = 159.3578
+Subleading Higgs p_T = 178.6917
+Radion pT = 312.1168
+Higgs reconstructed Radion pT = 251.7295
+Higgs delta phi = -2.4430
+Higgs 1 phi = -0.4027
+Higgs 2 phi = 2.0403
+
+Leading Px[7] = 162.0259
+Leading Py[7] = 308.1815
+Leading Higgs p_T = 348.1785
+Subleading Px[7] = -111.6360
+Subleading Py[7] = -221.9942
+Subleading Higgs p_T = 248.4835
+Radion pT = 340.8778
+Higgs reconstructed Radion pT = 99.8368
+Higgs delta phi = 3.1235
+Higgs 1 phi = 1.0868
+Higgs 2 phi = -2.0367
+
+Leading Px[8] = -302.2859
+Leading Py[8] = 346.0492
+Leading Higgs p_T = 459.4854
+Subleading Px[8] = 3.9591
+Subleading Py[8] = 242.2031
+Subleading Higgs p_T = 242.2354
+Radion pT = 245.7101
+Higgs reconstructed Radion pT = 659.5753
+Higgs delta phi = 0.7343
+Higgs 1 phi = 2.2888
+Higgs 2 phi = 1.5545
+
+Leading Px[9] = -275.1201
+Leading Py[9] = -38.2594
+Leading Higgs p_T = 277.7677
+Subleading Px[9] = 184.0609
+Subleading Py[9] = -36.1175
+Subleading Higgs p_T = 187.5710
+Radion pT = 56.6947
+Higgs reconstructed Radion pT = 117.5743
+Higgs delta phi = -2.8097
+Higgs 1 phi = -3.0034
+Higgs 2 phi = -0.1938
+!!!=====Dataset=====!!!!
+<class 'str'>
+ZZ4l
+!!!=====Dataset=====!!!!
+[[324], [290], [1.08e+03], [1.51e+03], [831], ... [162], [267], [394], [585], [342]]
+HT Num (No Cross Cleaning): 29065
+[[[False, True, True, True], [True, False, ... True], [True, True, True, True]]]
+Positively charged tau
+Negetively charged tau
+[344, 562, 206, -357, 75.4, -94, -253, ... 250, -541, 76.9, 237, -621, -595, -235]
+
+Leading Px[0] = 344.1927
+Leading Py[0] = -171.7734
+Leading Higgs p_T = 384.6748
+Subleading Px[0] = -85.4973
+Subleading Py[0] = -96.6140
+Subleading Higgs p_T = 129.0118
+Radion pT = 372.7669
+Higgs reconstructed Radion pT = 372.7669
+Higgs delta phi = 1.8323
+Higgs 1 phi = -0.4629
+Higgs 2 phi = -2.2952
+
+Leading Px[1] = 562.2172
+Leading Py[1] = -32.2176
+Leading Higgs p_T = 563.1396
+Subleading Px[1] = -419.7888
+Subleading Py[1] = 5.5852
+Subleading Higgs p_T = 419.8260
+Radion pT = 144.8969
+Higgs reconstructed Radion pT = 144.8970
+Higgs delta phi = 3.0977
+Higgs 1 phi = -0.0572
+Higgs 2 phi = 3.1283
+
+Leading Px[2] = 206.4676
+Leading Py[2] = 231.2331
+Leading Higgs p_T = 309.9962
+Subleading Px[2] = -73.1368
+Subleading Py[2] = -108.6111
+Subleading Higgs p_T = 130.9403
+Radion pT = 153.1283
+Higgs reconstructed Radion pT = 181.1443
+Higgs delta phi = 3.0054
+Higgs 1 phi = 0.8419
+Higgs 2 phi = -2.1634
+
+Leading Px[3] = -356.7308
+Leading Py[3] = -251.1933
+Leading Higgs p_T = 436.2968
+Subleading Px[3] = -4.8368
+Subleading Py[3] = -352.1459
+Subleading Higgs p_T = 352.1792
+Radion pT = 51.1959
+Higgs reconstructed Radion pT = 703.3842
+Higgs delta phi = -0.9436
+Higgs 1 phi = -2.5281
+Higgs 2 phi = -1.5845
+
+Leading Px[4] = 75.3527
+Leading Py[4] = -260.2332
+Leading Higgs p_T = 270.9232
+Subleading Px[4] = -26.0648
+Subleading Py[4] = 152.3154
+Subleading Higgs p_T = 154.5294
+Radion pT = 160.5389
+Higgs reconstructed Radion pT = 118.6405
+Higgs delta phi = -3.0292
+Higgs 1 phi = -1.2889
+Higgs 2 phi = 1.7403
+
+Leading Px[5] = -94.0455
+Leading Py[5] = -461.8629
+Leading Higgs p_T = 471.3405
+Subleading Px[5] = 25.0314
+Subleading Py[5] = 178.7149
+Subleading Higgs p_T = 180.4594
+Radion pT = 50.9669
+Higgs reconstructed Radion pT = 291.4373
+Higgs delta phi = 3.0799
+Higgs 1 phi = -1.7717
+Higgs 2 phi = 1.4316
+
+Leading Px[6] = -253.3680
+Leading Py[6] = 548.6251
+Leading Higgs p_T = 604.3053
+Subleading Px[6] = 121.8413
+Subleading Py[6] = -238.5214
+Subleading Higgs p_T = 267.8390
+Radion pT = 181.1443
+Higgs reconstructed Radion pT = 336.8436
+Higgs delta phi = 3.1020
+Higgs 1 phi = 2.0034
+Higgs 2 phi = -1.0985
+
+Leading Px[7] = -416.5074
+Leading Py[7] = -60.8971
+Leading Higgs p_T = 420.9357
+Subleading Px[7] = 144.8241
+Subleading Py[7] = 54.9275
+Subleading Higgs p_T = 154.8905
+Radion pT = 703.3842
+Higgs reconstructed Radion pT = 271.7489
+Higgs delta phi = 2.9243
+Higgs 1 phi = -2.9964
+Higgs 2 phi = 0.3625
+
+Leading Px[8] = -264.6002
+Leading Py[8] = 355.9315
+Leading Higgs p_T = 443.5093
+Subleading Px[8] = -11.0196
+Subleading Py[8] = -164.6102
+Subleading Higgs p_T = 164.9787
+Radion pT = 17.5589
+Higgs reconstructed Radion pT = 335.5146
+Higgs delta phi = -2.4355
+Higgs 1 phi = 2.2101
+Higgs 2 phi = -1.6376
+
+Leading Px[9] = -177.3827
+Leading Py[9] = 687.1563
+Leading Higgs p_T = 709.6819
+Subleading Px[9] = 95.9529
+Subleading Py[9] = 33.9736
+Subleading Higgs p_T = 101.7898
+Radion pT = 27.6331
+Higgs reconstructed Radion pT = 725.7129
+Higgs delta phi = 1.4831
+Higgs 1 phi = 1.8234
+Higgs 2 phi = 0.3403
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━ 2/2 [ 0:00:14 < 0:00:00 | 0.1 chunk/s ]
+Pair_DeltaPhi_Hist
+====================Radion Mass = 2.0 TeV====================
+Preprocessing 100% ━━━━━━━━━━━━━━━━━━━━━━━━ 1/1 [ 0:00:01 < 0:00:00 | ? file/s ]
+!!!=====Dataset=====!!!!
+<class 'str'>
+Signal
+!!!=====Dataset=====!!!!
+[[1.22e+03], [1.29e+03], [1.56e+03], ... [2.24e+03], [1.83e+03], [1.31e+03]]
+HT Num (No Cross Cleaning): 14343
+[[[False, True, False, True], [True, False, ... [True, True, True, True, True]]]
+MET Len: 32025
+HT Len: 32025
+Positively charged tau
+Negetively charged tau
+[571, 39, 478, -130, 342, 506, 461, -816, ... 318, 16.8, -480, 22.3, 208, -276, -516]
+
+Leading Px[0] = 571.2751
+Leading Py[0] = -142.7971
+Leading Higgs p_T = 588.8516
+Subleading Px[0] = -179.7271
+Subleading Py[0] = 90.0179
+Subleading Higgs p_T = 201.0101
+Radion pT = 432.1199
+Higgs reconstructed Radion pT = 395.0892
+Higgs delta phi = -2.9222
+Higgs 1 phi = -0.2449
+Higgs 2 phi = 2.6773
+
+Leading Px[1] = 38.9957
+Leading Py[1] = -499.5931
+Leading Higgs p_T = 501.1127
+Subleading Px[1] = 78.8471
+Subleading Py[1] = 178.3234
+Subleading Higgs p_T = 194.9772
+Radion pT = 395.0892
+Higgs reconstructed Radion pT = 342.2005
+Higgs delta phi = -2.6474
+Higgs 1 phi = -1.4929
+Higgs 2 phi = 1.1545
+
+Leading Px[2] = 478.1036
+Leading Py[2] = 395.7916
+Leading Higgs p_T = 620.6722
+Subleading Px[2] = -147.5682
+Subleading Py[2] = -117.3964
+Subleading Higgs p_T = 188.5690
+Radion pT = 342.2005
+Higgs reconstructed Radion pT = 432.1545
+Higgs delta phi = -3.1221
+Higgs 1 phi = 0.6915
+Higgs 2 phi = -2.4696
+
+Leading Px[3] = -130.1387
+Leading Py[3] = -275.1689
+Leading Higgs p_T = 304.3912
+Subleading Px[3] = 20.7359
+Subleading Py[3] = 123.8421
+Subleading Higgs p_T = 125.5661
+Radion pT = 425.4677
+Higgs reconstructed Radion pT = 186.7318
+Higgs delta phi = 2.8657
+Higgs 1 phi = -2.0126
+Higgs 2 phi = 1.4049
+
+Leading Px[4] = 342.4660
+Leading Py[4] = 28.5980
+Leading Higgs p_T = 343.6580
+Subleading Px[4] = -158.3223
+Subleading Py[4] = 15.3669
+Subleading Higgs p_T = 159.0663
+Radion pT = 432.1545
+Higgs reconstructed Radion pT = 189.3193
+Higgs delta phi = -2.9615
+Higgs 1 phi = 0.0833
+Higgs 2 phi = 3.0448
+
+Leading Px[5] = 505.5478
+Leading Py[5] = -331.5151
+Leading Higgs p_T = 604.5501
+Subleading Px[5] = -191.4687
+Subleading Py[5] = -197.5273
+Subleading Higgs p_T = 275.0951
+Radion pT = 186.7318
+Higgs reconstructed Radion pT = 615.2491
+Higgs delta phi = 1.7602
+Higgs 1 phi = -0.5804
+Higgs 2 phi = -2.3406
+
+Leading Px[6] = 461.1286
+Leading Py[6] = -768.5068
+Leading Higgs p_T = 896.2378
+Subleading Px[6] = -191.0027
+Subleading Py[6] = 298.0277
+Subleading Higgs p_T = 353.9810
+Radion pT = 189.3194
+Higgs reconstructed Radion pT = 542.5113
+Higgs delta phi = 3.1121
+Higgs 1 phi = -1.0304
+Higgs 2 phi = 2.1407
+
+Leading Px[7] = -816.3318
+Leading Py[7] = -592.0562
+Leading Higgs p_T = 1008.4286
+Subleading Px[7] = 176.7337
+Subleading Py[7] = 316.6980
+Subleading Higgs p_T = 362.6740
+Radion pT = 289.3221
+Higgs reconstructed Radion pT = 696.3533
+Higgs delta phi = 2.7073
+Higgs 1 phi = -2.5141
+Higgs 2 phi = 1.0618
+
+Leading Px[8] = -372.3767
+Leading Py[8] = -547.3402
+Leading Higgs p_T = 662.0013
+Subleading Px[8] = 172.7430
+Subleading Py[8] = 477.9168
+Subleading Higgs p_T = 508.1777
+Radion pT = 218.2939
+Higgs reconstructed Radion pT = 211.3604
+Higgs delta phi = 2.8910
+Higgs 1 phi = -2.1682
+Higgs 2 phi = 1.2240
+
+Leading Px[9] = 455.6312
+Leading Py[9] = -10.5140
+Leading Higgs p_T = 455.7525
+Subleading Px[9] = -202.5858
+Subleading Py[9] = 11.5721
+Subleading Higgs p_T = 202.9160
+Radion pT = 73.3933
+Higgs reconstructed Radion pT = 253.0477
+Higgs delta phi = -3.1076
+Higgs 1 phi = -0.0231
+Higgs 2 phi = 3.0845
+Efficiency (HT+MET Trigger): 0.650429
+!!!=====Dataset=====!!!!
+<class 'str'>
+ZZ4l
+!!!=====Dataset=====!!!!
+[[324], [290], [1.08e+03], [1.51e+03], [831], ... [162], [267], [394], [585], [342]]
+HT Num (No Cross Cleaning): 29065
+[[[False, True, True, True], [True, False, ... True], [True, True, True, True]]]
+MET Len: 55545
+HT Len: 55545
+Positively charged tau
+Negetively charged tau
+[344, 206, 75.4, -94, -177, -141, -115, ... 276, 307, -785, 134, -320, 76.9, -595]
+
+Leading Px[0] = 344.1927
+Leading Py[0] = -171.7734
+Leading Higgs p_T = 384.6748
+Subleading Px[0] = -85.4973
+Subleading Py[0] = -96.6140
+Subleading Higgs p_T = 129.0118
+Radion pT = 372.7669
+Higgs reconstructed Radion pT = 372.7669
+Higgs delta phi = 1.8323
+Higgs 1 phi = -0.4629
+Higgs 2 phi = -2.2952
+
+Leading Px[1] = 206.4676
+Leading Py[1] = 231.2331
+Leading Higgs p_T = 309.9962
+Subleading Px[1] = -73.1368
+Subleading Py[1] = -108.6111
+Subleading Higgs p_T = 130.9403
+Radion pT = 181.1443
+Higgs reconstructed Radion pT = 181.1443
+Higgs delta phi = 3.0054
+Higgs 1 phi = 0.8419
+Higgs 2 phi = -2.1634
+
+Leading Px[2] = 75.3527
+Leading Py[2] = -260.2332
+Leading Higgs p_T = 270.9232
+Subleading Px[2] = -26.0648
+Subleading Py[2] = 152.3154
+Subleading Higgs p_T = 154.5294
+Radion pT = 377.3505
+Higgs reconstructed Radion pT = 118.6405
+Higgs delta phi = -3.0292
+Higgs 1 phi = -1.2889
+Higgs 2 phi = 1.7403
+
+Leading Px[3] = -94.0455
+Leading Py[3] = -461.8629
+Leading Higgs p_T = 471.3405
+Subleading Px[3] = 25.0314
+Subleading Py[3] = 178.7149
+Subleading Higgs p_T = 180.4594
+Radion pT = 295.2159
+Higgs reconstructed Radion pT = 291.4373
+Higgs delta phi = 3.0799
+Higgs 1 phi = -1.7717
+Higgs 2 phi = 1.4316
+
+Leading Px[4] = -177.3827
+Leading Py[4] = 687.1563
+Leading Higgs p_T = 709.6819
+Subleading Px[4] = 95.9529
+Subleading Py[4] = 33.9736
+Subleading Higgs p_T = 101.7898
+Radion pT = 135.9360
+Higgs reconstructed Radion pT = 725.7129
+Higgs delta phi = 1.4831
+Higgs 1 phi = 1.8234
+Higgs 2 phi = 0.3403
+
+Leading Px[5] = -140.5108
+Leading Py[5] = 283.1813
+Leading Higgs p_T = 316.1249
+Subleading Px[5] = 38.4241
+Subleading Py[5] = -116.5238
+Subleading Higgs p_T = 122.6956
+Radion pT = 118.6405
+Higgs reconstructed Radion pT = 195.4391
+Higgs delta phi = -2.9995
+Higgs 1 phi = 2.0314
+Higgs 2 phi = -1.2523
+
+Leading Px[6] = -115.1868
+Leading Py[6] = 398.5056
+Leading Higgs p_T = 414.8188
+Subleading Px[6] = -151.3848
+Subleading Py[6] = -44.0072
+Subleading Higgs p_T = 157.6515
+Radion pT = 291.4373
+Higgs reconstructed Radion pT = 443.5420
+Higgs delta phi = -1.5723
+Higgs 1 phi = 1.8522
+Higgs 2 phi = -2.8587
+
+Leading Px[7] = 518.8343
+Leading Py[7] = -62.4373
+Leading Higgs p_T = 522.5777
+Subleading Px[7] = -243.4606
+Subleading Py[7] = 14.8181
+Subleading Higgs p_T = 243.9111
+Radion pT = 246.7383
+Higgs reconstructed Radion pT = 279.4607
+Higgs delta phi = 3.0826
+Higgs 1 phi = -0.1198
+Higgs 2 phi = 3.0808
+
+Leading Px[8] = -49.5048
+Leading Py[8] = 249.6384
+Leading Higgs p_T = 254.4996
+Subleading Px[8] = -97.0531
+Subleading Py[8] = -34.9824
+Subleading Higgs p_T = 103.1652
+Radion pT = 204.2331
+Higgs reconstructed Radion pT = 259.9162
+Higgs delta phi = -1.7210
+Higgs 1 phi = 1.7666
+Higgs 2 phi = -2.7956
+
+Leading Px[9] = -193.0783
+Leading Py[9] = -52.3779
+Leading Higgs p_T = 200.0567
+Subleading Px[9] = 99.2880
+Subleading Py[9] = 14.5948
+Subleading Higgs p_T = 100.3549
+Radion pT = 257.1923
+Higgs reconstructed Radion pT = 101.1147
+Higgs delta phi = -3.0226
+Higgs 1 phi = -2.8767
+Higgs 2 phi = 0.1459
+Efficiency (HT+MET Trigger): 0.051364
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━ 2/2 [ 0:00:14 < 0:00:00 | 0.1 chunk/s ]
+Pair_DeltaPhi_Hist
+!!!=====Dataset=====!!!!
+<class 'str'>
+Signal
+!!!=====Dataset=====!!!!
+[[1.22e+03], [1.29e+03], [1.56e+03], ... [2.24e+03], [1.83e+03], [1.31e+03]]
+HT Num (No Cross Cleaning): 14343
+[[[False, True, False, True], [True, False, ... [True, True, True, True, True]]]
+Positively charged tau
+Negetively charged tau
+[39, 478, 342, 494, 506, -107, 461, ... 22.3, 208, -473, -11.3, -276, -516, -311]
+
+Leading Px[0] = 38.9957
+Leading Py[0] = -499.5931
+Leading Higgs p_T = 501.1127
+Subleading Px[0] = 78.8471
+Subleading Py[0] = 178.3234
+Subleading Higgs p_T = 194.9772
+Radion pT = 432.1199
+Higgs reconstructed Radion pT = 342.2005
+Higgs delta phi = -2.6474
+Higgs 1 phi = -1.4929
+Higgs 2 phi = 1.1545
+
+Leading Px[1] = 478.1036
+Leading Py[1] = 395.7916
+Leading Higgs p_T = 620.6722
+Subleading Px[1] = -147.5682
+Subleading Py[1] = -117.3964
+Subleading Higgs p_T = 188.5690
+Radion pT = 153.3825
+Higgs reconstructed Radion pT = 432.1545
+Higgs delta phi = -3.1221
+Higgs 1 phi = 0.6915
+Higgs 2 phi = -2.4696
+
+Leading Px[2] = 342.4660
+Leading Py[2] = 28.5980
+Leading Higgs p_T = 343.6580
+Subleading Px[2] = -158.3223
+Subleading Py[2] = 15.3669
+Subleading Higgs p_T = 159.0663
+Radion pT = 342.2005
+Higgs reconstructed Radion pT = 189.3193
+Higgs delta phi = -2.9615
+Higgs 1 phi = 0.0833
+Higgs 2 phi = 3.0448
+
+Leading Px[3] = 494.3456
+Leading Py[3] = -23.6156
+Leading Higgs p_T = 494.9094
+Subleading Px[3] = -290.2393
+Subleading Py[3] = 17.5288
+Subleading Higgs p_T = 290.7682
+Radion pT = 425.4677
+Higgs reconstructed Radion pT = 204.1970
+Higgs delta phi = -3.1290
+Higgs 1 phi = -0.0477
+Higgs 2 phi = 3.0813
+
+Leading Px[4] = 505.5478
+Leading Py[4] = -331.5151
+Leading Higgs p_T = 604.5501
+Subleading Px[4] = -191.4687
+Subleading Py[4] = -197.5273
+Subleading Higgs p_T = 275.0951
+Radion pT = 432.1545
+Higgs reconstructed Radion pT = 615.2491
+Higgs delta phi = 1.7602
+Higgs 1 phi = -0.5804
+Higgs 2 phi = -2.3406
+
+Leading Px[5] = -106.7763
+Leading Py[5] = 428.9111
+Leading Higgs p_T = 442.0022
+Subleading Px[5] = 45.1873
+Subleading Py[5] = -243.2705
+Subleading Higgs p_T = 247.4317
+Radion pT = 284.0449
+Higgs reconstructed Radion pT = 195.5905
+Higgs delta phi = -3.0813
+Higgs 1 phi = 1.8148
+Higgs 2 phi = -1.3871
+
+Leading Px[6] = 461.1286
+Leading Py[6] = -768.5068
+Leading Higgs p_T = 896.2378
+Subleading Px[6] = -191.0027
+Subleading Py[6] = 298.0277
+Subleading Higgs p_T = 353.9810
+Radion pT = 189.3194
+Higgs reconstructed Radion pT = 542.5113
+Higgs delta phi = 3.1121
+Higgs 1 phi = -1.0304
+Higgs 2 phi = 2.1407
+
+Leading Px[7] = -816.3318
+Leading Py[7] = -592.0562
+Leading Higgs p_T = 1008.4286
+Subleading Px[7] = 176.7337
+Subleading Py[7] = 316.6980
+Subleading Higgs p_T = 362.6740
+Radion pT = 289.3221
+Higgs reconstructed Radion pT = 696.3533
+Higgs delta phi = 2.7073
+Higgs 1 phi = -2.5141
+Higgs 2 phi = 1.0618
+
+Leading Px[8] = 100.6332
+Leading Py[8] = -703.4247
+Leading Higgs p_T = 710.5867
+Subleading Px[8] = -105.5304
+Subleading Py[8] = 325.8905
+Subleading Higgs p_T = 342.5512
+Radion pT = 218.2939
+Higgs reconstructed Radion pT = 377.5660
+Higgs delta phi = 2.9705
+Higgs 1 phi = -1.4287
+Higgs 2 phi = 1.8840
+
+Leading Px[9] = -372.3767
+Leading Py[9] = -547.3402
+Leading Higgs p_T = 662.0013
+Subleading Px[9] = 172.7430
+Subleading Py[9] = 477.9168
+Subleading Higgs p_T = 508.1777
+Radion pT = 204.1970
+Higgs reconstructed Radion pT = 211.3604
+Higgs delta phi = 2.8910
+Higgs 1 phi = -2.1682
+Higgs 2 phi = 1.2240
+!!!=====Dataset=====!!!!
+<class 'str'>
+ZZ4l
+!!!=====Dataset=====!!!!
+[[324], [290], [1.08e+03], [1.51e+03], [831], ... [162], [267], [394], [585], [342]]
+HT Num (No Cross Cleaning): 29065
+[[[False, True, True, True], [True, False, ... True], [True, True, True, True]]]
+Positively charged tau
+Negetively charged tau
+[344, 562, -357, -94, -253, -417, -265, ... 250, -541, 76.9, 237, -621, -595, -235]
+
+Leading Px[0] = 344.1927
+Leading Py[0] = -171.7734
+Leading Higgs p_T = 384.6748
+Subleading Px[0] = -85.4973
+Subleading Py[0] = -96.6140
+Subleading Higgs p_T = 129.0118
+Radion pT = 372.7669
+Higgs reconstructed Radion pT = 372.7669
+Higgs delta phi = 1.8323
+Higgs 1 phi = -0.4629
+Higgs 2 phi = -2.2952
+
+Leading Px[1] = 562.2172
+Leading Py[1] = -32.2176
+Leading Higgs p_T = 563.1396
+Subleading Px[1] = -419.7888
+Subleading Py[1] = 5.5852
+Subleading Higgs p_T = 419.8260
+Radion pT = 144.8969
+Higgs reconstructed Radion pT = 144.8970
+Higgs delta phi = 3.0977
+Higgs 1 phi = -0.0572
+Higgs 2 phi = 3.1283
+
+Leading Px[2] = -356.7308
+Leading Py[2] = -251.1933
+Leading Higgs p_T = 436.2968
+Subleading Px[2] = -4.8368
+Subleading Py[2] = -352.1459
+Subleading Higgs p_T = 352.1792
+Radion pT = 153.1283
+Higgs reconstructed Radion pT = 703.3842
+Higgs delta phi = -0.9436
+Higgs 1 phi = -2.5281
+Higgs 2 phi = -1.5845
+
+Leading Px[3] = -94.0455
+Leading Py[3] = -461.8629
+Leading Higgs p_T = 471.3405
+Subleading Px[3] = 25.0314
+Subleading Py[3] = 178.7149
+Subleading Higgs p_T = 180.4594
+Radion pT = 51.1959
+Higgs reconstructed Radion pT = 291.4373
+Higgs delta phi = 3.0799
+Higgs 1 phi = -1.7717
+Higgs 2 phi = 1.4316
+
+Leading Px[4] = -253.3680
+Leading Py[4] = 548.6251
+Leading Higgs p_T = 604.3053
+Subleading Px[4] = 121.8413
+Subleading Py[4] = -238.5214
+Subleading Higgs p_T = 267.8390
+Radion pT = 160.5389
+Higgs reconstructed Radion pT = 336.8436
+Higgs delta phi = 3.1020
+Higgs 1 phi = 2.0034
+Higgs 2 phi = -1.0985
+
+Leading Px[5] = -416.5074
+Leading Py[5] = -60.8971
+Leading Higgs p_T = 420.9357
+Subleading Px[5] = 144.8241
+Subleading Py[5] = 54.9275
+Subleading Higgs p_T = 154.8905
+Radion pT = 50.9669
+Higgs reconstructed Radion pT = 271.7489
+Higgs delta phi = 2.9243
+Higgs 1 phi = -2.9964
+Higgs 2 phi = 0.3625
+
+Leading Px[6] = -264.6002
+Leading Py[6] = 355.9315
+Leading Higgs p_T = 443.5093
+Subleading Px[6] = -11.0196
+Subleading Py[6] = -164.6102
+Subleading Higgs p_T = 164.9787
+Radion pT = 703.3842
+Higgs reconstructed Radion pT = 335.5146
+Higgs delta phi = -2.4355
+Higgs 1 phi = 2.2101
+Higgs 2 phi = -1.6376
+
+Leading Px[7] = -177.3827
+Leading Py[7] = 687.1563
+Leading Higgs p_T = 709.6819
+Subleading Px[7] = 95.9529
+Subleading Py[7] = 33.9736
+Subleading Higgs p_T = 101.7898
+Radion pT = 17.5589
+Higgs reconstructed Radion pT = 725.7129
+Higgs delta phi = 1.4831
+Higgs 1 phi = 1.8234
+Higgs 2 phi = 0.3403
+
+Leading Px[8] = -571.8105
+Leading Py[8] = -313.4340
+Leading Higgs p_T = 652.0799
+Subleading Px[8] = 194.3957
+Subleading Py[8] = 304.0333
+Subleading Higgs p_T = 360.8683
+Radion pT = 27.6331
+Higgs reconstructed Radion pT = 377.5319
+Higgs delta phi = 2.6411
+Higgs 1 phi = -2.6402
+Higgs 2 phi = 1.0019
+
+Leading Px[9] = -340.7116
+Leading Py[9] = 318.1012
+Leading Higgs p_T = 466.1253
+Subleading Px[9] = 131.8248
+Subleading Py[9] = 29.1375
+Subleading Higgs p_T = 135.0066
+Radion pT = 377.3505
+Higgs reconstructed Radion pT = 405.2263
+Higgs delta phi = 2.1730
+Higgs 1 phi = 2.3905
+Higgs 2 phi = 0.2175
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━ 2/2 [ 0:00:14 < 0:00:00 | 0.1 chunk/s ]
+Pair_DeltaPhi_Hist
+!!!=====Dataset=====!!!!
+<class 'str'>
+Signal
+!!!=====Dataset=====!!!!
+[[1.22e+03], [1.29e+03], [1.56e+03], ... [2.24e+03], [1.83e+03], [1.31e+03]]
+HT Num (No Cross Cleaning): 14343
+[[[False, True, False, True], [True, False, ... [True, True, True, True, True]]]
+Positively charged tau
+Negetively charged tau
+[571, 39, 478, -130, 342, 494, 506, ... 22.3, 208, -473, -11.3, -276, -516, -311]
+
+Leading Px[0] = 571.2751
+Leading Py[0] = -142.7971
+Leading Higgs p_T = 588.8516
+Subleading Px[0] = -179.7271
+Subleading Py[0] = 90.0179
+Subleading Higgs p_T = 201.0101
+Radion pT = 432.1199
+Higgs reconstructed Radion pT = 395.0892
+Higgs delta phi = -2.9222
+Higgs 1 phi = -0.2449
+Higgs 2 phi = 2.6773
+
+Leading Px[1] = 38.9957
+Leading Py[1] = -499.5931
+Leading Higgs p_T = 501.1127
+Subleading Px[1] = 78.8471
+Subleading Py[1] = 178.3234
+Subleading Higgs p_T = 194.9772
+Radion pT = 395.0892
+Higgs reconstructed Radion pT = 342.2005
+Higgs delta phi = -2.6474
+Higgs 1 phi = -1.4929
+Higgs 2 phi = 1.1545
+
+Leading Px[2] = 478.1036
+Leading Py[2] = 395.7916
+Leading Higgs p_T = 620.6722
+Subleading Px[2] = -147.5682
+Subleading Py[2] = -117.3964
+Subleading Higgs p_T = 188.5690
+Radion pT = 153.3825
+Higgs reconstructed Radion pT = 432.1545
+Higgs delta phi = -3.1221
+Higgs 1 phi = 0.6915
+Higgs 2 phi = -2.4696
+
+Leading Px[3] = -130.1387
+Leading Py[3] = -275.1689
+Leading Higgs p_T = 304.3912
+Subleading Px[3] = 20.7359
+Subleading Py[3] = 123.8421
+Subleading Higgs p_T = 125.5661
+Radion pT = 342.2005
+Higgs reconstructed Radion pT = 186.7318
+Higgs delta phi = 2.8657
+Higgs 1 phi = -2.0126
+Higgs 2 phi = 1.4049
+
+Leading Px[4] = 342.4660
+Leading Py[4] = 28.5980
+Leading Higgs p_T = 343.6580
+Subleading Px[4] = -158.3223
+Subleading Py[4] = 15.3669
+Subleading Higgs p_T = 159.0663
+Radion pT = 425.4677
+Higgs reconstructed Radion pT = 189.3193
+Higgs delta phi = -2.9615
+Higgs 1 phi = 0.0833
+Higgs 2 phi = 3.0448
+
+Leading Px[5] = 494.3456
+Leading Py[5] = -23.6156
+Leading Higgs p_T = 494.9094
+Subleading Px[5] = -290.2393
+Subleading Py[5] = 17.5288
+Subleading Higgs p_T = 290.7682
+Radion pT = 432.1545
+Higgs reconstructed Radion pT = 204.1970
+Higgs delta phi = -3.1290
+Higgs 1 phi = -0.0477
+Higgs 2 phi = 3.0813
+
+Leading Px[6] = 505.5478
+Leading Py[6] = -331.5151
+Leading Higgs p_T = 604.5501
+Subleading Px[6] = -191.4687
+Subleading Py[6] = -197.5273
+Subleading Higgs p_T = 275.0951
+Radion pT = 284.0449
+Higgs reconstructed Radion pT = 615.2491
+Higgs delta phi = 1.7602
+Higgs 1 phi = -0.5804
+Higgs 2 phi = -2.3406
+
+Leading Px[7] = -106.7763
+Leading Py[7] = 428.9111
+Leading Higgs p_T = 442.0022
+Subleading Px[7] = 45.1873
+Subleading Py[7] = -243.2705
+Subleading Higgs p_T = 247.4317
+Radion pT = 186.7318
+Higgs reconstructed Radion pT = 195.5905
+Higgs delta phi = -3.0813
+Higgs 1 phi = 1.8148
+Higgs 2 phi = -1.3871
+
+Leading Px[8] = 461.1286
+Leading Py[8] = -768.5068
+Leading Higgs p_T = 896.2378
+Subleading Px[8] = -191.0027
+Subleading Py[8] = 298.0277
+Subleading Higgs p_T = 353.9810
+Radion pT = 189.3194
+Higgs reconstructed Radion pT = 542.5113
+Higgs delta phi = 3.1121
+Higgs 1 phi = -1.0304
+Higgs 2 phi = 2.1407
+
+Leading Px[9] = -816.3318
+Leading Py[9] = -592.0562
+Leading Higgs p_T = 1008.4286
+Subleading Px[9] = 176.7337
+Subleading Py[9] = 316.6980
+Subleading Higgs p_T = 362.6740
+Radion pT = 289.3221
+Higgs reconstructed Radion pT = 696.3533
+Higgs delta phi = 2.7073
+Higgs 1 phi = -2.5141
+Higgs 2 phi = 1.0618
+!!!=====Dataset=====!!!!
+<class 'str'>
+ZZ4l
+!!!=====Dataset=====!!!!
+[[324], [290], [1.08e+03], [1.51e+03], [831], ... [162], [267], [394], [585], [342]]
+HT Num (No Cross Cleaning): 29065
+[[[False, True, True, True], [True, False, ... True], [True, True, True, True]]]
+Positively charged tau
+Negetively charged tau
+[344, 562, 206, -357, 75.4, -94, -253, ... 250, -541, 76.9, 237, -621, -595, -235]
+
+Leading Px[0] = 344.1927
+Leading Py[0] = -171.7734
+Leading Higgs p_T = 384.6748
+Subleading Px[0] = -85.4973
+Subleading Py[0] = -96.6140
+Subleading Higgs p_T = 129.0118
+Radion pT = 372.7669
+Higgs reconstructed Radion pT = 372.7669
+Higgs delta phi = 1.8323
+Higgs 1 phi = -0.4629
+Higgs 2 phi = -2.2952
+
+Leading Px[1] = 562.2172
+Leading Py[1] = -32.2176
+Leading Higgs p_T = 563.1396
+Subleading Px[1] = -419.7888
+Subleading Py[1] = 5.5852
+Subleading Higgs p_T = 419.8260
+Radion pT = 144.8969
+Higgs reconstructed Radion pT = 144.8970
+Higgs delta phi = 3.0977
+Higgs 1 phi = -0.0572
+Higgs 2 phi = 3.1283
+
+Leading Px[2] = 206.4676
+Leading Py[2] = 231.2331
+Leading Higgs p_T = 309.9962
+Subleading Px[2] = -73.1368
+Subleading Py[2] = -108.6111
+Subleading Higgs p_T = 130.9403
+Radion pT = 153.1283
+Higgs reconstructed Radion pT = 181.1443
+Higgs delta phi = 3.0054
+Higgs 1 phi = 0.8419
+Higgs 2 phi = -2.1634
+
+Leading Px[3] = -356.7308
+Leading Py[3] = -251.1933
+Leading Higgs p_T = 436.2968
+Subleading Px[3] = -4.8368
+Subleading Py[3] = -352.1459
+Subleading Higgs p_T = 352.1792
+Radion pT = 51.1959
+Higgs reconstructed Radion pT = 703.3842
+Higgs delta phi = -0.9436
+Higgs 1 phi = -2.5281
+Higgs 2 phi = -1.5845
+
+Leading Px[4] = 75.3527
+Leading Py[4] = -260.2332
+Leading Higgs p_T = 270.9232
+Subleading Px[4] = -26.0648
+Subleading Py[4] = 152.3154
+Subleading Higgs p_T = 154.5294
+Radion pT = 160.5389
+Higgs reconstructed Radion pT = 118.6405
+Higgs delta phi = -3.0292
+Higgs 1 phi = -1.2889
+Higgs 2 phi = 1.7403
+
+Leading Px[5] = -94.0455
+Leading Py[5] = -461.8629
+Leading Higgs p_T = 471.3405
+Subleading Px[5] = 25.0314
+Subleading Py[5] = 178.7149
+Subleading Higgs p_T = 180.4594
+Radion pT = 50.9669
+Higgs reconstructed Radion pT = 291.4373
+Higgs delta phi = 3.0799
+Higgs 1 phi = -1.7717
+Higgs 2 phi = 1.4316
+
+Leading Px[6] = -253.3680
+Leading Py[6] = 548.6251
+Leading Higgs p_T = 604.3053
+Subleading Px[6] = 121.8413
+Subleading Py[6] = -238.5214
+Subleading Higgs p_T = 267.8390
+Radion pT = 181.1443
+Higgs reconstructed Radion pT = 336.8436
+Higgs delta phi = 3.1020
+Higgs 1 phi = 2.0034
+Higgs 2 phi = -1.0985
+
+Leading Px[7] = -416.5074
+Leading Py[7] = -60.8971
+Leading Higgs p_T = 420.9357
+Subleading Px[7] = 144.8241
+Subleading Py[7] = 54.9275
+Subleading Higgs p_T = 154.8905
+Radion pT = 703.3842
+Higgs reconstructed Radion pT = 271.7489
+Higgs delta phi = 2.9243
+Higgs 1 phi = -2.9964
+Higgs 2 phi = 0.3625
+
+Leading Px[8] = -264.6002
+Leading Py[8] = 355.9315
+Leading Higgs p_T = 443.5093
+Subleading Px[8] = -11.0196
+Subleading Py[8] = -164.6102
+Subleading Higgs p_T = 164.9787
+Radion pT = 17.5589
+Higgs reconstructed Radion pT = 335.5146
+Higgs delta phi = -2.4355
+Higgs 1 phi = 2.2101
+Higgs 2 phi = -1.6376
+
+Leading Px[9] = -177.3827
+Leading Py[9] = 687.1563
+Leading Higgs p_T = 709.6819
+Subleading Px[9] = 95.9529
+Subleading Py[9] = 33.9736
+Subleading Higgs p_T = 101.7898
+Radion pT = 27.6331
+Higgs reconstructed Radion pT = 725.7129
+Higgs delta phi = 1.4831
+Higgs 1 phi = 1.8234
+Higgs 2 phi = 0.3403
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━ 2/2 [ 0:00:14 < 0:00:00 | 0.1 chunk/s ]
+Pair_DeltaPhi_Hist
+====================Radion Mass = 3.0 TeV====================
+Preprocessing 100% ━━━━━━━━━━━━━━━━━━━━━━━━ 1/1 [ 0:00:00 < 0:00:00 | ? file/s ]
+!!!=====Dataset=====!!!!
+<class 'str'>
+Signal
+!!!=====Dataset=====!!!!
+[[1.24e+03], [2.07e+03], [1.98e+03], ... [2.11e+03], [1.81e+03], [1.84e+03]]
+HT Num (No Cross Cleaning): 14235
+[[[False, True, False, True], [True, ... [True, True, True, True, True, True]]]
+MET Len: 29964
+HT Len: 29964
+Positively charged tau
+Negetively charged tau
+[-125, -420, -777, 714, -189, 91.7, 959, ... 296, -555, -309, 736, -986, 561, 851]
+
+Leading Px[0] = -125.1989
+Leading Py[0] = -595.5611
+Leading Higgs p_T = 608.5785
+Subleading Px[0] = 148.7197
+Subleading Py[0] = 426.8657
+Subleading Higgs p_T = 452.0308
+Radion pT = 170.3272
+Higgs reconstructed Radion pT = 170.3273
+Higgs delta phi = -3.0135
+Higgs 1 phi = -1.7780
+Higgs 2 phi = 1.2355
+
+Leading Px[1] = -420.2162
+Leading Py[1] = -444.8846
+Leading Higgs p_T = 611.9673
+Subleading Px[1] = 231.2092
+Subleading Py[1] = 331.9467
+Subleading Higgs p_T = 404.5322
+Radion pT = 502.8044
+Higgs reconstructed Radion pT = 220.1786
+Higgs delta phi = 2.9931
+Higgs 1 phi = -2.3277
+Higgs 2 phi = 0.9624
+
+Leading Px[2] = -777.1443
+Leading Py[2] = 580.5402
+Leading Higgs p_T = 970.0413
+Subleading Px[2] = 437.9108
+Subleading Py[2] = -242.9082
+Subleading Higgs p_T = 500.7697
+Radion pT = 514.2617
+Higgs reconstructed Radion pT = 478.6175
+Higgs delta phi = 3.0064
+Higgs 1 phi = 2.5000
+Higgs 2 phi = -0.5064
+
+Leading Px[3] = 713.9741
+Leading Py[3] = 143.5060
+Leading Higgs p_T = 728.2534
+Subleading Px[3] = -172.5721
+Subleading Py[3] = 23.8650
+Subleading Higgs p_T = 174.2145
+Radion pT = 364.1230
+Higgs reconstructed Radion pT = 566.6825
+Higgs delta phi = -2.8058
+Higgs 1 phi = 0.1984
+Higgs 2 phi = 3.0042
+
+Leading Px[4] = -189.3620
+Leading Py[4] = -561.9432
+Leading Higgs p_T = 592.9909
+Subleading Px[4] = 93.8914
+Subleading Py[4] = 299.7024
+Subleading Higgs p_T = 314.0655
+Radion pT = 602.7834
+Higgs reconstructed Radion pT = 279.0787
+Higgs delta phi = 3.1202
+Higgs 1 phi = -1.8958
+Higgs 2 phi = 1.2672
+
+Leading Px[5] = 91.6681
+Leading Py[5] = 474.2528
+Leading Higgs p_T = 483.0308
+Subleading Px[5] = -65.9636
+Subleading Py[5] = -317.5116
+Subleading Higgs p_T = 324.2913
+Radion pT = 299.4565
+Higgs reconstructed Radion pT = 158.8349
+Higgs delta phi = -3.1277
+Higgs 1 phi = 1.3799
+Higgs 2 phi = -1.7756
+
+Leading Px[6] = 958.5635
+Leading Py[6] = 307.3925
+Leading Higgs p_T = 1006.6450
+Subleading Px[6] = -410.4346
+Subleading Py[6] = -174.7658
+Subleading Higgs p_T = 446.0938
+Radion pT = 326.4094
+Higgs reconstructed Radion pT = 563.9460
+Higgs delta phi = 3.0494
+Higgs 1 phi = 0.3103
+Higgs 2 phi = -2.7390
+
+Leading Px[7] = -448.5777
+Leading Py[7] = -567.0694
+Leading Higgs p_T = 723.0419
+Subleading Px[7] = 242.7034
+Subleading Py[7] = 298.8446
+Subleading Higgs p_T = 384.9845
+Radion pT = 220.1786
+Higgs reconstructed Radion pT = 338.1253
+Higgs delta phi = -3.1288
+Higgs 1 phi = -2.2401
+Higgs 2 phi = 0.8887
+
+Leading Px[8] = 755.3884
+Leading Py[8] = -520.6120
+Leading Higgs p_T = 917.4140
+Subleading Px[8] = -351.3312
+Subleading Py[8] = 397.3661
+Subleading Higgs p_T = 530.4088
+Radion pT = 341.9342
+Higgs reconstructed Radion pT = 422.4355
+Higgs delta phi = -2.8982
+Higgs 1 phi = -0.6034
+Higgs 2 phi = 2.2948
+
+Leading Px[9] = 586.4127
+Leading Py[9] = -329.1130
+Leading Higgs p_T = 672.4546
+Subleading Px[9] = -312.2684
+Subleading Py[9] = 158.5883
+Subleading Higgs p_T = 350.2311
+Radion pT = 781.3796
+Higgs reconstructed Radion pT = 322.8526
+Higgs delta phi = 3.1001
+Higgs 1 phi = -0.5114
+Higgs 2 phi = 2.6717
+Efficiency (HT+MET Trigger): 0.769290
+!!!=====Dataset=====!!!!
+<class 'str'>
+ZZ4l
+!!!=====Dataset=====!!!!
+[[324], [290], [1.08e+03], [1.51e+03], [831], ... [162], [267], [394], [585], [342]]
+HT Num (No Cross Cleaning): 29065
+[[[False, True, True, True], [True, False, ... True], [True, True, True, True]]]
+MET Len: 55545
+HT Len: 55545
+Positively charged tau
+Negetively charged tau
+[344, 206, 75.4, -94, -177, -141, -115, ... 276, 307, -785, 134, -320, 76.9, -595]
+
+Leading Px[0] = 344.1927
+Leading Py[0] = -171.7734
+Leading Higgs p_T = 384.6748
+Subleading Px[0] = -85.4973
+Subleading Py[0] = -96.6140
+Subleading Higgs p_T = 129.0118
+Radion pT = 372.7669
+Higgs reconstructed Radion pT = 372.7669
+Higgs delta phi = 1.8323
+Higgs 1 phi = -0.4629
+Higgs 2 phi = -2.2952
+
+Leading Px[1] = 206.4676
+Leading Py[1] = 231.2331
+Leading Higgs p_T = 309.9962
+Subleading Px[1] = -73.1368
+Subleading Py[1] = -108.6111
+Subleading Higgs p_T = 130.9403
+Radion pT = 181.1443
+Higgs reconstructed Radion pT = 181.1443
+Higgs delta phi = 3.0054
+Higgs 1 phi = 0.8419
+Higgs 2 phi = -2.1634
+
+Leading Px[2] = 75.3527
+Leading Py[2] = -260.2332
+Leading Higgs p_T = 270.9232
+Subleading Px[2] = -26.0648
+Subleading Py[2] = 152.3154
+Subleading Higgs p_T = 154.5294
+Radion pT = 377.3505
+Higgs reconstructed Radion pT = 118.6405
+Higgs delta phi = -3.0292
+Higgs 1 phi = -1.2889
+Higgs 2 phi = 1.7403
+
+Leading Px[3] = -94.0455
+Leading Py[3] = -461.8629
+Leading Higgs p_T = 471.3405
+Subleading Px[3] = 25.0314
+Subleading Py[3] = 178.7149
+Subleading Higgs p_T = 180.4594
+Radion pT = 295.2159
+Higgs reconstructed Radion pT = 291.4373
+Higgs delta phi = 3.0799
+Higgs 1 phi = -1.7717
+Higgs 2 phi = 1.4316
+
+Leading Px[4] = -177.3827
+Leading Py[4] = 687.1563
+Leading Higgs p_T = 709.6819
+Subleading Px[4] = 95.9529
+Subleading Py[4] = 33.9736
+Subleading Higgs p_T = 101.7898
+Radion pT = 135.9360
+Higgs reconstructed Radion pT = 725.7129
+Higgs delta phi = 1.4831
+Higgs 1 phi = 1.8234
+Higgs 2 phi = 0.3403
+
+Leading Px[5] = -140.5108
+Leading Py[5] = 283.1813
+Leading Higgs p_T = 316.1249
+Subleading Px[5] = 38.4241
+Subleading Py[5] = -116.5238
+Subleading Higgs p_T = 122.6956
+Radion pT = 118.6405
+Higgs reconstructed Radion pT = 195.4391
+Higgs delta phi = -2.9995
+Higgs 1 phi = 2.0314
+Higgs 2 phi = -1.2523
+
+Leading Px[6] = -115.1868
+Leading Py[6] = 398.5056
+Leading Higgs p_T = 414.8188
+Subleading Px[6] = -151.3848
+Subleading Py[6] = -44.0072
+Subleading Higgs p_T = 157.6515
+Radion pT = 291.4373
+Higgs reconstructed Radion pT = 443.5420
+Higgs delta phi = -1.5723
+Higgs 1 phi = 1.8522
+Higgs 2 phi = -2.8587
+
+Leading Px[7] = 518.8343
+Leading Py[7] = -62.4373
+Leading Higgs p_T = 522.5777
+Subleading Px[7] = -243.4606
+Subleading Py[7] = 14.8181
+Subleading Higgs p_T = 243.9111
+Radion pT = 246.7383
+Higgs reconstructed Radion pT = 279.4607
+Higgs delta phi = 3.0826
+Higgs 1 phi = -0.1198
+Higgs 2 phi = 3.0808
+
+Leading Px[8] = -49.5048
+Leading Py[8] = 249.6384
+Leading Higgs p_T = 254.4996
+Subleading Px[8] = -97.0531
+Subleading Py[8] = -34.9824
+Subleading Higgs p_T = 103.1652
+Radion pT = 204.2331
+Higgs reconstructed Radion pT = 259.9162
+Higgs delta phi = -1.7210
+Higgs 1 phi = 1.7666
+Higgs 2 phi = -2.7956
+
+Leading Px[9] = -193.0783
+Leading Py[9] = -52.3779
+Leading Higgs p_T = 200.0567
+Subleading Px[9] = 99.2880
+Subleading Py[9] = 14.5948
+Subleading Higgs p_T = 100.3549
+Radion pT = 257.1923
+Higgs reconstructed Radion pT = 101.1147
+Higgs delta phi = -3.0226
+Higgs 1 phi = -2.8767
+Higgs 2 phi = 0.1459
+Efficiency (HT+MET Trigger): 0.051364
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━ 2/2 [ 0:00:14 < 0:00:00 | 0.1 chunk/s ]
+Pair_DeltaPhi_Hist
+!!!=====Dataset=====!!!!
+<class 'str'>
+Signal
+!!!=====Dataset=====!!!!
+[[1.24e+03], [2.07e+03], [1.98e+03], ... [2.11e+03], [1.81e+03], [1.84e+03]]
+HT Num (No Cross Cleaning): 14235
+[[[False, True, False, True], [True, ... [True, True, True, True, True, True]]]
+Positively charged tau
+Negetively charged tau
+[-353, -125, -420, -777, 714, -189, 91.7, ... -555, 855, -309, 736, -986, 561, 851]
+
+Leading Px[0] = -353.1902
+Leading Py[0] = -174.0020
+Leading Higgs p_T = 393.7258
+Subleading Px[0] = 94.2867
+Subleading Py[0] = 49.3240
+Subleading Higgs p_T = 106.4089
+Radion pT = 287.3597
+Higgs reconstructed Radion pT = 287.3597
+Higgs delta phi = 3.1174
+Higgs 1 phi = -2.6838
+Higgs 2 phi = 0.4820
+
+Leading Px[1] = -125.1989
+Leading Py[1] = -595.5611
+Leading Higgs p_T = 608.5785
+Subleading Px[1] = 148.7197
+Subleading Py[1] = 426.8657
+Subleading Higgs p_T = 452.0308
+Radion pT = 170.3272
+Higgs reconstructed Radion pT = 170.3273
+Higgs delta phi = -3.0135
+Higgs 1 phi = -1.7780
+Higgs 2 phi = 1.2355
+
+Leading Px[2] = -420.2162
+Leading Py[2] = -444.8846
+Leading Higgs p_T = 611.9673
+Subleading Px[2] = 231.2092
+Subleading Py[2] = 331.9467
+Subleading Higgs p_T = 404.5322
+Radion pT = 502.8044
+Higgs reconstructed Radion pT = 220.1786
+Higgs delta phi = 2.9931
+Higgs 1 phi = -2.3277
+Higgs 2 phi = 0.9624
+
+Leading Px[3] = -777.1443
+Leading Py[3] = 580.5402
+Leading Higgs p_T = 970.0413
+Subleading Px[3] = 437.9108
+Subleading Py[3] = -242.9082
+Subleading Higgs p_T = 500.7697
+Radion pT = 514.2617
+Higgs reconstructed Radion pT = 478.6175
+Higgs delta phi = 3.0064
+Higgs 1 phi = 2.5000
+Higgs 2 phi = -0.5064
+
+Leading Px[4] = 713.9741
+Leading Py[4] = 143.5060
+Leading Higgs p_T = 728.2534
+Subleading Px[4] = -172.5721
+Subleading Py[4] = 23.8650
+Subleading Higgs p_T = 174.2145
+Radion pT = 364.1230
+Higgs reconstructed Radion pT = 566.6825
+Higgs delta phi = -2.8058
+Higgs 1 phi = 0.1984
+Higgs 2 phi = 3.0042
+
+Leading Px[5] = -189.3620
+Leading Py[5] = -561.9432
+Leading Higgs p_T = 592.9909
+Subleading Px[5] = 93.8914
+Subleading Py[5] = 299.7024
+Subleading Higgs p_T = 314.0655
+Radion pT = 602.7834
+Higgs reconstructed Radion pT = 279.0787
+Higgs delta phi = 3.1202
+Higgs 1 phi = -1.8958
+Higgs 2 phi = 1.2672
+
+Leading Px[6] = 91.6681
+Leading Py[6] = 474.2528
+Leading Higgs p_T = 483.0308
+Subleading Px[6] = -65.9636
+Subleading Py[6] = -317.5116
+Subleading Higgs p_T = 324.2913
+Radion pT = 299.4565
+Higgs reconstructed Radion pT = 158.8349
+Higgs delta phi = -3.1277
+Higgs 1 phi = 1.3799
+Higgs 2 phi = -1.7756
+
+Leading Px[7] = 958.5635
+Leading Py[7] = 307.3925
+Leading Higgs p_T = 1006.6450
+Subleading Px[7] = -410.4346
+Subleading Py[7] = -174.7658
+Subleading Higgs p_T = 446.0938
+Radion pT = 326.4094
+Higgs reconstructed Radion pT = 563.9460
+Higgs delta phi = 3.0494
+Higgs 1 phi = 0.3103
+Higgs 2 phi = -2.7390
+
+Leading Px[8] = -448.5777
+Leading Py[8] = -567.0694
+Leading Higgs p_T = 723.0419
+Subleading Px[8] = 242.7034
+Subleading Py[8] = 298.8446
+Subleading Higgs p_T = 384.9845
+Radion pT = 220.1786
+Higgs reconstructed Radion pT = 338.1253
+Higgs delta phi = -3.1288
+Higgs 1 phi = -2.2401
+Higgs 2 phi = 0.8887
+
+Leading Px[9] = 755.3884
+Leading Py[9] = -520.6120
+Leading Higgs p_T = 917.4140
+Subleading Px[9] = -351.3312
+Subleading Py[9] = 397.3661
+Subleading Higgs p_T = 530.4088
+Radion pT = 341.9342
+Higgs reconstructed Radion pT = 422.4355
+Higgs delta phi = -2.8982
+Higgs 1 phi = -0.6034
+Higgs 2 phi = 2.2948
+!!!=====Dataset=====!!!!
+<class 'str'>
+ZZ4l
+!!!=====Dataset=====!!!!
+[[324], [290], [1.08e+03], [1.51e+03], [831], ... [162], [267], [394], [585], [342]]
+HT Num (No Cross Cleaning): 29065
+[[[False, True, True, True], [True, False, ... True], [True, True, True, True]]]
+Positively charged tau
+Negetively charged tau
+[344, 562, -357, -94, -253, -417, -265, ... 250, -541, 76.9, 237, -621, -595, -235]
+
+Leading Px[0] = 344.1927
+Leading Py[0] = -171.7734
+Leading Higgs p_T = 384.6748
+Subleading Px[0] = -85.4973
+Subleading Py[0] = -96.6140
+Subleading Higgs p_T = 129.0118
+Radion pT = 372.7669
+Higgs reconstructed Radion pT = 372.7669
+Higgs delta phi = 1.8323
+Higgs 1 phi = -0.4629
+Higgs 2 phi = -2.2952
+
+Leading Px[1] = 562.2172
+Leading Py[1] = -32.2176
+Leading Higgs p_T = 563.1396
+Subleading Px[1] = -419.7888
+Subleading Py[1] = 5.5852
+Subleading Higgs p_T = 419.8260
+Radion pT = 144.8969
+Higgs reconstructed Radion pT = 144.8970
+Higgs delta phi = 3.0977
+Higgs 1 phi = -0.0572
+Higgs 2 phi = 3.1283
+
+Leading Px[2] = -356.7308
+Leading Py[2] = -251.1933
+Leading Higgs p_T = 436.2968
+Subleading Px[2] = -4.8368
+Subleading Py[2] = -352.1459
+Subleading Higgs p_T = 352.1792
+Radion pT = 153.1283
+Higgs reconstructed Radion pT = 703.3842
+Higgs delta phi = -0.9436
+Higgs 1 phi = -2.5281
+Higgs 2 phi = -1.5845
+
+Leading Px[3] = -94.0455
+Leading Py[3] = -461.8629
+Leading Higgs p_T = 471.3405
+Subleading Px[3] = 25.0314
+Subleading Py[3] = 178.7149
+Subleading Higgs p_T = 180.4594
+Radion pT = 51.1959
+Higgs reconstructed Radion pT = 291.4373
+Higgs delta phi = 3.0799
+Higgs 1 phi = -1.7717
+Higgs 2 phi = 1.4316
+
+Leading Px[4] = -253.3680
+Leading Py[4] = 548.6251
+Leading Higgs p_T = 604.3053
+Subleading Px[4] = 121.8413
+Subleading Py[4] = -238.5214
+Subleading Higgs p_T = 267.8390
+Radion pT = 160.5389
+Higgs reconstructed Radion pT = 336.8436
+Higgs delta phi = 3.1020
+Higgs 1 phi = 2.0034
+Higgs 2 phi = -1.0985
+
+Leading Px[5] = -416.5074
+Leading Py[5] = -60.8971
+Leading Higgs p_T = 420.9357
+Subleading Px[5] = 144.8241
+Subleading Py[5] = 54.9275
+Subleading Higgs p_T = 154.8905
+Radion pT = 50.9669
+Higgs reconstructed Radion pT = 271.7489
+Higgs delta phi = 2.9243
+Higgs 1 phi = -2.9964
+Higgs 2 phi = 0.3625
+
+Leading Px[6] = -264.6002
+Leading Py[6] = 355.9315
+Leading Higgs p_T = 443.5093
+Subleading Px[6] = -11.0196
+Subleading Py[6] = -164.6102
+Subleading Higgs p_T = 164.9787
+Radion pT = 703.3842
+Higgs reconstructed Radion pT = 335.5146
+Higgs delta phi = -2.4355
+Higgs 1 phi = 2.2101
+Higgs 2 phi = -1.6376
+
+Leading Px[7] = -177.3827
+Leading Py[7] = 687.1563
+Leading Higgs p_T = 709.6819
+Subleading Px[7] = 95.9529
+Subleading Py[7] = 33.9736
+Subleading Higgs p_T = 101.7898
+Radion pT = 17.5589
+Higgs reconstructed Radion pT = 725.7129
+Higgs delta phi = 1.4831
+Higgs 1 phi = 1.8234
+Higgs 2 phi = 0.3403
+
+Leading Px[8] = -571.8105
+Leading Py[8] = -313.4340
+Leading Higgs p_T = 652.0799
+Subleading Px[8] = 194.3957
+Subleading Py[8] = 304.0333
+Subleading Higgs p_T = 360.8683
+Radion pT = 27.6331
+Higgs reconstructed Radion pT = 377.5319
+Higgs delta phi = 2.6411
+Higgs 1 phi = -2.6402
+Higgs 2 phi = 1.0019
+
+Leading Px[9] = -340.7116
+Leading Py[9] = 318.1012
+Leading Higgs p_T = 466.1253
+Subleading Px[9] = 131.8248
+Subleading Py[9] = 29.1375
+Subleading Higgs p_T = 135.0066
+Radion pT = 377.3505
+Higgs reconstructed Radion pT = 405.2263
+Higgs delta phi = 2.1730
+Higgs 1 phi = 2.3905
+Higgs 2 phi = 0.2175
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━ 2/2 [ 0:00:14 < 0:00:00 | 0.1 chunk/s ]
+Pair_DeltaPhi_Hist
+!!!=====Dataset=====!!!!
+<class 'str'>
+Signal
+!!!=====Dataset=====!!!!
+[[1.24e+03], [2.07e+03], [1.98e+03], ... [2.11e+03], [1.81e+03], [1.84e+03]]
+HT Num (No Cross Cleaning): 14235
+[[[False, True, False, True], [True, ... [True, True, True, True, True, True]]]
+Positively charged tau
+Negetively charged tau
+[-353, -125, -420, -777, 714, -189, 91.7, ... -555, 855, -309, 736, -986, 561, 851]
+
+Leading Px[0] = -353.1902
+Leading Py[0] = -174.0020
+Leading Higgs p_T = 393.7258
+Subleading Px[0] = 94.2867
+Subleading Py[0] = 49.3240
+Subleading Higgs p_T = 106.4089
+Radion pT = 287.3597
+Higgs reconstructed Radion pT = 287.3597
+Higgs delta phi = 3.1174
+Higgs 1 phi = -2.6838
+Higgs 2 phi = 0.4820
+
+Leading Px[1] = -125.1989
+Leading Py[1] = -595.5611
+Leading Higgs p_T = 608.5785
+Subleading Px[1] = 148.7197
+Subleading Py[1] = 426.8657
+Subleading Higgs p_T = 452.0308
+Radion pT = 170.3272
+Higgs reconstructed Radion pT = 170.3273
+Higgs delta phi = -3.0135
+Higgs 1 phi = -1.7780
+Higgs 2 phi = 1.2355
+
+Leading Px[2] = -420.2162
+Leading Py[2] = -444.8846
+Leading Higgs p_T = 611.9673
+Subleading Px[2] = 231.2092
+Subleading Py[2] = 331.9467
+Subleading Higgs p_T = 404.5322
+Radion pT = 502.8044
+Higgs reconstructed Radion pT = 220.1786
+Higgs delta phi = 2.9931
+Higgs 1 phi = -2.3277
+Higgs 2 phi = 0.9624
+
+Leading Px[3] = -777.1443
+Leading Py[3] = 580.5402
+Leading Higgs p_T = 970.0413
+Subleading Px[3] = 437.9108
+Subleading Py[3] = -242.9082
+Subleading Higgs p_T = 500.7697
+Radion pT = 514.2617
+Higgs reconstructed Radion pT = 478.6175
+Higgs delta phi = 3.0064
+Higgs 1 phi = 2.5000
+Higgs 2 phi = -0.5064
+
+Leading Px[4] = 713.9741
+Leading Py[4] = 143.5060
+Leading Higgs p_T = 728.2534
+Subleading Px[4] = -172.5721
+Subleading Py[4] = 23.8650
+Subleading Higgs p_T = 174.2145
+Radion pT = 364.1230
+Higgs reconstructed Radion pT = 566.6825
+Higgs delta phi = -2.8058
+Higgs 1 phi = 0.1984
+Higgs 2 phi = 3.0042
+
+Leading Px[5] = -189.3620
+Leading Py[5] = -561.9432
+Leading Higgs p_T = 592.9909
+Subleading Px[5] = 93.8914
+Subleading Py[5] = 299.7024
+Subleading Higgs p_T = 314.0655
+Radion pT = 602.7834
+Higgs reconstructed Radion pT = 279.0787
+Higgs delta phi = 3.1202
+Higgs 1 phi = -1.8958
+Higgs 2 phi = 1.2672
+
+Leading Px[6] = 91.6681
+Leading Py[6] = 474.2528
+Leading Higgs p_T = 483.0308
+Subleading Px[6] = -65.9636
+Subleading Py[6] = -317.5116
+Subleading Higgs p_T = 324.2913
+Radion pT = 299.4565
+Higgs reconstructed Radion pT = 158.8349
+Higgs delta phi = -3.1277
+Higgs 1 phi = 1.3799
+Higgs 2 phi = -1.7756
+
+Leading Px[7] = 958.5635
+Leading Py[7] = 307.3925
+Leading Higgs p_T = 1006.6450
+Subleading Px[7] = -410.4346
+Subleading Py[7] = -174.7658
+Subleading Higgs p_T = 446.0938
+Radion pT = 326.4094
+Higgs reconstructed Radion pT = 563.9460
+Higgs delta phi = 3.0494
+Higgs 1 phi = 0.3103
+Higgs 2 phi = -2.7390
+
+Leading Px[8] = -448.5777
+Leading Py[8] = -567.0694
+Leading Higgs p_T = 723.0419
+Subleading Px[8] = 242.7034
+Subleading Py[8] = 298.8446
+Subleading Higgs p_T = 384.9845
+Radion pT = 220.1786
+Higgs reconstructed Radion pT = 338.1253
+Higgs delta phi = -3.1288
+Higgs 1 phi = -2.2401
+Higgs 2 phi = 0.8887
+
+Leading Px[9] = 755.3884
+Leading Py[9] = -520.6120
+Leading Higgs p_T = 917.4140
+Subleading Px[9] = -351.3312
+Subleading Py[9] = 397.3661
+Subleading Higgs p_T = 530.4088
+Radion pT = 341.9342
+Higgs reconstructed Radion pT = 422.4355
+Higgs delta phi = -2.8982
+Higgs 1 phi = -0.6034
+Higgs 2 phi = 2.2948
+!!!=====Dataset=====!!!!
+<class 'str'>
+ZZ4l
+!!!=====Dataset=====!!!!
+[[324], [290], [1.08e+03], [1.51e+03], [831], ... [162], [267], [394], [585], [342]]
+HT Num (No Cross Cleaning): 29065
+[[[False, True, True, True], [True, False, ... True], [True, True, True, True]]]
+Positively charged tau
+Negetively charged tau
+[344, 562, 206, -357, 75.4, -94, -253, ... 250, -541, 76.9, 237, -621, -595, -235]
+
+Leading Px[0] = 344.1927
+Leading Py[0] = -171.7734
+Leading Higgs p_T = 384.6748
+Subleading Px[0] = -85.4973
+Subleading Py[0] = -96.6140
+Subleading Higgs p_T = 129.0118
+Radion pT = 372.7669
+Higgs reconstructed Radion pT = 372.7669
+Higgs delta phi = 1.8323
+Higgs 1 phi = -0.4629
+Higgs 2 phi = -2.2952
+
+Leading Px[1] = 562.2172
+Leading Py[1] = -32.2176
+Leading Higgs p_T = 563.1396
+Subleading Px[1] = -419.7888
+Subleading Py[1] = 5.5852
+Subleading Higgs p_T = 419.8260
+Radion pT = 144.8969
+Higgs reconstructed Radion pT = 144.8970
+Higgs delta phi = 3.0977
+Higgs 1 phi = -0.0572
+Higgs 2 phi = 3.1283
+
+Leading Px[2] = 206.4676
+Leading Py[2] = 231.2331
+Leading Higgs p_T = 309.9962
+Subleading Px[2] = -73.1368
+Subleading Py[2] = -108.6111
+Subleading Higgs p_T = 130.9403
+Radion pT = 153.1283
+Higgs reconstructed Radion pT = 181.1443
+Higgs delta phi = 3.0054
+Higgs 1 phi = 0.8419
+Higgs 2 phi = -2.1634
+
+Leading Px[3] = -356.7308
+Leading Py[3] = -251.1933
+Leading Higgs p_T = 436.2968
+Subleading Px[3] = -4.8368
+Subleading Py[3] = -352.1459
+Subleading Higgs p_T = 352.1792
+Radion pT = 51.1959
+Higgs reconstructed Radion pT = 703.3842
+Higgs delta phi = -0.9436
+Higgs 1 phi = -2.5281
+Higgs 2 phi = -1.5845
+
+Leading Px[4] = 75.3527
+Leading Py[4] = -260.2332
+Leading Higgs p_T = 270.9232
+Subleading Px[4] = -26.0648
+Subleading Py[4] = 152.3154
+Subleading Higgs p_T = 154.5294
+Radion pT = 160.5389
+Higgs reconstructed Radion pT = 118.6405
+Higgs delta phi = -3.0292
+Higgs 1 phi = -1.2889
+Higgs 2 phi = 1.7403
+
+Leading Px[5] = -94.0455
+Leading Py[5] = -461.8629
+Leading Higgs p_T = 471.3405
+Subleading Px[5] = 25.0314
+Subleading Py[5] = 178.7149
+Subleading Higgs p_T = 180.4594
+Radion pT = 50.9669
+Higgs reconstructed Radion pT = 291.4373
+Higgs delta phi = 3.0799
+Higgs 1 phi = -1.7717
+Higgs 2 phi = 1.4316
+
+Leading Px[6] = -253.3680
+Leading Py[6] = 548.6251
+Leading Higgs p_T = 604.3053
+Subleading Px[6] = 121.8413
+Subleading Py[6] = -238.5214
+Subleading Higgs p_T = 267.8390
+Radion pT = 181.1443
+Higgs reconstructed Radion pT = 336.8436
+Higgs delta phi = 3.1020
+Higgs 1 phi = 2.0034
+Higgs 2 phi = -1.0985
+
+Leading Px[7] = -416.5074
+Leading Py[7] = -60.8971
+Leading Higgs p_T = 420.9357
+Subleading Px[7] = 144.8241
+Subleading Py[7] = 54.9275
+Subleading Higgs p_T = 154.8905
+Radion pT = 703.3842
+Higgs reconstructed Radion pT = 271.7489
+Higgs delta phi = 2.9243
+Higgs 1 phi = -2.9964
+Higgs 2 phi = 0.3625
+
+Leading Px[8] = -264.6002
+Leading Py[8] = 355.9315
+Leading Higgs p_T = 443.5093
+Subleading Px[8] = -11.0196
+Subleading Py[8] = -164.6102
+Subleading Higgs p_T = 164.9787
+Radion pT = 17.5589
+Higgs reconstructed Radion pT = 335.5146
+Higgs delta phi = -2.4355
+Higgs 1 phi = 2.2101
+Higgs 2 phi = -1.6376
+
+Leading Px[9] = -177.3827
+Leading Py[9] = 687.1563
+Leading Higgs p_T = 709.6819
+Subleading Px[9] = 95.9529
+Subleading Py[9] = 33.9736
+Subleading Higgs p_T = 101.7898
+Radion pT = 27.6331
+Higgs reconstructed Radion pT = 725.7129
+Higgs delta phi = 1.4831
+Higgs 1 phi = 1.8234
+Higgs 2 phi = 0.3403
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━ 2/2 [ 0:00:14 < 0:00:00 | 0.1 chunk/s ]
+Pair_DeltaPhi_Hist

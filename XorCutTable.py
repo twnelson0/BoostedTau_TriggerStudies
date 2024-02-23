@@ -462,38 +462,38 @@ class TriggerStudies(processor.ProcessorABC):
 				print("Offline Cut 39")
 				print("No Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 				
-				tau = tau[ak.all(Jet.HT > 500, axis = 1)]
+				tau = tau[ak.any(Jet.HT > 500, axis = 1)]
 				print("HT Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				AK8Jet = AK8Jet[ak.all(Jet.HT > 500, axis = 1)]
-				Jet = Jet[ak.all(Jet.HT > 500, axis = 1)]
-				#JetMHT = JetMHT[ak.all(JetHT.HT > 500, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(Jet.HT > 500, axis = 1)]
+				Jet = Jet[ak.any(Jet.HT > 500, axis = 1)]
+				#JetMHT = JetMHT[ak.any(JetHT.HT > 500, axis = 1)]
 				
-				tau = tau[ak.all(Jet.pfMET > 100, axis = 1)]
+				tau = tau[ak.any(Jet.pfMET > 100, axis = 1)]
 				print("pfMet Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				AK8Jet = AK8Jet[ak.all(Jet.pfMET > 100, axis = 1)]
-				#JetMHT = JetMHT[ak.all(Jet.pfMET > 100, axis = 1)]
-				Jet = Jet[ak.all(Jet.pfMET > 100, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(Jet.pfMET > 100, axis = 1)]
+				#JetMHT = JetMHT[ak.any(Jet.pfMET > 100, axis = 1)]
+				Jet = Jet[ak.any(Jet.pfMET > 100, axis = 1)]
 
-				tau = tau[ak.all(Jet.MHT > 100, axis = 1)]
+				tau = tau[ak.any(Jet.MHT > 100, axis = 1)]
 				print("MHT Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				AK8Jet = AK8Jet[ak.all(Jet.MHT > 100, axis = 1)]
-				Jet = Jet[ak.all(Jet.MHT > 100, axis = 1)]
-				#JetHT = JetHT[ak.all(JetMHT.MHT > 100, axis = 1)]
-				#JetMHT = JetMHT[ak.all(Jet.MHT > 100, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(Jet.MHT > 100, axis = 1)]
+				Jet = Jet[ak.any(Jet.MHT > 100, axis = 1)]
+				#JetHT = JetHT[ak.any(JetMHT.MHT > 100, axis = 1)]
+				#JetMHT = JetMHT[ak.any(Jet.MHT > 100, axis = 1)]
 				
-				tau = tau[ak.all(Jet.PFLooseId, axis = 1)]
-				print("Loose ID: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				AK8Jet = AK8Jet[ak.all(Jet.PFLooseId, axis = 1)]
-				#JetHT = JetHT[ak.all(Jet.PFLooseId, axis = 1)]
-				#JetMHT = JetMHT[ak.all(Jet.PFLooseId, axis = 1)]
-				Jet = Jet[ak.all(Jet.PFLooseId, axis = 1)]
+				tau = tau[ak.any(Jet.PFLooseId, axis = 1)]
+				#print("Loose ID: %d"%ak.num(ak.ravel(tau.pt),axis=0))
+				AK8Jet = AK8Jet[ak.any(Jet.PFLooseId, axis = 1)]
+				#JetHT = JetHT[ak.any(Jet.PFLooseId, axis = 1)]
+				#JetMHT = JetMHT[ak.any(Jet.PFLooseId, axis = 1)]
+				Jet = Jet[ak.any(Jet.PFLooseId, axis = 1)]
 		
 		if (self.offline_cut and self.OrTrigger):
 			print("Offline Cut and either or trigger")
 			#Split arrays into each trigger and both triggers
 			tau39_selec = np.bitwise_and(tau.trigger,bit_mask([39,40])) == bit_mask([39])
 			tau40_selec = np.bitwise_and(tau.trigger,bit_mask([39,40])) == bit_mask([40])
-			tauboth_selec = np.bitwise_and(tau.trigger,bit_mask([39,40])) == bit_mask([39,40]) #Are these wrong???
+			tauboth_selec = np.bitwise_and(tau.trigger,bit_mask([39,40])) == bit_mask([39,40]) 
 			AK8Jet39_selec = np.bitwise_and(AK8Jet.trigger,bit_mask([39,40])) == bit_mask([39])
 			AK8Jet40_selec = np.bitwise_and(AK8Jet.trigger,bit_mask([39,40])) == bit_mask([40])
 			AK8Jetboth_selec = np.bitwise_and(AK8Jet.trigger,bit_mask([39,40])) == bit_mask([39,40])
@@ -510,10 +510,24 @@ class TriggerStudies(processor.ProcessorABC):
 			Jet39 = Jet[Jet39_selec]
 			Jet40 = Jet[Jet40_selec]
 			Jetboth = Jet[Jetboth_selec]
+
+			#Double check pfMET
+			#print("======================Inspecting pfMET==================================")
+			#for pfMET in Jetboth.pfMET:
+			#	if (len(pfMET) != 0):
+			#		print(pfMET)
+			#print("======================Inspecting HT==================================")
+			#for HT in Jetboth.HT:
+			#	if (len(HT) != 0):
+			#		print(HT)
+			#print("======================Inspecting MHT==================================")
+			#for MHT in Jetboth.MHT:
+			#	if (len(MHT) != 0):
+			#		print(MHT)
 			
-			print("# of AK8Jet trigger events: %d"%len(tau39))
-			print("# of PF trigger events: %d"%len(tau40))
-			print("# of Both trigger events: %d"%len(tauboth))
+			#print("# of AK8Jet trigger events: %d"%len(tau39))
+			#print("# of PF trigger events: %d"%len(tau40))
+			#print("# of Both trigger events: %d"%len(tauboth))
 			len39 = len(tau39.pt)
 			len40 = len(tau40.pt)
 			lenboth = len(tauboth.pt)
@@ -537,87 +551,84 @@ class TriggerStudies(processor.ProcessorABC):
 				print("Offline Cut 39")
 				#print("No Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 			
-				tau39 = tau39[ak.all(Jet39.HT > 500, axis = 1)]
-				tauboth = tauboth[ak.all(Jetboth.HT > 500, axis = 1)]
-				#print("HT Selection: %d"%ak.num(ak.ravel(tau39.pt),axis=0))
-				AK8Jet39 = AK8Jet39[ak.all(Jet39.HT > 500, axis = 1)]
-				AK8Jetboth = AK8Jetboth[ak.all(Jetboth.HT > 500, axis = 1)]
-				Jet39 = Jet39[ak.all(Jet39.HT > 500, axis = 1)]
-				Jetboth = Jetboth[ak.all(Jetboth.HT > 500, axis = 1)]
-				#JetMHT = JetMHT[ak.all(JetHT.HT > 500, axis = 1)]
+				tau39 = tau39[ak.any(Jet39.HT > 500, axis = 1)]
+				tauboth = tauboth[ak.any(Jetboth.HT > 500, axis = 1)]
+				AK8Jet39 = AK8Jet39[ak.any(Jet39.HT > 500, axis = 1)]
+				AK8Jetboth = AK8Jetboth[ak.any(Jetboth.HT > 500, axis = 1)]
+				Jet39 = Jet39[ak.any(Jet39.HT > 500, axis = 1)]
+				Jetboth = Jetboth[ak.any(Jetboth.HT > 500, axis = 1)]
 			
-				tau39 = tau39[ak.all(Jet39.pfMET > 100, axis = 1)]
-				tauboth = tauboth[ak.all(Jetboth.pfMET > 100, axis = 1)]
-				#print("pfMet Selection: %d"%ak.num(ak.ravel(tau39.pt),axis=0))
-				AK8Jet39 = AK8Jet39[ak.all(Jet39.pfMET > 100, axis = 1)]
-				AK8Jetboth = AK8Jetboth[ak.all(Jetboth.pfMET > 100, axis = 1)]
-				Jet39 = Jet39[ak.all(Jet39.pfMET > 100, axis = 1)]
-				Jetboth = Jetboth[ak.all(Jetboth.pfMET > 100, axis = 1)]
-				tau39 = tau39[ak.all(Jet39.MHT > 100, axis = 1)]
-				tauboth = tauboth[ak.all(Jetboth.MHT > 100, axis = 1)]
-				#print("MHT Selection: %d"%ak.num(ak.ravel(tau39.pt),axis=0))
-				AK8Jet39 = AK8Jet39[ak.all(Jet39.MHT > 100, axis = 1)]
-				AK8Jetboth = AK8Jetboth[ak.all(Jetboth.MHT > 100, axis = 1)]
-				Jet39 = Jet39[ak.all(Jet39.MHT > 100, axis = 1)]
-				Jetboth = Jetboth[ak.all(Jetboth.MHT > 100, axis = 1)]
-				#Jet39HT = Jet39HT[ak.all(Jet39MHT.MHT > 100, axis = 1)]
-				#Jet39MHT = Jet39MHT[ak.all(Jet39.MHT > 100, axis = 1)]
+				tau39 = tau39[ak.any(Jet39.pfMET > 100, axis = 1)]
+				tauboth = tauboth[ak.any(Jetboth.pfMET > 100, axis = 1)]
+				AK8Jet39 = AK8Jet39[ak.any(Jet39.pfMET > 100, axis = 1)]
+				AK8Jetboth = AK8Jetboth[ak.any(Jetboth.pfMET > 100, axis = 1)]
+				Jet39 = Jet39[ak.any(Jet39.pfMET > 100, axis = 1)]
+				Jetboth = Jetboth[ak.any(Jetboth.pfMET > 100, axis = 1)]
+				
+				tau39 = tau39[ak.any(Jet39.MHT > 100, axis = 1)]
+				tauboth = tauboth[ak.any(Jetboth.MHT > 100, axis = 1)]
+				AK8Jet39 = AK8Jet39[ak.any(Jet39.MHT > 100, axis = 1)]
+				AK8Jetboth = AK8Jetboth[ak.any(Jetboth.MHT > 100, axis = 1)]
+				Jet39 = Jet39[ak.any(Jet39.MHT > 100, axis = 1)]
+				Jetboth = Jetboth[ak.any(Jetboth.MHT > 100, axis = 1)]
 			
-				tau39 = tau39[ak.all(Jet39.PFLooseId, axis = 1)]
-				tauboth = tauboth[ak.all(Jetboth.PFLooseId, axis = 1)]
-				#print("Loose ID: %d"%ak.num(ak.ravel(tau39.pt),axis=0))
-				AK8Jet39 = AK8Jet39[ak.all(Jet39.PFLooseId, axis = 1)]
-				AK8Jetboth = AK8Jetboth[ak.all(Jetboth.PFLooseId, axis = 1)]
-				#Jet39HT = Jet39HT[ak.all(Jet39.PFLooseId, axis = 1)]
-				#Jet39MHT = Jet39MHT[ak.all(Jet39.PFLooseId, axis = 1)]
-				Jet39 = Jet39[ak.all(Jet39.PFLooseId, axis = 1)]
-				Jetboth = Jetboth[ak.all(Jetboth.PFLooseId, axis = 1)]
+				tau39 = tau39[ak.any(Jet39.PFLooseId, axis = 1)]
+				tauboth = tauboth[ak.any(Jetboth.PFLooseId, axis = 1)]
+				AK8Jet39 = AK8Jet39[ak.any(Jet39.PFLooseId, axis = 1)]
+				AK8Jetboth = AK8Jetboth[ak.any(Jetboth.PFLooseId, axis = 1)]
+				Jet39 = Jet39[ak.any(Jet39.PFLooseId, axis = 1)]
+				Jetboth = Jetboth[ak.any(Jetboth.PFLooseId, axis = 1)]
 			
 			
 			if ((self.trigger_bit == 41) and self.cut_num == 0):
 				print("Offline Cut 40")
 				#print("No Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				#tau40 = tau40[ak.any(AK8Jet40.AK8JetPt > 400, axis = 1)]
-				#tauboth = tauboth[ak.any(AK8Jetboth.AK8JetPt > 400, axis = 1)]
+				tau40 = tau40[ak.any(AK8Jet40.AK8JetPt > 400, axis = 1)]
+				tauboth = tauboth[ak.any(AK8Jetboth.AK8JetPt > 400, axis = 1)]
 				#print("AK8 Jet Pt Selection: %d"%ak.num(ak.ravel(tau40.pt),axis=0))
-				#Jet40 = Jet40[ak.any(AK8Jet40.AK8JetPt > 400, axis = 1)]
-				#Jetboth = Jetboth[ak.any(AK8Jetboth.AK8JetPt > 400, axis = 1)]
-				#AK8Jet40 = AK8Jet40[ak.any(AK8Jet40.AK8JetPt > 400, axis = 1)]
-				#AK8Jetboth = AK8Jetboth[ak.any(AK8Jetboth.AK8JetPt > 400, axis = 1)]
+				Jet40 = Jet40[ak.any(AK8Jet40.AK8JetPt > 400, axis = 1)]
+				Jetboth = Jetboth[ak.any(AK8Jetboth.AK8JetPt > 400, axis = 1)]
+				AK8Jet40 = AK8Jet40[ak.any(AK8Jet40.AK8JetPt > 400, axis = 1)]
+				AK8Jetboth = AK8Jetboth[ak.any(AK8Jetboth.AK8JetPt > 400, axis = 1)]
 			
-				#tau40 = tau40[ak.any(AK8Jet40.AK8JetDropMass > 30, axis = 1)]
-				#tauboth = tauboth[ak.any(AK8Jetboth.AK8JetDropMass > 30, axis = 1)]
+				tau40 = tau40[ak.any(AK8Jet40.AK8JetDropMass > 30, axis = 1)]
+				tauboth = tauboth[ak.any(AK8Jetboth.AK8JetDropMass > 30, axis = 1)]
 				#print("Soft Drop Mass Seleciton: %d"%ak.num(ak.ravel(tau40.pt),axis=0))
-				#Jet40 = Jet40[ak.any(AK8Jet40.AK8JetDropMass > 30, axis = 1)]
-				#Jetboth = Jetboth[ak.any(AK8Jetboth.AK8JetDropMass > 30, axis = 1)]
-				#AK8Jet40 = AK8Jet40[ak.any(AK8Jet40.AK8JetDropMass > 30, axis = 1)]
-				#AK8Jetboth = AK8Jetboth[ak.any(AK8Jetboth.AK8JetDropMass > 30, axis = 1)]
+				Jet40 = Jet40[ak.any(AK8Jet40.AK8JetDropMass > 30, axis = 1)]
+				Jetboth = Jetboth[ak.any(AK8Jetboth.AK8JetDropMass > 30, axis = 1)]
+				AK8Jet40 = AK8Jet40[ak.any(AK8Jet40.AK8JetDropMass > 30, axis = 1)]
+				AK8Jetboth = AK8Jetboth[ak.any(AK8Jetboth.AK8JetDropMass > 30, axis = 1)]
 				#print("Trigger Cuts applied to all")
 		
-			if ((self.trigger_bit == 41) and self.cut_num == 1):
-				print("Applying PF400 Cut Only")	
-				tau40 = tau40[ak.any(AK8Jet40.AK8JetPt > 400, axis = 1)]
-				Jet40 = Jet40[ak.any(AK8Jet40.AK8JetPt > 400, axis = 1)]
-				AK8Jet40 = AK8Jet40[ak.any(AK8Jet40.AK8JetPt > 400, axis = 1)]
+			#if ((self.trigger_bit == 41) and self.cut_num == 1):
+			#	print("Applying PF400 Cut Only")	
+			#	tau40 = tau40[ak.any(AK8Jet40.AK8JetPt > 400, axis = 1)]
+			#	Jet40 = Jet40[ak.any(AK8Jet40.AK8JetPt > 400, axis = 1)]
+			#	AK8Jet40 = AK8Jet40[ak.any(AK8Jet40.AK8JetPt > 400, axis = 1)]
 		
-			if ((self.trigger_bit == 41) and self.cut_num == 2):
-				print("Applying Trim Mass Cut Only")	
-				tau40 = tau40[ak.any(AK8Jet40.AK8JetDropMass > 30, axis = 1)]
-				Jet40 = Jet40[ak.any(AK8Jet40.AK8JetDropMass > 30, axis = 1)]
-				AK8Jet40 = AK8Jet40[ak.any(AK8Jet40.AK8JetDropMass > 30, axis = 1)]
+			#if ((self.trigger_bit == 41) and self.cut_num == 2):
+			#	print("Applying Trim Mass Cut Only")	
+			#	tau40 = tau40[ak.any(AK8Jet40.AK8JetDropMass > 30, axis = 1)]
+			#	Jet40 = Jet40[ak.any(AK8Jet40.AK8JetDropMass > 30, axis = 1)]
+			#	AK8Jet40 = AK8Jet40[ak.any(AK8Jet40.AK8JetDropMass > 30, axis = 1)]
 		
 			#Debugging each trigger only applying PF trigger
-			tau = ak.concatenate((tau39,tauboth))
-			AK8Jet = ak.concatenate((AK8Jet39,AK8Jetboth))
-			Jet = ak.concatenate((Jet39,Jetboth))
+			#tau = ak.concatenate((tau39,tauboth))
+			#AK8Jet = ak.concatenate((AK8Jet39,AK8Jetboth))
+			#Jet = ak.concatenate((Jet39,Jetboth))
+			
+			#Debugging each trigger only applying AK8Jet trigger
+			#tau = ak.concatenate((tau40,tauboth))
+			#AK8Jet = ak.concatenate((AK8Jet40,AK8Jetboth))
+			#Jet = ak.concatenate((Jet40,Jetboth))
 			
 			#Re-assemble data sets	
-			#tau = ak.concatenate((tau39,tau40))
-			#tau = ak.concatenate((tau,tauboth))
-			#AK8Jet = ak.concatenate((AK8Jet39,AK8Jet40))
-			#AK8Jet = ak.concatenate((AK8Jet,AK8Jetboth))
-			#Jet = ak.concatenate((Jet39,Jet40))
-			#Jet = ak.concatenate((Jet,Jetboth))
+			tau_semi = ak.concatenate((tau39,tau40))
+			tau = ak.concatenate((tau_semi,tauboth))
+			AK8Jet_semi = ak.concatenate((AK8Jet39,AK8Jet40))
+			AK8Jet = ak.concatenate((AK8Jet_semi,AK8Jetboth))
+			Jet_semi = ak.concatenate((Jet39,Jet40))
+			Jet = ak.concatenate((Jet_semi,Jetboth))
 			
 			#Look at lengths of concatenated data
 			print(len(ak.ravel(tau.pt)))

@@ -1,0 +1,1280 @@
+Mass: 1.0 TeV
+Jet MHT Defined:
+Before cut Events with 0 HT: 0
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso and decay cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+After cut Events with 0 HT: 0
+Number of disagreeing HT terms = 0
+MET Len: 20731
+HT Len: 20731
+[[], [-0.637], [], [-0.708], [-0.329], [], ... [0.517], [0.2], [], [], [], [], []]
+Number = 15424
+Number = 5528
+Efficiency (HT+MET Trigger): 0.377599
+Jet MHT Defined:
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso and decay cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+[[], [], [], [], [], [], [], [-0.842], ... 0.196], [], [], [], [], [], [], [], []]
+Number = 15424
+Number = 4156
+Number = 4156
+Efficiency (AK8Jet Trigger): 0.365275
+Jet MHT Defined:
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso and decay cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+[[], [], [], [], [], [], [], [-0.842], ... 0.196], [], [], [], [], [], [], [], []]
+Number = 15424
+Number = 4156
+Number = 4156
+Efficiency (AK8Jet Trigger): 0.365275
+Jet MHT Defined:
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso and decay cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+[[], [], [], [], [], [], [], [-0.842], ... 0.196], [], [], [], [], [], [], [], []]
+Number = 15424
+Number = 4156
+Number = 4156
+Efficiency (AK8Jet Trigger): 0.365275
+Mass: 2.0 TeV
+Jet MHT Defined:
+Before cut Events with 0 HT: 0
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso and decay cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+After cut Events with 0 HT: 0
+Number of disagreeing HT terms = 0
+MET Len: 32025
+HT Len: 32025
+[[0.46], [0.14], [], [0.778], [-0.973], ... [-0.249], [2.21], [1.37], [], [-0.794]]
+Number = 29796
+Number = 19184
+Efficiency (HT+MET Trigger): 0.650429
+Jet MHT Defined:
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso and decay cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+[[0.46], [], [0.217], [0.778], [-0.973], ... [-0.249], [], [1.37], [0.441], [-0.794]]
+Number = 29796
+Number = 25448
+Number = 25448
+Efficiency (AK8Jet Trigger): 0.890800
+Jet MHT Defined:
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso and decay cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+[[0.46], [], [0.217], [0.778], [-0.973], ... [-0.249], [], [1.37], [0.441], [-0.794]]
+Number = 29796
+Number = 25448
+Number = 25448
+Efficiency (AK8Jet Trigger): 0.890800
+Jet MHT Defined:
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso and decay cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+[[0.46], [], [0.217], [0.778], [-0.973], ... [-0.249], [], [1.37], [0.441], [-0.794]]
+Number = 29796
+Number = 25448
+Number = 25448
+Efficiency (AK8Jet Trigger): 0.890800
+Mass: 3.0 TeV
+Jet MHT Defined:
+Before cut Events with 0 HT: 0
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso and decay cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+After cut Events with 0 HT: 0
+Number of disagreeing HT terms = 0
+MET Len: 29964
+HT Len: 29964
+[[], [-2.15], [-0.257], [], [-0.751], ... [-0.194], [-0.46], [0.511], [-0.0873]]
+Number = 29572
+Number = 22528
+Efficiency (HT+MET Trigger): 0.769290
+Jet MHT Defined:
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso and decay cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+[[-0.977], [-2.15], [-0.257], [], [-0.751, ... [-0.194], [-0.46], [0.511], [-0.0873]]
+Number = 29572
+Number = 27720
+Number = 27720
+Efficiency (AK8Jet Trigger): 0.953753
+Jet MHT Defined:
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso and decay cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+[[-0.977], [-2.15], [-0.257], [], [-0.751, ... [-0.194], [-0.46], [0.511], [-0.0873]]
+Number = 29572
+Number = 27720
+Number = 27720
+Efficiency (AK8Jet Trigger): 0.953753
+Jet MHT Defined:
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso and decay cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+[[-0.977], [-2.15], [-0.257], [], [-0.751, ... [-0.194], [-0.46], [0.511], [-0.0873]]
+Number = 29572
+Number = 27720
+Number = 27720
+Efficiency (AK8Jet Trigger): 0.953753
+Background: ZZ4l
+Jet MHT Defined:
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso and decay cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+MET Len: 55530
+HT Len: 55530
+[[], [-1.21], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], []]
+Number = 45060
+Number = 2248
+Efficiency = 0.049889
+Efficiency = 0.049889
+Efficiency = 0.049889
+Efficiency = 0.049889
+Jet MHT Defined:
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso and decay cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+[[], [-1.21], [-0.569], [], [1.29], [], [], ... [], [], [], [], [], [], [], []]
+Number = 45060
+Number = 6804
+Number = 6804
+Efficiency = 0.150999
+Efficiency = 0.150999
+Efficiency = 0.150999
+Efficiency = 0.150999
+Jet MHT Defined:
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso and decay cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+[[], [-1.21], [-0.569], [], [1.29], [], [], ... [], [], [], [], [], [], [], []]
+Number = 45060
+Number = 6804
+Number = 6804
+Jet MHT Defined:
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso and decay cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+[[], [-1.21], [-0.569], [], [1.29], [], [], ... [], [], [], [], [], [], [], []]
+Number = 45060
+Number = 6804
+Number = 6804
+Background: top
+Preprocessing 100% ━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:00:10 < 0:00:00 | 0.3 file/s ]
+Jet MHT Defined:
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso and decay cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+MET Len: 21
+HT Len: 21
+[[], [], []]
+Number = 12
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso and decay cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+MET Len: 183
+HT Len: 183
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Number = 128
+Number = 12
+Jet MHT Defined:
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso and decay cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+MET Len: 602
+HT Len: 602
+[[], [], [], [], [], [], [], [-0.903], [], ... [], [], [], [], [], [], [], [], []]
+Number = 436
+Number = 52
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:35 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.111111
+Efficiency = 0.111111
+Efficiency = 0.111111
+Efficiency = 0.111111
+Jet MHT Defined:
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso and decay cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+[[], [], []]
+Number = 12
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso and decay cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Number = 128
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso and decay cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Number = 436
+Number = 24
+Number = 24
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:43 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.041667
+Efficiency = 0.041667
+Efficiency = 0.041667
+Efficiency = 0.041667
+Jet MHT Defined:
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso and decay cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+[[], [], []]
+Number = 12
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso and decay cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Number = 128
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso and decay cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Number = 436
+Number = 24
+Number = 24
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:39 < 0:00:00 | ? chunk/s ]
+Jet MHT Defined:
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso and decay cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+[[], [], []]
+Number = 12
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso and decay cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Number = 128
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso and decay cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Number = 436
+Number = 24
+Number = 24
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:40 < 0:00:00 | ? chunk/s ]
+Mass: 1.0 TeV
+Jet MHT Defined:
+Before cut Events with 0 HT: 0
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso and decay cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+After cut Events with 0 HT: 0
+Number of disagreeing HT terms = 0
+MET Len: 20731
+HT Len: 20731
+Offline Cut 39
+No Selection: 15424
+HT Selection: 12668
+pfMet Selection: 8552
+MHT Selection: 7124
+Loose ID: 6596
+Trigger Cuts applied to all
+[[-0.637], [-0.708], [-0.842], [-0.469], ... [0.517], [0.2], [0.0029], [-2.16]]
+Number = 15424
+Number = 6596
+Efficiency (HT+MET Trigger): 0.444069
+Jet MHT Defined:
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso and decay cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+Offline Cut 40
+No Selection: 15424
+AK8 Jet Pt Selection: 3080
+Soft Drop Mass Seleciton: 2972
+Trigger Cuts applied to all
+[[-0.718], [-0.469], [1.46], [0.205], ... [-1.65], [0.958], [0.518], [0.196]]
+Number = 15424
+Number = 2972
+Number = 2972
+Efficiency (AK8Jet Trigger): 0.272106
+Jet MHT Defined:
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso and decay cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+Applying PF400 Cut Only
+[[-0.718], [-0.469], [1.46], [0.205], ... [-1.65], [0.958], [0.518], [0.196]]
+Number = 15424
+Number = 3080
+Number = 3080
+Efficiency (AK8Jet Trigger): 0.278368
+Jet MHT Defined:
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso and decay cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+Applying Trim Mass Cut Only
+[[-1.04], [-0.637], [-0.708], [-0.703], ... [0.2], [-0.807], [0.0029], [-2.16]]
+Number = 15424
+Number = 12952
+Number = 12952
+Efficiency (AK8Jet Trigger): 0.982922
+Mass: 2.0 TeV
+Jet MHT Defined:
+Before cut Events with 0 HT: 0
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso and decay cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+After cut Events with 0 HT: 0
+Number of disagreeing HT terms = 0
+MET Len: 32025
+HT Len: 32025
+Offline Cut 39
+No Selection: 29796
+HT Selection: 29136
+pfMet Selection: 23752
+MHT Selection: 21820
+Loose ID: 20536
+Trigger Cuts applied to all
+[[0.46], [0.778], [-0.973], [-0.662], ... [1.22], [-0.249], [1.37], [-0.794]]
+Number = 29796
+Number = 20536
+Efficiency (HT+MET Trigger): 0.689524
+Jet MHT Defined:
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso and decay cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+Offline Cut 40
+No Selection: 29796
+AK8 Jet Pt Selection: 25592
+Soft Drop Mass Seleciton: 25064
+Trigger Cuts applied to all
+[[0.46], [0.14], [0.217], [0.778], ... [-0.249], [1.37], [0.441], [-0.794]]
+Number = 29796
+Number = 25064
+Number = 25064
+Efficiency (AK8Jet Trigger): 0.880717
+Jet MHT Defined:
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso and decay cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+Applying PF400 Cut Only
+[[0.46], [0.14], [0.217], [0.778], ... [-0.249], [1.37], [0.441], [-0.794]]
+Number = 29796
+Number = 25592
+Number = 25592
+Efficiency (AK8Jet Trigger): 0.893897
+Jet MHT Defined:
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso and decay cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+Applying Trim Mass Cut Only
+[[0.46], [0.14], [0.217], [0.778], [-0.973, ... [2.21], [1.37], [0.441], [-0.794]]
+Number = 29796
+Number = 28908
+Number = 28908
+Efficiency (AK8Jet Trigger): 0.985172
+Mass: 3.0 TeV
+Jet MHT Defined:
+Before cut Events with 0 HT: 0
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso and decay cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+After cut Events with 0 HT: 0
+Number of disagreeing HT terms = 0
+MET Len: 29964
+HT Len: 29964
+Offline Cut 39
+No Selection: 29572
+HT Selection: 29328
+pfMet Selection: 25948
+MHT Selection: 24580
+Loose ID: 23296
+Trigger Cuts applied to all
+[[-2.15], [-0.257], [0.672], [0.471], ... [0.559], [-0.923], [-0.194], [0.511]]
+Number = 29572
+Number = 23296
+Efficiency (HT+MET Trigger): 0.792484
+Jet MHT Defined:
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso and decay cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+Offline Cut 40
+No Selection: 29572
+AK8 Jet Pt Selection: 28276
+Soft Drop Mass Seleciton: 27376
+Trigger Cuts applied to all
+[[-0.977], [-2.15], [-0.257], [0.672], ... [-0.923], [-0.194], [-0.46], [0.511]]
+Number = 29572
+Number = 27376
+Number = 27376
+Efficiency (AK8Jet Trigger): 0.942669
+Jet MHT Defined:
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso and decay cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+Applying PF400 Cut Only
+[[-0.977], [-2.15], [-0.257], [0.672], ... [-0.194], [-0.46], [0.511], [-0.0873]]
+Number = 29572
+Number = 28276
+Number = 28276
+Efficiency (AK8Jet Trigger): 0.969333
+Jet MHT Defined:
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso and decay cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+Applying Trim Mass Cut Only
+[[-0.977], [-2.15], [-0.257], [0.672], ... [-0.923], [-0.194], [-0.46], [0.511]]
+Number = 29572
+Number = 28472
+Number = 28472
+Efficiency (AK8Jet Trigger): 0.971550
+Background: ZZ4l
+Jet MHT Defined:
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso and decay cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+MET Len: 55530
+HT Len: 55530
+Offline Cut 39
+No Selection: 45060
+HT Selection: 23616
+pfMet Selection: 3640
+MHT Selection: 3004
+Loose ID: 2780
+Trigger Cuts applied to all
+[[-1.21], [0.72], [1.15], [-1.55], [-1.37, ... [0.248], [0.849], [-1.6], [-1.72]]
+Number = 45060
+Number = 2780
+Efficiency = 0.061696
+Efficiency = 0.061696
+Efficiency = 0.061696
+Efficiency = 0.061696
+Jet MHT Defined:
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso and decay cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+Offline Cut 40
+No Selection: 45060
+AK8 Jet Pt Selection: 7760
+Soft Drop Mass Seleciton: 7616
+Trigger Cuts applied to all
+[[-1.21], [-0.569], [-1.23], [1.29], ... [-0.064], [-1.6], [-1.72], [-0.827]]
+Number = 45060
+Number = 7616
+Number = 7616
+Efficiency = 0.169019
+Efficiency = 0.169019
+Efficiency = 0.169019
+Efficiency = 0.169019
+Jet MHT Defined:
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso and decay cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+Applying PF400 Cut Only
+[[-1.21], [-0.569], [-1.23], [1.29], ... [-0.064], [-1.6], [-1.72], [-0.827]]
+Number = 45060
+Number = 7760
+Number = 7760
+Jet MHT Defined:
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso and decay cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+Applying Trim Mass Cut Only
+[[-1.21], [-0.569], [-1.23], [1.29], ... [0.0118], [-0.827], [2.25], [1.6]]
+Number = 45060
+Number = 20672
+Number = 20672
+Background: top
+Jet MHT Defined:
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso and decay cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+MET Len: 21
+HT Len: 21
+Offline Cut 39
+No Selection: 12
+HT Selection: 4
+pfMet Selection: 0
+MHT Selection: 0
+Loose ID: 0
+Trigger Cuts applied to all
+[]
+Number = 12
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso and decay cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+MET Len: 183
+HT Len: 183
+Offline Cut 39
+No Selection: 128
+HT Selection: 76
+pfMet Selection: 32
+MHT Selection: 24
+Loose ID: 24
+Trigger Cuts applied to all
+[[-0.998], [-0.75], [-0.76], [-0.196], [0.401], [-0.692]]
+Number = 128
+Number = 24
+Jet MHT Defined:
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso and decay cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+MET Len: 602
+HT Len: 602
+Offline Cut 39
+No Selection: 436
+HT Selection: 212
+pfMet Selection: 96
+MHT Selection: 64
+Loose ID: 64
+Trigger Cuts applied to all
+[[-0.903], [1.3], [-1.05], [0.448], [-0.719, ... [1.5], [-0.914], [0.547], [0.37]]
+Number = 436
+Number = 64
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:34 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.152778
+Efficiency = 0.152778
+Efficiency = 0.152778
+Efficiency = 0.152778
+Jet MHT Defined:
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso and decay cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+Offline Cut 40
+No Selection: 12
+AK8 Jet Pt Selection: 0
+Soft Drop Mass Seleciton: 0
+Trigger Cuts applied to all
+[]
+Number = 12
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso and decay cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+Offline Cut 40
+No Selection: 128
+AK8 Jet Pt Selection: 0
+Soft Drop Mass Seleciton: 0
+Trigger Cuts applied to all
+[]
+Number = 128
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso and decay cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+Offline Cut 40
+No Selection: 436
+AK8 Jet Pt Selection: 28
+Soft Drop Mass Seleciton: 28
+Trigger Cuts applied to all
+[[-0.741], [1.53], [0.545], [0.462], [-0.914], [0.37], [-1.36]]
+Number = 436
+Number = 28
+Number = 28
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:37 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.048611
+Efficiency = 0.048611
+Efficiency = 0.048611
+Efficiency = 0.048611
+Jet MHT Defined:
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso and decay cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+Applying PF400 Cut Only
+[]
+Number = 12
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso and decay cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+Applying PF400 Cut Only
+[]
+Number = 128
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso and decay cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+Applying PF400 Cut Only
+[[-0.741], [1.53], [0.545], [0.462], [-0.914], [0.37], [-1.36]]
+Number = 436
+Number = 28
+Number = 28
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:44 < 0:00:00 | ? chunk/s ]
+Jet MHT Defined:
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso and decay cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+Applying Trim Mass Cut Only
+[]
+Number = 12
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso and decay cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+Applying Trim Mass Cut Only
+[[-0.171], [-0.196], [0.278], [1.02], [-0.517], [-0.61]]
+Number = 128
+Number = 24
+Number = 24
+Jet MHT Defined:
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso and decay cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+Applying Trim Mass Cut Only
+[[1.64], [-0.903], [-0.741], [-0.02], ... [0.37], [-0.668], [-1.36], [-1.44]]
+Number = 436
+Number = 80
+Number = 80
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:38 < 0:00:00 | ? chunk/s ]
+Mass: 1.0 TeV
+Jet MHT Defined:
+Before cut Events with 0 HT: 0
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso and decay cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+After cut Events with 0 HT: 0
+Number of disagreeing HT terms = 0
+MET Len: 20731
+HT Len: 20731
+Offline Cut 39
+No Selection: 5528
+HT Selection: 5348
+pfMet Selection: 5184
+MHT Selection: 4976
+Loose ID: 4608
+Trigger Cuts applied to all
+[[], [-0.637], [], [-0.708], [], [], [], ... [0.517], [0.2], [], [], [], [], []]
+Number = 15424
+Number = 4608
+Efficiency (HT+MET Trigger): 0.314939
+Jet MHT Defined:
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso and decay cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+Offline Cut 40
+No Selection: 4156
+AK8 Jet Pt Selection: 2800
+Soft Drop Mass Seleciton: 2704
+Trigger Cuts applied to all
+[[-0.718], [-0.469], [1.46], [0.205], ... [-1.65], [0.958], [0.518], [0.196]]
+Number = 15424
+Number = 2704
+Number = 2704
+Efficiency (AK8Jet Trigger): 0.251044
+Jet MHT Defined:
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso and decay cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+Applying PF400 Cut Only
+[[-0.718], [-0.469], [1.46], [0.205], ... [-1.65], [0.958], [0.518], [0.196]]
+Number = 15424
+Number = 2800
+Number = 2800
+Efficiency (AK8Jet Trigger): 0.256736
+Jet MHT Defined:
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso and decay cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+Applying Trim Mass Cut Only
+[[-0.842], [0.445], [-0.718], [-0.469], ... [1.13], [0.518], [-0.21], [0.196]]
+Number = 15424
+Number = 4032
+Number = 4032
+Efficiency (AK8Jet Trigger): 0.358634
+Mass: 2.0 TeV
+Jet MHT Defined:
+Before cut Events with 0 HT: 0
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso and decay cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+After cut Events with 0 HT: 0
+Number of disagreeing HT terms = 0
+MET Len: 32025
+HT Len: 32025
+Offline Cut 39
+No Selection: 19184
+HT Selection: 19044
+pfMet Selection: 18476
+MHT Selection: 18000
+Loose ID: 16960
+Trigger Cuts applied to all
+[[0.46], [], [0.778], [-0.973], [-0.662], ... [1.22], [-0.249], [1.37], [], [-0.794]]
+Number = 29796
+Number = 16960
+Efficiency (HT+MET Trigger): 0.570929
+Jet MHT Defined:
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso and decay cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+Offline Cut 40
+No Selection: 25448
+AK8 Jet Pt Selection: 24532
+Soft Drop Mass Seleciton: 24060
+Trigger Cuts applied to all
+[[0.46], [0.217], [0.778], [-0.973], ... [-0.249], [1.37], [0.441], [-0.794]]
+Number = 29796
+Number = 24060
+Number = 24060
+Efficiency (AK8Jet Trigger): 0.851654
+Jet MHT Defined:
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso and decay cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+Applying PF400 Cut Only
+[[0.46], [0.217], [0.778], [-0.973], ... [-0.249], [1.37], [0.441], [-0.794]]
+Number = 29796
+Number = 24532
+Number = 24532
+Efficiency (AK8Jet Trigger): 0.863780
+Jet MHT Defined:
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso and decay cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+Applying Trim Mass Cut Only
+[[0.46], [0.217], [0.778], [-0.973], ... [-0.249], [1.37], [0.441], [-0.794]]
+Number = 29796
+Number = 24932
+Number = 24932
+Efficiency (AK8Jet Trigger): 0.878015
+Mass: 3.0 TeV
+Jet MHT Defined:
+Before cut Events with 0 HT: 0
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso and decay cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+After cut Events with 0 HT: 0
+Number of disagreeing HT terms = 0
+MET Len: 29964
+HT Len: 29964
+Offline Cut 39
+No Selection: 22528
+HT Selection: 22440
+pfMet Selection: 21904
+MHT Selection: 21508
+Loose ID: 20392
+Trigger Cuts applied to all
+[[], [-2.15], [-0.257], [], [0.471], ... [0.559], [-0.923], [-0.194], [0.511]]
+Number = 29572
+Number = 20392
+Efficiency (HT+MET Trigger): 0.695134
+Jet MHT Defined:
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso and decay cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+Offline Cut 40
+No Selection: 27720
+AK8 Jet Pt Selection: 27500
+Soft Drop Mass Seleciton: 26636
+Trigger Cuts applied to all
+[[-0.977], [-2.15], [-0.257], [-0.751], ... [-0.923], [-0.194], [-0.46], [0.511]]
+Number = 29572
+Number = 26636
+Number = 26636
+Efficiency (AK8Jet Trigger): 0.921670
+Jet MHT Defined:
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso and decay cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+Applying PF400 Cut Only
+[[-0.977], [-2.15], [-0.257], [-0.751], ... [-0.194], [-0.46], [0.511], [-0.0873]]
+Number = 29572
+Number = 27500
+Number = 27500
+Efficiency (AK8Jet Trigger): 0.947472
+Jet MHT Defined:
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso and decay cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+Applying Trim Mass Cut Only
+[[-0.977], [-2.15], [-0.257], [-0.751], ... [-0.923], [-0.194], [-0.46], [0.511]]
+Number = 29572
+Number = 26844
+Number = 26844
+Efficiency (AK8Jet Trigger): 0.927890
+Background: ZZ4l
+Jet MHT Defined:
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso and decay cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+MET Len: 55530
+HT Len: 55530
+Offline Cut 39
+No Selection: 2248
+HT Selection: 2004
+pfMet Selection: 1392
+MHT Selection: 1312
+Loose ID: 1212
+Trigger Cuts applied to all
+[[], [-1.21], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], []]
+Number = 45060
+Number = 1212
+Efficiency = 0.026897
+Efficiency = 0.026897
+Efficiency = 0.026897
+Efficiency = 0.026897
+Jet MHT Defined:
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso and decay cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+Offline Cut 40
+No Selection: 6804
+AK8 Jet Pt Selection: 5432
+Soft Drop Mass Seleciton: 5348
+Trigger Cuts applied to all
+[[-1.21], [-0.569], [1.29], [-0.534], ... [-0.853], [0.603], [-1.72], [-0.827]]
+Number = 45060
+Number = 5348
+Number = 5348
+Efficiency = 0.118686
+Efficiency = 0.118686
+Efficiency = 0.118686
+Efficiency = 0.118686
+Jet MHT Defined:
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso and decay cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+Applying PF400 Cut Only
+[[-1.21], [-0.569], [1.29], [-0.534], ... [-0.853], [0.603], [-1.72], [-0.827]]
+Number = 45060
+Number = 5432
+Number = 5432
+Jet MHT Defined:
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso and decay cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+Applying Trim Mass Cut Only
+[[-1.21], [-0.569], [1.29], [-0.534], ... [-0.853], [0.603], [-1.72], [-0.827]]
+Number = 45060
+Number = 6708
+Number = 6708
+Background: top
+Jet MHT Defined:
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso and decay cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+MET Len: 21
+HT Len: 21
+Offline Cut 39
+No Selection: 0
+HT Selection: 0
+pfMet Selection: 0
+MHT Selection: 0
+Loose ID: 0
+Trigger Cuts applied to all
+[[], [], []]
+Number = 12
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso and decay cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+MET Len: 183
+HT Len: 183
+Offline Cut 39
+No Selection: 12
+HT Selection: 12
+pfMet Selection: 12
+MHT Selection: 12
+Loose ID: 12
+Trigger Cuts applied to all
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Number = 128
+Number = 12
+Jet MHT Defined:
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso and decay cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+MET Len: 602
+HT Len: 602
+Offline Cut 39
+No Selection: 52
+HT Selection: 52
+pfMet Selection: 48
+MHT Selection: 40
+Loose ID: 40
+Trigger Cuts applied to all
+[[], [], [], [], [], [], [], [-0.903], [], ... [], [], [], [], [], [], [], [], []]
+Number = 436
+Number = 40
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:41 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.090278
+Efficiency = 0.090278
+Efficiency = 0.090278
+Efficiency = 0.090278
+Jet MHT Defined:
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso and decay cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+Offline Cut 40
+No Selection: 0
+AK8 Jet Pt Selection: 0
+Soft Drop Mass Seleciton: 0
+Trigger Cuts applied to all
+[]
+Number = 12
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso and decay cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+Offline Cut 40
+No Selection: 0
+AK8 Jet Pt Selection: 0
+Soft Drop Mass Seleciton: 0
+Trigger Cuts applied to all
+[]
+Number = 128
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso and decay cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+Offline Cut 40
+No Selection: 24
+AK8 Jet Pt Selection: 24
+Soft Drop Mass Seleciton: 24
+Trigger Cuts applied to all
+[[-0.741], [1.53], [0.462], [-0.914], [0.37], [-1.36]]
+Number = 436
+Number = 24
+Number = 24
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:40 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.041667
+Efficiency = 0.041667
+Efficiency = 0.041667
+Efficiency = 0.041667
+Jet MHT Defined:
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso and decay cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+Applying PF400 Cut Only
+[]
+Number = 12
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso and decay cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+Applying PF400 Cut Only
+[]
+Number = 128
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso and decay cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+Applying PF400 Cut Only
+[[-0.741], [1.53], [0.462], [-0.914], [0.37], [-1.36]]
+Number = 436
+Number = 24
+Number = 24
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:46 < 0:00:00 | ? chunk/s ]
+Jet MHT Defined:
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso and decay cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+Applying Trim Mass Cut Only
+[]
+Number = 12
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso and decay cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+Applying Trim Mass Cut Only
+[]
+Number = 128
+Number = 0
+Number = 0
+Jet MHT Defined:
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso and decay cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+Applying Trim Mass Cut Only
+[[-0.741], [1.53], [0.462], [-0.914], [0.37], [-1.36]]
+Number = 436
+Number = 24
+Number = 24
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:44 < 0:00:00 | ? chunk/s ]

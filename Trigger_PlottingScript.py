@@ -187,16 +187,11 @@ class TriggerStudies(processor.ProcessorABC):
 		Jet_MHT["MHT"] = np.sqrt(Jet_MHT.MHT_x**2 + Jet_MHT.MHT_y**2)
 		MHT_NoCrossCleaning.fill(ak.ravel(Jet_MHT.MHT))
 		MHT_Acc_NoCrossingClean = hist.accumulators.Mean().fill(ak.ravel(Jet_MHT.MHT))
+		MET_Acc_NoCrossClean = hist.accumulators.Mean().fill(ak.ravel(Jet.pfMET))
 		print("Jet MHT Defined:")
 	
 		#mval_temp = deltaR(tau_temp1,HT) >= 0.5
 		#print(mval_temp)
-		if (len(Jet.Pt) != len(mval_temp)):
-			print("Things aren't good")
-			if (len(Jet.Pt) > len(mval_temp)):
-				print("More Jets than entries in mval_temp")
-			if (len(Jet.Pt) < len(mval_temp)):
-				print("Fewer entries in Jets than mval_temp")
 
 		#Histograms of variables relavent to trigger 
 		if (self.trigger_bit == 40):
@@ -209,9 +204,6 @@ class TriggerStudies(processor.ProcessorABC):
 			
 		if (self.trigger_bit == 27):
 			print("No Cut Accumulators updated")
-			HT_NoCut.fill(ak.ravel(HT_Val_NoCuts))
-			HT_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(HT_Val_NoCuts))
-			print("HT Mean: %f"%HT_Acc_NoCut.value)
 			MET_NoCut.fill(ak.ravel(Jet.pfMET))
 			MET_Acc_NoCut = hist.accumulators.Mean().fill(ak.ravel(Jet.pfMET))
 			print("MET Mean: %f"%MET_Acc_NoCut.value)
@@ -236,7 +228,6 @@ class TriggerStudies(processor.ProcessorABC):
 		Muon = Muon[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		Electron = Electron[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		Jet = Jet[(ak.sum(tau.charge,axis=1) == 0)]
-		Jet_HT = Jet_HT[(ak.sum(tau.charge,axis=1) == 0)]
 		Jet_MHT = Jet_MHT[(ak.sum(tau.charge,axis=1) == 0)]
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 
@@ -244,7 +235,6 @@ class TriggerStudies(processor.ProcessorABC):
 		Electron = Electron[ak.num(tau) >= 4]
 		Muon = Muon[ak.num(tau) >= 4]
 		Jet_MHT = Jet_MHT[ak.num(tau) >= 4]
-		Jet_HT = Jet_HT[ak.num(tau) >= 4]
 		Jet = Jet[ak.num(tau) >= 4]
 		tau = tau[ak.num(tau) >= 4] #4 tau events
 		
@@ -261,7 +251,6 @@ class TriggerStudies(processor.ProcessorABC):
 		
 		if (self.trigger_bit == 27):
 			#Fill Histograms
-			HT_Val_PreTrigger = ak.sum(Jet_HT.Pt, axis = 1, keepdims=True) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
 			Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False)
 			Jet["MHT_y"] = ak.sum(Jet_MHT.Pt*np.sin(Jet_MHT.phi),axis=1,keepdims=False)
 			Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
@@ -333,8 +322,8 @@ class TriggerStudies(processor.ProcessorABC):
 			MET_ErrorBars = hist.intervals.ratio_uncertainty(MET_Trigg.view(), MET_PreTrigg.view(), uncertainty_type = "efficiency")	
 			
 			print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
-			Jet_PreTrigger.fill(MET_NoTrigg_Arr + MHT_NoTrigg_Arr, HT_NoTrigg_Arr)
-			Jet_Trigger.fill(MET_Trigg_Arr + MHT_Trigg_Arr, HT_Trigg_Arr)
+			Jet_PreTrigger.fill(MET_NoTrigg_Arr, MHT_NoTrigg_Arr)
+			Jet_Trigger.fill(MET_Trigg_Arr, MHT_Trigg_Arr)
 			eff_Jet = Jet_Trigger/Jet_PreTrigger
 		
 		if (self.trigger_bit == 40):
@@ -378,14 +367,10 @@ class TriggerStudies(processor.ProcessorABC):
 					"post_trigger_num": post_triggernum,
 					"MET_NoCut": MET_NoCut,
 					"Acc_MET_NoCut": MET_Acc_NoCut,
-					"Acc_HT_NoCut": HT_Acc_NoCut,
 					"MET_NoCrossClean": MET_NoCrossCleaning,
 					"MHT_NoCrossClean": MHT_NoCrossCleaning,
 					"Acc_MET_NoCrossClean": MET_Acc_NoCrossClean,
 					"Acc_MHT_NoCrossClean": MHT_Acc_NoCrossingClean,
-					"Acc_HT_NoCrossClean": HT_Acc_NoCrossClean,
-					"Acc_HT_PreTrigg": HT_Acc_PreTrigg,
-					"Acc_HT_Trigg": HT_Acc_Trigg,
 					"MHT_TurnOn" : MHT_TurnOn,
 					"MET_TurnOn" : MET_TurnOn,
 					"MHT_ErrorBars" : MHT_ErrorBars,
@@ -832,7 +817,7 @@ if __name__ == "__main__":
 						#Set up efficiency histogram
 						eff_Jet = hist.Hist(
 							hist.axis.Regular(20, 0, 1200., name = "pfMET" , label = r"MET [GeV]"),
-							hist.axis.Regular(20, 0, 3500., name = "HT", label = r"HT [GeV]")
+							hist.axis.Regular(20, 0, 3500., name = "MHT", label = r"MHT [GeV]")
 						)
 						eff_Jet = trigger_out[background_name]["Jet_Trigg"]/trigger_out[background_name]["Jet_PreTrigg"] 
 						eff_Jet.plot2d(ax=ax)

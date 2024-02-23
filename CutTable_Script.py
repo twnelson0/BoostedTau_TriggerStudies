@@ -119,6 +119,7 @@ class TriggerStudies(processor.ProcessorABC):
 		AK8Jet = ak.zip(
 			{
 				"AK8JetDropMass": events.AK8JetSoftDropMass,
+				"AK8JetMass": events.AK8JetMass,
 				"AK8JetPt": events.AK8JetPt,
 				"nMu": events.nMu,
 				"nEle": events.nEle,
@@ -398,32 +399,33 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,trigger_mask) == trigger_mask]
 			Jet = Jet[np.bitwise_and(Jet.trigger,trigger_mask) == trigger_mask]
 
-		if (self.offline_cut):
+		if (self.offline_cut): #Switched from using soft drop mass to just AK8Jet Mass
+			AK8Jet["HT"] = ak.sum(AK8Jet.AK8JetPt, axis = 1, keepdims = False)
 			if (self.trigger_bit == 40 and self.cut_num == 0):
 				print("Offline Cut 40")
 				print("No Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				tau = tau[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
+				tau = tau[ak.any(AK8Jet.AK8JetPt > 400, axis = 1)]
 				print("AK8 Jet Pt Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				Jet = Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
-				AK8Jet = AK8Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
+				Jet = Jet[ak.any(AK8Jet.AK8JetPt > 400, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(AK8Jet.AK8JetPt > 400, axis = 1)]
 				
-				tau = tau[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+				tau = tau[ak.any(AK8Jet.AK8JetDropMass > 30, axis = 1)]
 				print("Soft Drop Mass Seleciton: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				Jet = Jet[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
-				AK8Jet = AK8Jet[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+				Jet = Jet[ak.any(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(AK8Jet.AK8JetDropMass > 30, axis = 1)]
 				print("Trigger Cuts applied to all")
 			
 			if (self.trigger_bit == 40 and self.cut_num == 1):
 				print("Applying PF400 Cut Only")	
-				tau = tau[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
-				Jet = Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
-				AK8Jet = AK8Jet[ak.all(AK8Jet.AK8JetPt > 400, axis = 1)]
+				tau = tau[ak.any(AK8Jet.AK8JetPt > 400, axis = 1)]
+				Jet = Jet[ak.any(AK8Jet.AK8JetPt > 400, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(AK8Jet.AK8JetPt > 400, axis = 1)]
 			
 			if (self.trigger_bit == 40 and self.cut_num == 2):
 				print("Applying Trim Mass Cut Only")	
-				tau = tau[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
-				Jet = Jet[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
-				AK8Jet = AK8Jet[ak.all(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+				tau = tau[ak.any(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+				Jet = Jet[ak.any(AK8Jet.AK8JetDropMass > 30, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(AK8Jet.AK8JetDropMass > 30, axis = 1)]
 			
 			if (self.trigger_bit == 39):
 				print("Offline Cut 39")

@@ -1,0 +1,295 @@
+Mass: 1.0 TeV
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+Jet MHT Defined:
+3856
+[[], [], [], [], [], [], [], [], [], [], ... [0.196], [], [], [], [], [], [], [], []]
+Number = 20356
+Number = 3567
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+Jet MHT Defined:
+3856
+[[], [], [], [], [], [], [], [], [], [], ... [0.196], [], [], [], [], [], [], [], []]
+Number = 5270
+Number = 1126
+Taus after pt Cut: 34898
+Taus after eta cut: 34834
+Taus after dR cut: 34834
+Taus after iso cut: 27373
+Taus after Charge Conservation cut: 4516
+Taus after 4 tau cut: 3856
+Jet MHT Defined:
+3856
+[[0, 0, 0, 0], [549755813888, 549755813888, 549755813888, ... 0, 0, 0], [0, 0, 0, 0]]
+Both triggers = 2576
+Trigger 39 = 2952
+Triger 40 = 1580
+Or fraction = 0.4608
+Applied Or Cut
+[[], [-0.637], [], [-0.708], [-0.329], [], ... [0.517], [0.2], [], [], [], [], []]
+Mass: 2.0 TeV
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+Jet MHT Defined:
+7449
+[[0.46], [], [], [0.778], [-0.973], ... [-0.249], [], [1.37], [], [-0.794]]
+Number = 31217
+Number = 18560
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+Jet MHT Defined:
+7449
+[[0.46], [], [], [0.778], [-0.973], ... [-0.249], [], [1.37], [], [-0.794]]
+Number = 15174
+Number = 9537
+Taus after pt Cut: 64143
+Taus after eta cut: 63976
+Taus after dR cut: 63976
+Taus after iso cut: 49171
+Taus after Charge Conservation cut: 8414
+Taus after 4 tau cut: 7449
+Jet MHT Defined:
+7449
+[[1649267441664, 1649267441664, 1649267441664, ... 1649267441664, 1649267441664]]
+Both triggers = 17800
+Trigger 39 = 1384
+Triger 40 = 7648
+Or fraction = 0.9005
+Applied Or Cut
+[[0.46], [0.14], [0.217], [0.778], [-0.973, ... [2.21], [1.37], [0.441], [-0.794]]
+Mass: 3.0 TeV
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+Jet MHT Defined:
+7393
+[[], [-2.15], [-0.257], [], [-0.751], ... [-0.194], [-0.46], [0.511], [-0.0873]]
+Number = 29143
+Number = 21570
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+Jet MHT Defined:
+7393
+[[], [-2.15], [-0.257], [], [-0.751], ... [-0.194], [-0.46], [0.511], [-0.0873]]
+Number = 16239
+Number = 12296
+Taus after pt Cut: 65472
+Taus after eta cut: 65308
+Taus after dR cut: 65308
+Taus after iso cut: 48792
+Taus after Charge Conservation cut: 8469
+Taus after 4 tau cut: 7393
+Jet MHT Defined:
+7393
+[[1099511627776, 1099511627776, 1099511627776, ... 1649267441664, 1649267441664]]
+Both triggers = 21800
+Trigger 39 = 728
+Triger 40 = 5920
+Or fraction = 0.9620
+Applied Or Cut
+[[-0.977], [-2.15], [-0.257], [], [-0.751, ... [-0.194], [-0.46], [0.511], [-0.0873]]
+Background: ZZ4l
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+Jet MHT Defined:
+11265
+[[], [-1.21], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], []]
+Number = 54893
+Number = 1644
+Efficiency = 0.029949
+Efficiency = 0.029949
+Efficiency = 0.029949
+Efficiency = 0.029949
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+Jet MHT Defined:
+11265
+[[], [-1.21], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], []]
+Number = 9920
+Number = 682
+Efficiency = 0.068750
+Efficiency = 0.068750
+Efficiency = 0.068750
+Efficiency = 0.068750
+Taus after pt Cut: 113714
+Taus after eta cut: 113607
+Taus after dR cut: 113607
+Taus after iso cut: 91034
+Taus after Charge Conservation cut: 14755
+Taus after 4 tau cut: 11265
+Jet MHT Defined:
+11265
+[[0, 0, 0, 0], [1649267441664, 1649267441664, 1649267441664, ... 0, 0], [0, 0, 0, 0]]
+Both triggers = 1392
+Trigger 39 = 856
+Triger 40 = 5412
+Or fraction = 0.1700
+Applied Or Cut
+[[], [-1.21], [-0.569], [], [1.29], [], [], ... [], [], [], [], [], [], [], []]
+Efficiency = 0.169996
+Efficiency = 0.169996
+Efficiency = 0.169996
+Efficiency = 0.169996
+Background: top
+Top Background
+Preprocessing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:00:09 < 0:00:00 | 0.3 file/s ]
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+Jet MHT Defined:
+3
+[[], [], []]
+Number = 19
+Number = 0
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+Jet MHT Defined:
+32
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Number = 183
+Number = 0
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+Jet MHT Defined:
+109
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Number = 591
+Number = 16
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:08 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.020177
+Efficiency = 0.020177
+Efficiency = 0.020177
+Efficiency = 0.020177
+Top Background
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+Jet MHT Defined:
+3
+[[], [], []]
+Number = 0
+Number = 0
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+Jet MHT Defined:
+32
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Number = 10
+Number = 0
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+Jet MHT Defined:
+109
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Number = 41
+Number = 4
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:26 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.078431
+Efficiency = 0.078431
+Efficiency = 0.078431
+Efficiency = 0.078431
+Top Background
+Taus after pt Cut: 40502
+Taus after eta cut: 40409
+Taus after dR cut: 40409
+Taus after iso cut: 5196
+Taus after Charge Conservation cut: 7689
+Taus after 4 tau cut: 3
+Jet MHT Defined:
+3
+[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+Both triggers = 0
+Trigger 39 = 0
+Triger 40 = 0
+Or fraction = 0.0000
+Applied Or Cut
+[[], [], []]
+Taus after pt Cut: 88465
+Taus after eta cut: 88226
+Taus after dR cut: 88226
+Taus after iso cut: 25771
+Taus after Charge Conservation cut: 7853
+Taus after 4 tau cut: 32
+Jet MHT Defined:
+32
+[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0, ... 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+Both triggers = 0
+Trigger 39 = 12
+Triger 40 = 0
+Or fraction = 0.0938
+Applied Or Cut
+[[], [], [], [], [], [], [], [], [], [], ... [], [], [], [], [], [], [], [], [], []]
+Taus after pt Cut: 56328
+Taus after eta cut: 56206
+Taus after dR cut: 56206
+Taus after iso cut: 25972
+Taus after Charge Conservation cut: 8033
+Taus after 4 tau cut: 109
+Jet MHT Defined:
+109
+[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0, ... 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+Both triggers = 8
+Trigger 39 = 44
+Triger 40 = 16
+Or fraction = 0.1560
+Applied Or Cut
+[[], [], [], [], [], [], [], [-0.903], [], ... [], [], [], [], [], [], [], [], []]
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:17 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.138889
+Efficiency = 0.138889
+Efficiency = 0.138889
+Efficiency = 0.138889

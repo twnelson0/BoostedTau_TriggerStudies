@@ -1,0 +1,50 @@
+Preprocessing 100% ━━━━━━━━━━━━━━━━━━━━━━ 5/5 [ 0:00:22 < 0:00:00 | 0.3 file/s ]
+[[613], [548], [898], [903], [397], [461, ... [456], [531], [836], [839], [946]]
+HT Num (No Cross Cleaning): 8216
+[[[False, True, True, True], [True, False, ... [True, True, True, True, True, True]]]
+MET Len: 20731
+HT Len: 20731
+Efficiency (HT+MET Trigger): 0.377599
+[[324], [290], [1.08e+03], [1.51e+03], [831], ... [162], [267], [394], [585], [342]]
+HT Num (No Cross Cleaning): 29065
+[[[False, True, True, True], [True, False, ... True], [True, True, True, True]]]
+MET Len: 55545
+HT Len: 55545
+Efficiency (HT+MET Trigger): 0.051364
+[[905], [502], [961], [502], [1.26e+03], ... [788], [944], [439], [297], [367]]
+HT Num (No Cross Cleaning): 11511
+[[[False, True, True, True, True, True, True, ... [True, True, True, True, False]]]
+MET Len: 21
+HT Len: 21
+Processing  40% ━━━━━━━━━╸               2/5 [ 0:03:00 < 0:00:59 | 0.1 chunk/s ]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/coffea/processor/executor.py", line 1654, in _work_function
+    out = processor_instance.process(events)
+  File "/srv/FourTau_Dist.py", line 408, in process
+    TauDeltaPhi_all_hist *= 1/(TauDeltaPhi_all_hist.sum())
+ZeroDivisionError: float division by zero
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/srv/FourTau_Dist.py", line 543, in <module>
+    fourtau_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=FourTauPlotting(trigger_bit=trigger_pair[0], or_trigger=trigger_pair[1]))
+  File "/usr/local/lib/python3.10/site-packages/coffea/processor/executor.py", line 1700, in __call__
+    wrapped_out = self.run(fileset, processor_instance, treename)
+  File "/usr/local/lib/python3.10/site-packages/coffea/processor/executor.py", line 1848, in run
+    wrapped_out, e = executor(chunks, closure, None)
+  File "/usr/local/lib/python3.10/site-packages/coffea/processor/executor.py", line 672, in __call__
+    accumulate(
+  File "/usr/local/lib/python3.10/site-packages/coffea/processor/accumulator.py", line 100, in accumulate
+    accum = iadd(accum, next(gen))
+  File "/usr/local/lib/python3.10/site-packages/coffea/processor/accumulator.py", line 92, in <genexpr>
+    gen = (x for x in items if x is not None)
+  File "/usr/local/lib/python3.10/site-packages/rich/progress.py", line 1215, in track
+    for value in sequence:
+  File "/usr/local/lib/python3.10/site-packages/coffea/processor/executor.py", line 1367, in automatic_retries
+    raise e
+  File "/usr/local/lib/python3.10/site-packages/coffea/processor/executor.py", line 1336, in automatic_retries
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/coffea/processor/executor.py", line 1656, in _work_function
+    raise Exception(f"Failed processing file: {item!r}") from e
+Exception: Failed processing file: WorkItem(dataset='TTToHadronic', filename='root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v2_Hadd/TTToHadronic.root', treename='4tau_tree', entrystart=0, entrystop=11511, fileuuid=b'\xd4\xaa\xae\x1e%\x99\x11\xee\xa7\x9d\xb5\xbd\xe1\x83\xbe\xef', usermeta={})

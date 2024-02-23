@@ -1,0 +1,15 @@
+Preprocessing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:00:03 < 0:00:00 | 0.9 file/s ]
+Delta R Cut obtained
+Efficiency (HT+MET Trigger): 0.045623
+Delta R Cut obtained
+Efficiency (HT+MET Trigger): 0.660422
+Delta R Cut obtained
+Efficiency (HT+MET Trigger): 0.380805
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:00:28 < 0:00:00 | 0.2 chunk/s ]
+Delta R Cut obtained
+Efficiency (AK8Jet Trigger): 0.356250
+Delta R Cut obtained
+Efficiency (AK8Jet Trigger): 0.890800
+Delta R Cut obtained
+Efficiency (AK8Jet Trigger): 0.365275
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:00:12 < 0:00:00 | 0.7 chunk/s ]

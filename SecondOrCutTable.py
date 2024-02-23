@@ -62,7 +62,7 @@ def DrawTable(table_title, table_name, table_dict, lepton_flavor):
 	
 	#Fill table
 	for sample, eff_arr in table_dict.items():
-		file.write(sample + " & " + "%.3f"%eff_arr[0] + " & " + "%.3f"%eff_arr[1] + " & " +  " & " + "%.3f"%eff_arr[2] + " & " + "%.3f"%eff_arr[3] +"\\\\")
+		file.write(sample + " & " + "%.3f"%eff_arr[0] + " & " + "%.3f"%eff_arr[1] + " & " +  "%.3f"%eff_arr[2] + " & " + "%.3f"%eff_arr[3] +"\\\\")
 		file.write("\n")
 	file.write("\\hline \n")
 	file.write("\\end{tabular} \n")
@@ -677,8 +677,12 @@ if __name__ == "__main__":
 							eff_arr[0] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
 						if (trigger_bit == 40):
 							eff_arr[1] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
-						if (trigger_bit == 41):
+						if (trigger_bit == 21):
 							eff_arr[2] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
+						if (trigger_bit == 38):
+							eff_arr[2] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
+						if (trigger_bit == 41):
+							eff_arr[3] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
 					else:
 						#trigger_out[background_name]["boosted_tau"][var_name].plot1d(ax=ax)
 						#trigger_out[background_name][var_name].plot1d(ax=ax)
@@ -687,8 +691,12 @@ if __name__ == "__main__":
 							eff_arr[0] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
 						if (trigger_bit == 40):
 							eff_arr[1] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
-						if (trigger_bit == 41):
+						if (trigger_bit == 21):
 							eff_arr[2] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
+						if (trigger_bit == 38):
+							eff_arr[2] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
+						if (trigger_bit == 41):
+							eff_arr[3] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
 
 	
 			table_dict[title_dict[background_name]] = eff_arr

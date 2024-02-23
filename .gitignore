@@ -155,6 +155,7 @@ cython_debug/
 # Plots and data
 *.png
 *.root
+*.tex
 
 #Singularity files
 shell

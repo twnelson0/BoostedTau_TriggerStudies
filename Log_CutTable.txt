@@ -1,0 +1,15 @@
+Mass: 1.0 TeV
+Jet MHT Defined:
+8216
+Traceback (most recent call last):
+  File "/srv/CutTable_Script.py", line 544, in <module>
+    trigger_out = p2.process(events)
+  File "/srv/CutTable_Script.py", line 263, in process
+    Jet_MHT["dR"] = ak.prod(ak.unflatten(deltaR(tau_jet["tau"],tau_jet["Jet_MHT"]) >= 0.5,axis = 1, counts = 4), axis=2) #Clump jet and taus in structure
+  File "/usr/local/lib/python3.10/site-packages/awkward/operations/structure.py", line 2206, in unflatten
+    out = transform(layout, depth=1, posaxis=axis)
+  File "/usr/local/lib/python3.10/site-packages/awkward/operations/structure.py", line 2185, in transform
+    raise ValueError(
+ValueError: structure imposed by 'counts' does not fit in the array or partition at axis=1
+
+(https://github.com/scikit-hep/awkward-1.0/blob/1.10.3/src/awkward/operations/structure.py#L2187)

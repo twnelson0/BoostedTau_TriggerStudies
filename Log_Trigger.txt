@@ -1,0 +1,144 @@
+Delta R11 length = 3856
+tau array length = 3856
+Mass: 1.0 TeV
+Jet MHT Defined:
+3856
+Efficiency (HT+MET Trigger): 0.377481
+Jet MHT Defined:
+3856
+Efficiency (AK8Jet Trigger): 0.365275
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: 5215.0
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: 1888.0
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: nan (nan with flow)
+Delta R11 length = 7449
+tau array length = 7449
+Mass: 2.0 TeV
+Jet MHT Defined:
+7449
+Efficiency (HT+MET Trigger): 0.650094
+Jet MHT Defined:
+7449
+Efficiency (AK8Jet Trigger): 0.890800
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: 14817.0
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: 13171.0
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: nan (nan with flow)
+Delta R11 length = 7393
+tau array length = 7393
+Mass: 3.0 TeV
+Jet MHT Defined:
+7393
+Efficiency (HT+MET Trigger): 0.769550
+Jet MHT Defined:
+7393
+Efficiency (AK8Jet Trigger): 0.953753
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: 13743.0
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: 13009.0
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: nan (nan with flow)
+Background: ZZ4l
+Jet MHT Defined:
+11265
+Efficiency (HT+MET Trigger): 0.051354
+Efficiency = 0.051354
+ZZ4l
+Efficiency = 0.051354
+ZZ4l
+Efficiency = 0.051354
+ZZ4l
+Efficiency = 0.051354
+ZZ4l
+Jet MHT Defined:
+11265
+Efficiency = 0.356250
+ZZ4l
+Efficiency = 0.356250
+ZZ4l
+Efficiency = 0.356250
+ZZ4l
+Efficiency = 0.356250
+ZZ4l
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: 9719.0
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: 3454.0
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: nan (nan with flow)
+Background: top
+Preprocessing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:00:10 < 0:00:00 | 0.3 file/s ]
+Jet MHT Defined:
+3
+Efficiency (HT+MET Trigger): 0.000000
+Jet MHT Defined:
+32
+Efficiency (HT+MET Trigger): 0.114754
+Jet MHT Defined:
+109
+Efficiency (HT+MET Trigger): 0.135364
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:34 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.127364
+top
+Efficiency = 0.127364
+top
+Efficiency = 0.127364
+top
+Efficiency = 0.127364
+top
+Jet MHT Defined:
+3
+Jet MHT Defined:
+32
+Jet MHT Defined:
+109
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:39 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.254902
+top
+Efficiency = 0.254902
+top
+Efficiency = 0.254902
+top
+Efficiency = 0.254902
+top
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: 47.0
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: 13.0
+Warning:  you don't have flow bins stored in Hist(
+  Regular(20, 0, 1100, underflow=False, overflow=False, name='JetPt', label='AK8Jet $p_T$ [GeV]'),
+  Regular(10, 0, 300, underflow=False, overflow=False, name='SoftMass', label='AK8Jet Soft Mass [GeV]'),
+  storage=Double()) # Sum: nan (nan with flow)

@@ -687,5 +687,3 @@ if __name__ == "__main__":
 			#fourtau_out["Background"]["FourTau_Mass_hist"].plot1d(ax=ax, label = "Background") #Draw Histogram
 
 
-			
-	

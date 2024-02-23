@@ -1,0 +1,202 @@
+Delta R11 length = 3856
+tau array length = 3856
+Mass: 1.0 TeV
+Jet MHT Defined:
+8216
+8216
+[[[False, True, True, True], [True, False, ... [True, True, True, True, True, True]]]
+[[180, 165, 133, 98.3, 37.2], [243, 154, ... [431, 179, 145, 90.6, 70.6, 30.7]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 8216
+No Cut Accumulators updated
+HT Mean: 183.694812
+MET Mean: 168.423798
+Efficiency (HT+MET Trigger): 0.385474
+Jet MHT Defined:
+8216
+8216
+[[[False, True, True, True], [True, False, ... [True, True, True, True, True, True]]]
+[[180, 165, 133, 98.3, 37.2], [243, 154, ... [431, 179, 145, 90.6, 70.6, 30.7]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 8216
+Efficiency (AK8Jet Trigger): 0.365275
+Delta R11 length = 7449
+tau array length = 7449
+Mass: 2.0 TeV
+Jet MHT Defined:
+14343
+14343
+[[[False, True, False, True], [True, False, ... [True, True, True, True, True]]]
+[[826, 396], [627, 280, 192, 67.1, 48.1, ... 41.6], [773, 415, 47.4, 44.4, 30.5]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 14343
+No Cut Accumulators updated
+HT Mean: 212.631531
+MET Mean: 287.846402
+Efficiency (HT+MET Trigger): 0.646647
+Jet MHT Defined:
+14343
+14343
+[[[False, True, False, True], [True, False, ... [True, True, True, True, True]]]
+[[826, 396], [627, 280, 192, 67.1, 48.1, ... 41.6], [773, 415, 47.4, 44.4, 30.5]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 14343
+Efficiency (AK8Jet Trigger): 0.890800
+Delta R11 length = 7393
+tau array length = 7393
+Mass: 3.0 TeV
+Jet MHT Defined:
+14235
+14235
+[[[False, True, False, True], [True, ... [True, True, True, True, True, True]]]
+[[898, 195, 76.2, 74.6], [1.46e+03, 403, 157, ... 903], [767, 655, 228, 138, 48.5]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 14235
+No Cut Accumulators updated
+HT Mean: 227.501914
+MET Mean: 408.792548
+Efficiency (HT+MET Trigger): 0.768953
+Jet MHT Defined:
+14235
+14235
+[[[False, True, False, True], [True, ... [True, True, True, True, True, True]]]
+[[898, 195, 76.2, 74.6], [1.46e+03, 403, 157, ... 903], [767, 655, 228, 138, 48.5]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 14235
+Efficiency (AK8Jet Trigger): 0.953753
+Background: ZZ4l
+Jet MHT Defined:
+29065
+29065
+[[[False, True, True, True], [True, False, ... True], [True, True, True, True]]]
+[[94.1, 84.5, 73.2, 71.7], [70.1, 67.2, 65.1, ... 91.5], [80, 80, 68.9, 67.4, 45.3]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 29065
+Efficiency (HT+MET Trigger): 0.057848
+Efficiency = 0.057848
+ZZ4l
+Efficiency = 0.057848
+ZZ4l
+Efficiency = 0.057848
+ZZ4l
+Efficiency = 0.057848
+ZZ4l
+Efficiency = 0.057848
+ZZ4l
+Efficiency = 0.057848
+ZZ4l
+Efficiency = 0.057848
+ZZ4l
+Efficiency = 0.057848
+ZZ4l
+Jet MHT Defined:
+29065
+29065
+[[[False, True, True, True], [True, False, ... True], [True, True, True, True]]]
+[[94.1, 84.5, 73.2, 71.7], [70.1, 67.2, 65.1, ... 91.5], [80, 80, 68.9, 67.4, 45.3]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 29065
+Efficiency = 0.356250
+ZZ4l
+Efficiency = 0.356250
+ZZ4l
+Efficiency = 0.356250
+ZZ4l
+Efficiency = 0.356250
+ZZ4l
+Efficiency = 0.356250
+ZZ4l
+Efficiency = 0.356250
+ZZ4l
+Background: top
+Preprocessing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:00:09 < 0:00:00 | 0.3 file/s ]
+Jet MHT Defined:
+11511
+11511
+[[[False, True, True, True, True, True, True, ... [True, True, True, True, False]]]
+[[204, 174, 129, 83, 75.9, 66.8, 58.7, 46.4, ... [79.9, 69.6, 62.1, 60, 55.9, 39.8]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 11511
+Efficiency (HT+MET Trigger): 0.000000
+Jet MHT Defined:
+24625
+24625
+[[[False, True, True, True], [True, False, ... [True, True, True, True, True]]]
+[[145, 115, 89.6, 79.1, 70.8], [94, 93.1, ... 30.2], [92.4, 58.7, 46.1, 43.5, 30.9]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 24625
+Efficiency (HT+MET Trigger): 0.108108
+Jet MHT Defined:
+15268
+15268
+[[[True, False, True, False], [False, True, ... [True, True, False, True, True]]]
+[[150, 142, 89.1], [126, 84.3, 72.3, 54.7, ... 109, 41.9], [104, 90.4, 64.7, 60.7]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 15268
+Efficiency (HT+MET Trigger): 0.121795
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:09:09 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.114961
+top
+Efficiency = 0.114961
+top
+Efficiency = 0.114961
+top
+Efficiency = 0.114961
+top
+Efficiency = 0.114961
+top
+Efficiency = 0.114961
+top
+Efficiency = 0.114961
+top
+Efficiency = 0.114961
+top
+Jet MHT Defined:
+11511
+11511
+[[[False, True, True, True, True, True, True, ... [True, True, True, True, False]]]
+[[204, 174, 129, 83, 75.9, 66.8, 58.7, 46.4, ... [79.9, 69.6, 62.1, 60, 55.9, 39.8]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 11511
+Jet MHT Defined:
+24625
+24625
+[[[False, True, True, True], [True, False, ... [True, True, True, True, True]]]
+[[145, 115, 89.6, 79.1, 70.8], [94, 93.1, ... 30.2], [92.4, 58.7, 46.1, 43.5, 30.9]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 24625
+Jet MHT Defined:
+15268
+15268
+[[[True, False, True, False], [False, True, ... [True, True, False, True, True]]]
+[[150, 142, 89.1], [126, 84.3, 72.3, 54.7, ... 109, 41.9], [104, 90.4, 64.7, 60.7]]
+Comparing to Jet
+Cross Cleaning Applied
+Len HT = 15268
+Processing 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3/3 [ 0:08:38 < 0:00:00 | ? chunk/s ]
+Efficiency = 0.254902
+top
+Efficiency = 0.254902
+top
+Efficiency = 0.254902
+top
+Efficiency = 0.254902
+top
+Efficiency = 0.254902
+top
+Efficiency = 0.254902
+top
+AK8Jet Stuff!!
