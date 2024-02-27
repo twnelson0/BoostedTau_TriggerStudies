@@ -52,7 +52,7 @@ def DrawTable(table_title, table_name, table_dict):
 	file.write("\\hline \n")
 	file.write("\\multicolumn{4}{|c|}{" + table_title  + "} \\\\ \n")
 	file.write("\\hline \n")
-	file.write("Sample File(s) & PFHT500\\_PFMET100 PFMHT100\\_IDTight Efficiency & AK8PFJet400\\_TrimMass30 Efficiency & PFHT500\\_PFMET100 PFMHT100\\_IDTight or \\ AK8PFJet400\\_TrimMass30 Efficiency  \\\\ \n")
+	file.write("Sample File(s) & PFMET120 PFMHT120\\_IDTight Efficiency & Mu50\\_v Efficiency & PFMET120\\_PFMHT120\\_IDTight or \\ Mu50\\_v Efficiency  \\\\ \n")
 	file.write("\\hline \n")
 	
 	#Fill table
