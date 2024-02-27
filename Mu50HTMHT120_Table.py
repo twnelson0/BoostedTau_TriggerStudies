@@ -52,7 +52,7 @@ def DrawTable(table_title, table_name, table_dict):
 	file.write("\\hline \n")
 	file.write("\\multicolumn{4}{|c|}{" + table_title  + "} \\\\ \n")
 	file.write("\\hline \n")
-	file.write("Sample File(s) & PFMET120 PFMHT120\\_IDTight Efficiency & Mu50\\_v Efficiency & PFMET120\\_PFMHT120\\_IDTight or \\ Mu50\\_v Efficiency  \\\\ \n")
+	file.write("Sample File(s) & PFMET120\\_PFMHT120\\_IDTight Efficiency & Mu50 Efficiency & PFMET120\\_PFMHT120\\_IDTight or \\ Mu50 Efficiency  \\\\ \n")
 	file.write("\\hline \n")
 	
 	#Fill table
@@ -138,6 +138,21 @@ class TriggerStudies(processor.ProcessorABC):
 			with_name="AK8JetArray",
 			behavior=candidate.behavior,
 		)
+
+		Muon = ak.zip(
+			{
+				"nMu": events.nMu,
+				"E": events.muEn,
+				"px": events.muPt*np.cos(events.muPhi),
+				"py": events.muPt*np.sin(events.muPhi),
+				"pz": events.muPt*np.sinh(events.muEta),
+				"pt": np.sqrt(events.muPt*np.cos(events.muPhi)**2 + events.muPt*np.sin(events.muPhi)**2)
+				"charge": events.muCharge,
+				"trigger": events.HLTJet,
+			},
+			with_name="MuonArray",
+			behavior=candidate.behavior,
+		)
 		
 		Jet = ak.zip(
 			{
@@ -156,7 +171,7 @@ class TriggerStudies(processor.ProcessorABC):
 		)
 		
 		#Histograms (AK8Jet) (Trigger bit = 40)
-		AK8Pt_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8Pt_hist").Reg(40,0,1100, name="AK8Pt", label = "AK8 Jet r$p_T$ [GeV]").Double()	
+		#AK8Pt_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8Pt_hist").Reg(40,0,1100, name="AK8Pt", label = "AK8 Jet r$p_T$ [GeV]").Double()	
 		AK8SoftMass_all = hist.Hist.new.StrCat(["No Trigger","Trigger"], name = "AK8SoftMass_hist").Reg(40,0,400, name="AK8SoftMass", label = "AK8 Jet Soft Drop Mass [GeV]").Double()
 		AK8Pt_PreTrigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
 		AK8Pt_Trigg = hist.Hist.new.Reg(40, 0, 1100, name = "JetPt_Trigg", label = r"AK8Jet $p_T$ [GeV]").Double()
@@ -255,6 +270,7 @@ class TriggerStudies(processor.ProcessorABC):
 		#JetUp_HT = JetUp_HT[(ak.sum(tau.charge,axis=1) == 0)]
 		#JetDown_HT = JetDown_HT[(ak.sum(tau.charge,axis=1) == 0)]
 		Jet_MHT = Jet_MHT[(ak.sum(tau.charge,axis=1) == 0)]
+		Muon = Muon[(ak.sum(tau.charge,axis=1) == 0)]
 		tau = tau[(ak.sum(tau.charge,axis=1) == 0)] #Charge conservation
 		CutFlow_Table.fill(6*np.ones([len(ak.ravel(tau.pt))]))
 		print("Taus after Charge Conservation cut: %d"%len(tau.pt))
@@ -262,6 +278,7 @@ class TriggerStudies(processor.ProcessorABC):
 		AK8Jet = AK8Jet[ak.num(tau) >= 4]
 		Jet_MHT = Jet_MHT[ak.num(tau) >= 4]
 		Jet_HT = Jet_HT[ak.num(tau) >= 4]
+		Muon = Muon[ak.num(tau) >= 4]
 		#JetUp_HT = JetUp_HT[ak.num(tau) >= 4]
 		#JetDown_HT = JetDown_HT[ak.num(tau) >= 4]
 		Jet = Jet[ak.num(tau) >= 4]
@@ -272,14 +289,15 @@ class TriggerStudies(processor.ProcessorABC):
 
 		#Set up pre-trigger selection events
 		Pt_PreTrigg_Arr = ak.ravel(tau.pt)
-		if (self.trigger_bit == 40 or self.trigger_bit == 41):	
-			AK8Pt_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetPt))
-			AK8Pt_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
-			AK8SoftMass_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
-			AK8SoftMass_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
-			AK8Pt_all.fill("No Trigger",ak.ravel(AK8Jet.AK8JetPt))
+		if (self.trigger_bit == 21 or self.trigger_bit == 41):
+			print("Mu50 Trigger")	
+			#AK8Pt_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetPt))
+			#AK8Pt_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
+			#AK8SoftMass_PreTrigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
+			#AK8SoftMass_NoTrigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
+			#AK8Pt_all.fill("No Trigger",ak.ravel(AK8Jet.AK8JetPt))
 		
-		if (self.trigger_bit == 39 or self.trigger_bit == 41):
+		if (self.trigger_bit == 27 or self.trigger_bit == 41):
 			#Fill Histograms
 			HT_Val_PreTrigger = ak.sum(Jet_HT.Pt, axis = 1, keepdims=True) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=True) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=True)
 			Jet["MHT_x"] = ak.sum(Jet_MHT.Pt*np.cos(Jet_MHT.phi),axis=1,keepdims=False) #+ ak.sum(JetUp_MHT.PtTotUncUp*np.cos(JetUp_MHT.phi),axis=1,keepdims=False) + ak.sum(JetDown_MHT.PtTotUncDown*np.cos(JetDown_MHT.phi),axis=1,keepdims=False)
@@ -287,24 +305,9 @@ class TriggerStudies(processor.ProcessorABC):
 			JetMHT = Jet
 			JetHT = Jet
 			Jet["MHT"] = np.sqrt(Jet.MHT_x**2 + Jet.MHT_y**2)
-			Jet["HT"] = ak.sum(Jet_HT.Pt, axis = 1, keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=False)
+			#Jet["HT"] = ak.sum(Jet_HT.Pt, axis = 1, keepdims=False) #+ ak.sum(JetUp_HT.PtTotUncUp,axis = 1,keepdims=False) + ak.sum(JetDown_HT.PtTotUncDown,axis=1,keepdims=False)
 			Jet = Jet[Jet.HT > 0] #Fix issue with zeros in HT
-			JetHT = JetHT[JetHT.HT > 0] #Fix issue with zeros in HT
-			#Jet = JetMHT[JetMHT.MHT > 0] #Fix issue with zeros in HT
-			#if (self.signal):
-			#	zeroNum = 0
-			#	for HT in ak.ravel(Jet.HT):
-			#		if (HT == 0):
-			#			zeroNum+=1
-			#	print("After cut Events with 0 HT: %d"%zeroNum)
-
-			Jet = Jet[Jet.HT > 0] #Remove 0 HT events (??)
-			#if (self.signal):
-			#	offVal = 0
-			#	for (HT1,HT2) in zip(ak.ravel(Jet.HT),ak.ravel(JetHT.HT)):
-			#		if (HT1 != HT2):
-			#			offVal += 1
-			#	print("Number of disagreeing HT terms = %d"%offVal)
+			#JetHT = JetHT[JetHT.HT > 0] #Fix issue with zeros in HT
 			
 			HT_PreTrigg.fill(ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0]))
 			#HT_NoTrigg_Arr = ak.ravel(HT_Val_PreTrigger[HT_Val_PreTrigger > 0])
@@ -315,144 +318,125 @@ class TriggerStudies(processor.ProcessorABC):
 			print("HT Len: %d"%len(HT_NoTrigg_Arr))		
 		
 		if (self.trigger_cut and self.OrTrigger == False):
-			if (self.trigger_bit == 39):
-				tau = tau[np.bitwise_and(tau.trigger,bit_mask([39])) != 0]
-				AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([39])) != 0]
-				Jet = Jet[np.bitwise_and(Jet.trigger,bit_mask([39])) != 0]
+			if (self.trigger_bit == 27):
+				tau = tau[np.bitwise_and(tau.trigger,bit_mask([27])) != 0]
+				AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([27])) != 0]
+				Jet = Jet[np.bitwise_and(Jet.trigger,bit_mask([27])) != 0]
 				
-			if (self.trigger_bit == 40):
-				tau = tau[np.bitwise_and(tau.trigger,bit_mask([40])) != 0]
-				AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([40])) != 0]
-				Jet = Jet[np.bitwise_and(Jet.trigger,bit_mask([40])) != 0]
+			if (self.trigger_bit == 21):
+				tau = tau[np.bitwise_and(tau.trigger,bit_mask([21])) != 0]
+				AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([21])) != 0]
+				Jet = Jet[np.bitwise_and(Jet.trigger,bit_mask([21])) != 0]
 		
 		if (self.offline_cut and self.OrTrigger == False): #Offline Single Cut only
 			print("Single offline Trigger Cut")
-			if (self.trigger_bit == 40 and self.cut_num == 0):
+			if (self.trigger_bit == 21 and self.cut_num == 0):
 
-				print("Offline Cut 40")
-				print("No Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				tau = tau[ak.any(AK8Jet.AK8JetPt > 500, axis = 1)]
-				print("AK8 Jet Pt Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				Jet = Jet[ak.any(AK8Jet.AK8JetPt > 500, axis = 1)]
-				AK8Jet = AK8Jet[ak.any(AK8Jet.AK8JetPt > 500, axis = 1)]
+				print("Offline Cut 21")
+				#print("No Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
+				tau = tau[ak.any(Muon.nMu != 0, axis = 1)]
+				Jet = Jet[ak.any(Muon.nMu != 0, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(Muon.nMu != 0, axis = 1)]
+				Muon = Muon[ak.any(Muon.nMu != 0, axis = 1)]
 				
-				tau = tau[ak.any(AK8Jet.AK8JetDropMass > 30, axis = 1)]
-				print("Soft Drop Mass Seleciton: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				Jet = Jet[ak.any(AK8Jet.AK8JetDropMass > 30, axis = 1)]
-				AK8Jet = AK8Jet[ak.any(AK8Jet.AK8JetDropMass > 30, axis = 1)]
-				print("Trigger Cuts applied to all")
+				tau = tau[ak.any(Muon.pt > 52, axis = 1)]
+				Jet = Jet[ak.any(Muon.pt > 52, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(Muon.pt > 52, axis = 1)]
+				Muon = Muon[ak.any(Muon.pt > 52, axis = 1)]
 			
-			if (self.trigger_bit == 40 and self.cut_num == 1):
-				print("Applying PF400 Cut Only")	
-				tau = tau[ak.any(AK8Jet.AK8JetPt > 500, axis = 1)]
-				Jet = Jet[ak.any(AK8Jet.AK8JetPt > 500, axis = 1)]
-				AK8Jet = AK8Jet[ak.any(AK8Jet.AK8JetPt > 500, axis = 1)]
 			
-			if (self.trigger_bit == 40 and self.cut_num == 2):
-				print("Applying Trim Mass Cut Only")	
-				tau = tau[ak.any(AK8Jet.AK8JetDropMass > 30, axis = 1)]
-				Jet = Jet[ak.any(AK8Jet.AK8JetDropMass > 30, axis = 1)]
-				AK8Jet = AK8Jet[ak.any(AK8Jet.AK8JetDropMass > 30, axis = 1)]
-			
-			if (self.trigger_bit == 39): #This needs to be fixed
-				print("Offline Cut 39")
+			if (self.trigger_bit == 27): #This needs to be fixed
+				print("Offline Cut 27")
 				print("No Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-
-				tau = tau[ak.any(Jet.HT > 600, axis = 1)]
-				print("HT Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				AK8Jet = AK8Jet[ak.any(Jet.HT > 600, axis = 1)]
-				Jet = Jet[ak.any(Jet.HT > 600, axis = 1)]
-				#JetMHT = JetMHT[ak.any(JetHT.HT > 500, axis = 1)]
 				
-				tau = tau[ak.any(Jet.pfMET > 125, axis = 1)]
+				tau = tau[ak.any(Jet.pfMET > 130, axis = 1)]
 				print("pfMet Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				AK8Jet = AK8Jet[ak.any(Jet.pfMET > 125, axis = 1)]
-				#JetMHT = JetMHT[ak.any(Jet.pfMET > 125, axis = 1)]
-				Jet = Jet[ak.any(Jet.pfMET > 125, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(Jet.pfMET > 130, axis = 1)]
+				Muon = Muon[ak.any(Jet.pfMET > 130, axis = 1)]
+				#JetMHT = JetMHT[ak.any(Jet.pfMET > 130, axis = 1)]
+				Jet = Jet[ak.any(Jet.pfMET > 130, axis = 1)]
 
-				tau = tau[ak.any(Jet.MHT > 125, axis = 1)]
+				tau = tau[ak.any(Jet.MHT > 130, axis = 1)]
 				print("MHT Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				AK8Jet = AK8Jet[ak.any(Jet.MHT > 125, axis = 1)]
-				Jet = Jet[ak.any(Jet.MHT > 125, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(Jet.MHT > 130, axis = 1)]
+				Muon = Muon[ak.any(Jet.MHT > 130, axis = 1)]
+				Jet = Jet[ak.any(Jet.MHT > 130, axis = 1)]
 				#JetHT = JetHT[ak.any(JetMHT.MHT > 100, axis = 1)]
 				#JetMHT = JetMHT[ak.any(Jet.MHT > 100, axis = 1)]
 				
 				tau = tau[ak.any(Jet.PFLooseId, axis = 1)]
 				#print("Loose ID: %d"%ak.num(ak.ravel(tau.pt),axis=0))
 				AK8Jet = AK8Jet[ak.any(Jet.PFLooseId, axis = 1)]
-				#JetHT = JetHT[ak.any(Jet.PFLooseId, axis = 1)]
-				#JetMHT = JetMHT[ak.any(Jet.PFLooseId, axis = 1)]
+				Muon = Muon[ak.any(Jet.PFLooseId, axis = 1)]
 				Jet = Jet[ak.any(Jet.PFLooseId, axis = 1)]
 		
 		if (self.offline_cut and self.OrTrigger): #Both triggers being applied
 			#Events that pass the PF HT+MHT+PFMET Trigger (39)
-			tau_pass39 = tau[np.bitwise_and(tau.trigger,bit_mask([39])) == bit_mask([39])]			
-			tau_fail39 = tau[np.bitwise_and(tau.trigger,bit_mask([39])) != bit_mask([39])]			
-			AK8Jet_pass39 = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([39])) == bit_mask([39])]			
-			AK8Jet_fail39 = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([39])) != bit_mask([39])]			
-			Jet_pass39 = Jet[np.bitwise_and(Jet.trigger,bit_mask([39])) == bit_mask([39])]			
-			Jet_fail39 = Jet[np.bitwise_and(Jet.trigger,bit_mask([39])) != bit_mask([39])]
-
-			#Apply offline cuts			
-			tau_pass39 = tau_pass39[ak.any(Jet_pass39.HT > 600, axis = 1)]
-			AK8Jet_pass39 = AK8Jet_pass39[ak.any(Jet_pass39.HT > 600, axis = 1)]
-			Jet_pass39 = Jet_pass39[ak.any(Jet_pass39.HT > 600, axis = 1)]
+			tau_pass27 = tau[np.bitwise_and(tau.trigger,bit_mask([27])) == bit_mask([27])]			
+			tau_fail27 = tau[np.bitwise_and(tau.trigger,bit_mask([27])) != bit_mask([27])]			
+			AK8Jet_pass27 = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([27])) == bit_mask([27])]			
+			AK8Jet_fail27 = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([27])) != bit_mask([27])]			
+			Jet_pass27 = Jet[np.bitwise_and(Jet.trigger,bit_mask([27])) == bit_mask([27])]			
+			Jet_fail27 = Jet[np.bitwise_and(Jet.trigger,bit_mask([27])) != bit_mask([27])]
+			Muon_pass27 = Muon[np.bitwise_and(Jet.trigger,bit_mask([27])) == bit_mask([27])]
+			Muon_fail27 = Muon[np.bitwise_and(Jet.trigger,bit_mask([27])) != bit_mask([27])]
 				
-			tau_pass39 = tau_pass39[ak.any(Jet_pass39.pfMET > 125, axis = 1)]
-			AK8Jet_pass39 = AK8Jet_pass39[ak.any(Jet_pass39.pfMET > 125, axis = 1)]
-			Jet_pass39 = Jet_pass39[ak.any(Jet_pass39.pfMET > 125, axis = 1)]
+			tau_pass27 = tau_pass27[ak.any(Jet_pass27.pfMET > 130, axis = 1)]
+			AK8Jet_pass27 = AK8Jet_pass27[ak.any(Jet_pass27.pfMET > 130, axis = 1)]
+			Muon_pass27 = Muon_pass27[ak.any(Jet_pass27.pfMET > 130, axis = 1)]
+			Jet_pass27 = Jet_pass27[ak.any(Jet_pass27.pfMET > 130, axis = 1)]
 
-			tau_pass39 = tau_pass39[ak.any(Jet_pass39.MHT > 125, axis = 1)]
-			AK8Jet_pass39 = AK8Jet_pass39[ak.any(Jet_pass39.MHT > 125, axis = 1)]
-			Jet_pass39 = Jet_pass39[ak.any(Jet_pass39.MHT > 125, axis = 1)]
+			tau_pass27 = tau_pass27[ak.any(Jet_pass27.MHT > 130, axis = 1)]
+			AK8Jet_pass27 = AK8Jet_pass27[ak.any(Jet_pass27.MHT > 130, axis = 1)]
+			Muon_pass27 = Muon_pass27[ak.any(Jet_pass27.MHT > 130, axis = 1)]
+			Jet_pass27 = Jet_pass27[ak.any(Jet_pass27.MHT > 130, axis = 1)]
 				
-			tau_pass39 = tau_pass39[ak.any(Jet_pass39.PFLooseId, axis = 1)]
-			AK8Jet_pass39 = AK8Jet_pass39[ak.any(Jet_pass39.PFLooseId, axis = 1)]
-			Jet_pass39 = Jet_pass39[ak.any(Jet_pass39.PFLooseId, axis = 1)]
+			tau_pass27 = tau_pass27[ak.any(Jet_pass27.PFLooseId, axis = 1)]
+			AK8Jet_pass27 = AK8Jet_pass27[ak.any(Jet_pass27.PFLooseId, axis = 1)]
+			Muon_pass27 = Muon_pass27[ak.any(Jet_pass27.PFLooseId, axis = 1)]
+			Jet_pass27 = Jet_pass27[ak.any(Jet_pass27.PFLooseId, axis = 1)]
 			
 			#Events that pass the AK8Jet Trigger (40) (old)
-			tau_pass40 = tau_fail39[np.bitwise_and(tau_fail39.trigger,bit_mask([40])) == bit_mask([40])]			
-			tau_fail40 = tau_fail39[np.bitwise_and(tau_fail39.trigger,bit_mask([40])) != bit_mask([40])]			
-			AK8Jet_pass40 = AK8Jet_fail39[np.bitwise_and(AK8Jet_fail39.trigger,bit_mask([40])) == bit_mask([40])]			
-			AK8Jet_fail40 = AK8Jet_fail39[np.bitwise_and(AK8Jet_fail39.trigger,bit_mask([40])) != bit_mask([40])]			
-			Jet_pass40 = Jet_fail39[np.bitwise_and(Jet_fail39.trigger,bit_mask([40])) == bit_mask([40])]			
-			Jet_fail40 = Jet_fail39[np.bitwise_and(Jet_fail39.trigger,bit_mask([40])) != bit_mask([40])]
+			tau_pass21 = tau_fail27[np.bitwise_and(tau_fail27.trigger,bit_mask([21])) == bit_mask([21])]			
+			tau_fail21 = tau_fail27[np.bitwise_and(tau_fail27.trigger,bit_mask([21])) != bit_mask([21])]			
+			AK8Jet_pass21 = AK8Jet_fail27[np.bitwise_and(AK8Jet_fail27.trigger,bit_mask([21])) == bit_mask([21])]			
+			AK8Jet_fail21 = AK8Jet_fail27[np.bitwise_and(AK8Jet_fail27.trigger,bit_mask([21])) != bit_mask([21])]			
+			Jet_pass21 = Jet_fail27[np.bitwise_and(Jet_fail27.trigger,bit_mask([21])) == bit_mask([21])]			
+			Jet_fail21 = Jet_fail27[np.bitwise_and(Jet_fail27.trigger,bit_mask([21])) != bit_mask([21])]
+			Muon_pass21 = Muon_fail27[np.bitwise_and(Muon_fail27.trigger,bit_mask([21])) == bit_mask([21])]			
+			Muon_fail21 = Muon_fail27[np.bitwise_and(Muon_fail27.trigger,bit_mask([21])) != bit_mask([21])]
 			
-			#Events that pass the AK8Jet Trigger (40)
-			#tau_pass40 = ak.concatenate((tau_fail39[np.bitwise_and(tau_fail39.trigger,bit_mask([40])) == bit_mask([40])],tau_pass39[np.bitwise_and(tau_pass39.trigger,bit_mask([40])) == bit_mask([40])]))
-			#tau_fail40 = ak.concatenate(tau_fail39[np.bitwise_and(tau_fail39.trigger,bit_mask([40])) != bit_mask([40])]			
-			#AK8Jet_pass40 = ak.concatenate((AK8Jet_fail39[np.bitwise_and(AK8Jet_fail39.trigger,bit_mask([40])) == bit_mask([40])],AK8Jet_pass39[np.bitwise_and(AK8Jet_pass39.trigger,bit_mask([40])) == bit_mask([40])]))			
-			#AK8Jet_fail40 = ak.concatenate(AK8Jet_fail39[np.bitwise_and(AK8Jet_fail39.trigger,bit_mask([40])) != bit_mask([40])]			
-			#Jet_pass40 = ak.concatenate((Jet_fail39[np.bitwise_and(Jet_fail39.trigger,bit_mask([40])) == bit_mask([40])],Jet_pass39[np.bitwise_and(Jet_pass39.trigger,bit_mask([40])) == bit_mask([40])]))			
-			#Jet_fail40 = ak.concatenate(Jet_fail39[np.bitwise_and(Jet_fail39.trigger,bit_mask([40])) != bit_mask([40])]
-
-			#Scrap duplicate events from those passing HT Trigger (39)
-			#tau_pass39 = tau_pass39[np.bitwise_and(tau_pass39.trigger,bit_mask([40])) != bit_mask([40])]
-			#AK8Jet_pass39 = AK8Jet_pass39[np.bitwise_and(AK8Jet_pass39.trigger,bit_mask([40])) != bit_mask([40])]
-			#Jet_pass39 = Jet_pass39[np.bitwise_and(Jet_pass39.trigger,bit_mask([40])) != bit_mask([40])]
-
 			#Apply offline cuts
 			if (self.cut_num == 0):
-				tau_pass40 = tau_pass40[ak.any(AK8Jet_pass40.AK8JetPt > 500, axis = 1)]
-				Jet_pass40 = Jet_pass40[ak.any(AK8Jet_pass40.AK8JetPt > 500, axis = 1)]
-				AK8Jet_pass40 = AK8Jet_pass40[ak.any(AK8Jet_pass40.AK8JetPt > 500, axis = 1)]
+				tau_pass21 = tau_pass21[ak.any(Muon_fail27.nMu != 0, axis = 1)]
+				AK8Jet_pass21 = AK8Jet_pass21[ak.any(Muon_fail27.nMu != 0, axis = 1)]
+				Jet_pass21 = Jet_pass21[ak.any(Muon_fail27.nMu != 0, axis = 1)]
+				Muon_pass21 = Muon_pass21[ak.any(Muon_fail27.nMu != 0, axis = 1)]
+
+				tau_pass21 = tau_pass21[ak.any(Muon_pass21.pt > 52, axis = 1)]
+				AK8Jet_pass21 = AK8Jet_pass21[ak.any(Muon_pass21.pt > 52, axis = 1)]
+				Jet_pass21 = Jet_pass21[ak.any(Muon_pass21.pt > 52, axis = 1)]
+				Muon_pass21 = Muon_pass21[ak.any(Muon_pass21.pt > 52, axis = 1)]
+				# tau_pass40 = tau_pass40[ak.any(AK8Jet_pass40.AK8JetPt > 500, axis = 1)]
+				# Jet_pass40 = Jet_pass40[ak.any(AK8Jet_pass40.AK8JetPt > 500, axis = 1)]
+				# AK8Jet_pass40 = AK8Jet_pass40[ak.any(AK8Jet_pass40.AK8JetPt > 500, axis = 1)]
 				
-				tau_pass40 = tau_pass40[ak.any(AK8Jet_pass40.AK8JetDropMass > 30, axis = 1)]
-				Jet_pass40 = Jet_pass40[ak.any(AK8Jet_pass40.AK8JetDropMass > 30, axis = 1)]
-				AK8Jet_pass40 = AK8Jet_pass40[ak.any(AK8Jet_pass40.AK8JetDropMass > 30, axis = 1)]
+				# tau_pass40 = tau_pass40[ak.any(AK8Jet_pass40.AK8JetDropMass > 30, axis = 1)]
+				# Jet_pass40 = Jet_pass40[ak.any(AK8Jet_pass40.AK8JetDropMass > 30, axis = 1)]
+				# AK8Jet_pass40 = AK8Jet_pass40[ak.any(AK8Jet_pass40.AK8JetDropMass > 30, axis = 1)]
 
 			#Recombine passing events
-			tau_combine = ak.concatenate((tau_pass39,tau_pass40)) 
+			tau_combine = ak.concatenate((tau_pass27,tau_pass21)) 
 		
 		#Efficiency Histograms 
-		if (self.trigger_bit == 40):	
+		if (self.trigger_bit == 21):	
 			Pt_PostTrigg_Arr = ak.ravel(tau.pt)
-			AK8Pt_Trigg.fill(ak.ravel(AK8Jet.AK8JetPt))
-			AK8SoftMass_Trigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
-			AK8Pt_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetPt))	
-			AK8Pt_Trigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
-			AK8SoftMass_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetDropMass))	
-			AK8SoftMass_Trigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
+			# AK8Pt_Trigg.fill(ak.ravel(AK8Jet.AK8JetPt))
+			# AK8SoftMass_Trigg.fill(ak.ravel(AK8Jet.AK8JetDropMass))
+			# #AK8Pt_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetPt))	
+			# AK8Pt_Trigg_Arr = ak.ravel(AK8Jet.AK8JetPt)
+			# AK8SoftMass_all.fill("Trigger",ak.ravel(AK8Jet.AK8JetDropMass))	
+			# AK8SoftMass_Trigg_Arr = ak.ravel(AK8Jet.AK8JetDropMass)
 			#pre_triggernum = ak.num(AK8Pt_NoTrigg_Arr,axis=0)
 			pre_triggernum = ak.num(Pt_PreTrigg_Arr,axis=0)
 			#print("Number = %d"%pre_triggernum)
@@ -463,23 +447,23 @@ class TriggerStudies(processor.ProcessorABC):
             
 			#if (self.signal):
 			#	print("Efficiency (AK8Jet Trigger): %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
-			AK8Jet_PreTrigger.fill(AK8Pt_NoTrigg_Arr, AK8SoftMass_NoTrigg_Arr)
+			#AK8Jet_PreTrigger.fill(AK8Pt_NoTrigg_Arr, AK8SoftMass_NoTrigg_Arr)
 			AK8Jet_Trigger.fill(AK8Pt_Trigg_Arr, AK8SoftMass_Trigg_Arr)
 			eff_AK8Jet = AK8Jet_Trigger/AK8Jet_PreTrigger
 		
-		if (self.trigger_bit == 39):
+		if (self.trigger_bit == 27):
 			Pt_PostTrigg_Arr = ak.ravel(tau.pt)
-			HT_Trigg.fill(ak.ravel(Jet.HT))
-			HT_Trigg_Arr = ak.ravel(Jet.HT)
-			MET_Trigg.fill(ak.ravel(Jet.pfMET))
-			MET_Trigg_Arr = ak.ravel(Jet.pfMET)
-			#pre_triggernum = ak.num(MET_NoTrigg_Arr,axis=0)
-			pre_triggernum = ak.num(Pt_PreTrigg_Arr,axis=0)
-			print("Number = %d"%pre_triggernum)
-			Pt_PostTrigg_Arr = ak.ravel(tau.pt)
-			#post_triggernum = ak.num(MET_Trigg_Arr,axis=0)	
-			post_triggernum = ak.num(Pt_PostTrigg_Arr,axis=0)
-			print("Number = %d"%post_triggernum)
+			# HT_Trigg.fill(ak.ravel(Jet.HT))
+			# HT_Trigg_Arr = ak.ravel(Jet.HT)
+			# MET_Trigg.fill(ak.ravel(Jet.pfMET))
+			# MET_Trigg_Arr = ak.ravel(Jet.pfMET)
+			# #pre_triggernum = ak.num(MET_NoTrigg_Arr,axis=0)
+			# pre_triggernum = ak.num(Pt_PreTrigg_Arr,axis=0)
+			# print("Number = %d"%pre_triggernum)
+			# Pt_PostTrigg_Arr = ak.ravel(tau.pt)
+			# #post_triggernum = ak.num(MET_Trigg_Arr,axis=0)	
+			# post_triggernum = ak.num(Pt_PostTrigg_Arr,axis=0)
+			# print("Number = %d"%post_triggernum)
 			#if (self.signal):	
 			#	print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
 			Jet_PreTrigger.fill(MET_NoTrigg_Arr, HT_NoTrigg_Arr)
@@ -491,31 +475,31 @@ class TriggerStudies(processor.ProcessorABC):
 			Pt_PostTrigg_Arr = ak.ravel(tau_combine.pt)
 			post_triggernum = ak.num(Pt_PostTrigg_Arr,axis=0)
 		
-		if (self.trigger_bit == 40):
+		if (self.trigger_bit == 21):
 			return{
 				 dataset: {
-					"AK8JetPt_PreTrigg": AK8Pt_PreTrigg,
-					"AK8JetPt_Trigg": AK8Pt_Trigg,
-					"AK8JetSoftMass_PreTrigg": AK8SoftMass_PreTrigg,
-					"AK8JetSoftMass_Trigg": AK8SoftMass_Trigg,
-					"AK8Jet_PreTrigg": AK8Jet_PreTrigger,
-					"AK8Jet_Trigg": AK8Jet_Trigger,
-					"AK8Jet_eff": eff_AK8Jet,
+					# "AK8JetPt_PreTrigg": AK8Pt_PreTrigg,
+					# "AK8JetPt_Trigg": AK8Pt_Trigg,
+					# "AK8JetSoftMass_PreTrigg": AK8SoftMass_PreTrigg,
+					# "AK8JetSoftMass_Trigg": AK8SoftMass_Trigg,
+					# "AK8Jet_PreTrigg": AK8Jet_PreTrigger,
+					# "AK8Jet_Trigg": AK8Jet_Trigger,
+					# "AK8Jet_eff": eff_AK8Jet,
 					"pre_trigger_num": pre_triggernum, 
 					"post_trigger_num": post_triggernum,
 					"Cutflow_hist": CutFlow_Table 
 				}
 			}
-		if (self.trigger_bit == 39):
+		if (self.trigger_bit == 27):
 			return{
 				 dataset: {
-					"MET_PreTrigg": MET_PreTrigg,
-					"MET_Trigg": MET_Trigg,
-					"HT_PreTrigg": HT_PreTrigg,
-					"HT_Trigg": HT_Trigg,
-					"Jet_PreTrigg": Jet_PreTrigger,
-					"Jet_Trigg": Jet_Trigger,
-					"Jet_eff": eff_Jet,
+					# "MET_PreTrigg": MET_PreTrigg,
+					# "MET_Trigg": MET_Trigg,
+					# "HT_PreTrigg": HT_PreTrigg,
+					# "HT_Trigg": HT_Trigg,
+					# "Jet_PreTrigg": Jet_PreTrigger,
+					# "Jet_Trigg": Jet_Trigger,
+					# "Jet_eff": eff_Jet,
 					"pre_trigger_num": pre_triggernum,
 					"post_trigger_num": post_triggernum,
 					"Cutflow_hist": CutFlow_Table 
@@ -535,28 +519,28 @@ class TriggerStudies(processor.ProcessorABC):
 if __name__ == "__main__":
 	mass_str_arr = ["1000","2000","3000"]
 	#mass_str_arr = ["2000"]
-	trigger_bit_list = [40]
-	trigger_AK8Jet_hist_dict_1d = {
-		"AK8JetSoftMass_Trigg" : ["AK8SoftMass_Trigger_Plot","AK8SoftDrop Mass Trigger"] , "AK8JetSoftMass_PreTrigg" : ["AK8SoftMass_NoTrigger_Plot","AK8SoftDrop Mass No Trigger"], 
-		"AK8JetPt_Trigg" : ["AK8Pt_Trigger_Plot",r"AK8Jet $p_T$ Trigger"], "AK8JetPt_PreTrigg" : ["AK8Pt_NoTrigger_Plot",r"AK8Jet $p_T$ No Trigger"]
-	}
+	# trigger_AK8Jet_hist_dict_1d = {
+	# 	"AK8JetSoftMass_Trigg" : ["AK8SoftMass_Trigger_Plot","AK8SoftDrop Mass Trigger"] , "AK8JetSoftMass_PreTrigg" : ["AK8SoftMass_NoTrigger_Plot","AK8SoftDrop Mass No Trigger"], 
+	# 	"AK8JetPt_Trigg" : ["AK8Pt_Trigger_Plot",r"AK8Jet $p_T$ Trigger"], "AK8JetPt_PreTrigg" : ["AK8Pt_NoTrigger_Plot",r"AK8Jet $p_T$ No Trigger"]
+	# }
 	
-	trigger_AK8Jet_hist_dict_2d = {
-		"AK8Jet_PreTrigg" : ["AK8Jet_PreTriggerHist_Plot", "AK8Jet 2D Histogram No Trigger"], "AK8Jet_Trigg" : ["AK8Jet_TriggerHist_Plot", "AK8Jet 2D Histogram Trigger"],
-		"AK8Jet_eff" : ["AK8Jet_Eff_Plot", "AK8Jet 2D Efficiency Histogram Trigger"]
-	}
+	# trigger_AK8Jet_hist_dict_2d = {
+	# 	"AK8Jet_PreTrigg" : ["AK8Jet_PreTriggerHist_Plot", "AK8Jet 2D Histogram No Trigger"], "AK8Jet_Trigg" : ["AK8Jet_TriggerHist_Plot", "AK8Jet 2D Histogram Trigger"],
+	# 	"AK8Jet_eff" : ["AK8Jet_Eff_Plot", "AK8Jet 2D Efficiency Histogram Trigger"]
+	# }
 
-	trigger_MTHTJet_hist_dict_1d = {
-		"MET_Trigg" : ["MET_Trigger_Plot","pfMET Trigger"] , "MET_PreTrigg" : ["MET_NoTrigger_Plot","pfMET No Trigger"], 
-		"HT_Trigg" : ["HT_Trigger_Plot",r"HT Trigger"], "HT_PreTrigg" : ["HT_NoTrigger_Plot", r"HT No Trigger"]
-	}
+	# trigger_MTHTJet_hist_dict_1d = {
+	# 	"MET_Trigg" : ["MET_Trigger_Plot","pfMET Trigger"] , "MET_PreTrigg" : ["MET_NoTrigger_Plot","pfMET No Trigger"], 
+	# 	"HT_Trigg" : ["HT_Trigger_Plot",r"HT Trigger"], "HT_PreTrigg" : ["HT_NoTrigger_Plot", r"HT No Trigger"]
+	# }
 	
-	trigger_MTHTJet_hist_dict_2d = {
-		"Jet_PreTrigg" : ["Jet_PreTriggerHist_Plot", "MET and HT 2D Histogram No Trigger"], "Jet_Trigg" : ["Jet_TriggerHist_Plot", "MET and HT 2D Histogram Trigger"],
-		"Jet_eff" : ["Jet_Eff_Plot", "MET and HT Efficiency Histogram Trigger"]
-	}
+	# trigger_MTHTJet_hist_dict_2d = {
+	# 	"Jet_PreTrigg" : ["Jet_PreTriggerHist_Plot", "MET and HT 2D Histogram No Trigger"], "Jet_Trigg" : ["Jet_TriggerHist_Plot", "MET and HT 2D Histogram Trigger"],
+	# 	"Jet_eff" : ["Jet_Eff_Plot", "MET and HT Efficiency Histogram Trigger"]
+	# }
 	
-	trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": 39, "AK8PFJet400_TrimMass30": 40, "OrTrigger": 41}
+	#trigger_dict = {"PFHT500_PFMET100_PFMHT100_IDTight": 27, "AK8PFJet400_TrimMass30": 21, "OrTrigger": 41}
+	trigger_dict = {"PFMET120_PFMHT120_IDTight": 27, "Mu50": 21, "OrTrigger": 41}
 
 	#filebase = "~/Analysis/BoostedTau/TriggerEff/2018_Samples/GluGluToRadionToHHTo4T_M-"
 	signal_base = "root://cmseos.fnal.gov//store/user/abdollah/SkimBoostedHH4t/2018/4t/v1_Hadd/GluGluToRadionToHHTo4T_M-"
@@ -608,9 +592,9 @@ if __name__ == "__main__":
 			p2 = TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, OrTrigger = XorVal)
 			trigger_out = p2.process(events)
 			
-			if (trigger_bit == 39):
+			if (trigger_bit == 27):
 				mass_eff_arr[0] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
-			if (trigger_bit == 40):
+			if (trigger_bit == 21):
 				mass_eff_arr[1] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
 			if (trigger_bit == 41):
 				mass_eff_arr[2] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]
@@ -667,33 +651,33 @@ if __name__ == "__main__":
 				print("Top Background")
 				trigger_out = iterative_runner(file_dict, treename="4tau_tree",processor_instance=TriggerStudies(trigger_bit, trigger_cut = use_trigger, offline_cut = use_offline, signal = True, OrTrigger = XorVal)) 
 		
-			if (trigger_bit == 40):
-				trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
-				trigger_hist_dict_2d = trigger_AK8Jet_hist_dict_2d 
+			# if (trigger_bit == 40):
+			# 	trigger_hist_dict_1d = trigger_AK8Jet_hist_dict_1d 
+			# 	trigger_hist_dict_2d = trigger_AK8Jet_hist_dict_2d 
 		
-			if (trigger_bit == 39):
-				trigger_hist_dict_1d = trigger_MTHTJet_hist_dict_1d  
-				trigger_hist_dict_2d = trigger_MTHTJet_hist_dict_2d 
+			# if (trigger_bit == 39):
+			# 	trigger_hist_dict_1d = trigger_MTHTJet_hist_dict_1d  
+			# 	trigger_hist_dict_2d = trigger_MTHTJet_hist_dict_2d 
 		
-			for var_name, hist_name_arr in trigger_hist_dict_1d.items():
-				if (background_name == "ZZ4l"):
-					print("Efficiency = %f"%(trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]))
-					if (trigger_bit == 39):
-						eff_arr[0] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
-					if (trigger_bit == 40):
-						eff_arr[1] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
-					if (trigger_bit == 41):
-						eff_arr[2] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
-				else:
-					#trigger_out[background_name]["boosted_tau"][var_name].plot1d(ax=ax)
-					#trigger_out[background_name][var_name].plot1d(ax=ax)
-					print("Efficiency = %f"%(trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]))
-					if (trigger_bit == 39):
-						eff_arr[0] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
-					if (trigger_bit == 40):
-						eff_arr[1] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
-					if (trigger_bit == 41):
-						eff_arr[2] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
+			#for var_name, hist_name_arr in trigger_hist_dict_1d.items():
+			if (background_name == "ZZ4l"):
+				print("Efficiency = %f"%(trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]))
+				if (trigger_bit == 27):
+					eff_arr[0] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
+				if (trigger_bit == 21):
+					eff_arr[1] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
+				if (trigger_bit == 41):
+					eff_arr[2] = trigger_out["boosted_tau"]["post_trigger_num"]/trigger_out["boosted_tau"]["pre_trigger_num"]	
+			else:
+				#trigger_out[background_name]["boosted_tau"][var_name].plot1d(ax=ax)
+				#trigger_out[background_name][var_name].plot1d(ax=ax)
+				print("Efficiency = %f"%(trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]))
+				if (trigger_bit == 27):
+					eff_arr[0] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
+				if (trigger_bit == 21):
+					eff_arr[1] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
+				if (trigger_bit == 41):
+					eff_arr[2] = trigger_out[background_name]["post_trigger_num"]/trigger_out[background_name]["pre_trigger_num"]	
 
 	
 		table_dict[title_dict[background_name]] = eff_arr
