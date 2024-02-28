@@ -143,10 +143,10 @@ class TriggerStudies(processor.ProcessorABC):
 			{
 				"nMu": events.nMu,
 				"E": events.muEn,
-				"px": events.muPt*np.cos(events.muPhi),
-				"py": events.muPt*np.sin(events.muPhi),
-				"pz": events.muPt*np.sinh(events.muEta),
-				"pt": np.sqrt(events.muPt*np.cos(events.muPhi)**2 + events.muPt*np.sin(events.muPhi)**2)
+				#"px": events.muPt*np.cos(events.muPhi),
+				#"py": events.muPt*np.sin(events.muPhi),
+				#"pz": events.muPt*np.sinh(events.muEta),
+				"pt": events.muPt, 
 				"charge": events.muCharge,
 				"trigger": events.HLTJet,
 			},
@@ -321,12 +321,14 @@ class TriggerStudies(processor.ProcessorABC):
 			if (self.trigger_bit == 27):
 				tau = tau[np.bitwise_and(tau.trigger,bit_mask([27])) != 0]
 				AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([27])) != 0]
+				Muon = Muon[np.bitwise_and(Muon.trigger,bit_mask([27])) != 0]
 				Jet = Jet[np.bitwise_and(Jet.trigger,bit_mask([27])) != 0]
 				
 			if (self.trigger_bit == 21):
 				tau = tau[np.bitwise_and(tau.trigger,bit_mask([21])) != 0]
 				AK8Jet = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([21])) != 0]
 				Jet = Jet[np.bitwise_and(Jet.trigger,bit_mask([21])) != 0]
+				Muon = Muon[np.bitwise_and(Muon.trigger,bit_mask([21])) != 0]
 		
 		if (self.offline_cut and self.OrTrigger == False): #Offline Single Cut only
 			print("Single offline Trigger Cut")
@@ -334,15 +336,17 @@ class TriggerStudies(processor.ProcessorABC):
 
 				print("Offline Cut 21")
 				#print("No Selection: %d"%ak.num(ak.ravel(tau.pt),axis=0))
-				tau = tau[ak.any(Muon.nMu != 0, axis = 1)]
-				Jet = Jet[ak.any(Muon.nMu != 0, axis = 1)]
-				AK8Jet = AK8Jet[ak.any(Muon.nMu != 0, axis = 1)]
-				Muon = Muon[ak.any(Muon.nMu != 0, axis = 1)]
+				tau = tau[ak.any(Muon.nMu > 0, axis = 1)]
+				Jet = Jet[ak.any(Muon.nMu > 0, axis = 1)]
+				AK8Jet = AK8Jet[ak.any(Muon.nMu > 0, axis = 1)]
+				Muon = Muon[ak.any(Muon.nMu > 0, axis = 1)]
+				print("Number of remaining events after nMoun cut:%d"%len(Muon.pt))
 				
 				tau = tau[ak.any(Muon.pt > 52, axis = 1)]
 				Jet = Jet[ak.any(Muon.pt > 52, axis = 1)]
 				AK8Jet = AK8Jet[ak.any(Muon.pt > 52, axis = 1)]
 				Muon = Muon[ak.any(Muon.pt > 52, axis = 1)]
+				print("Number of remaining events after pT Cut:%d"%len(Muon.pt))
 			
 			
 			if (self.trigger_bit == 27): #This needs to be fixed
@@ -378,8 +382,8 @@ class TriggerStudies(processor.ProcessorABC):
 			AK8Jet_fail27 = AK8Jet[np.bitwise_and(AK8Jet.trigger,bit_mask([27])) != bit_mask([27])]			
 			Jet_pass27 = Jet[np.bitwise_and(Jet.trigger,bit_mask([27])) == bit_mask([27])]			
 			Jet_fail27 = Jet[np.bitwise_and(Jet.trigger,bit_mask([27])) != bit_mask([27])]
-			Muon_pass27 = Muon[np.bitwise_and(Jet.trigger,bit_mask([27])) == bit_mask([27])]
-			Muon_fail27 = Muon[np.bitwise_and(Jet.trigger,bit_mask([27])) != bit_mask([27])]
+			Muon_pass27 = Muon[np.bitwise_and(Muon.trigger,bit_mask([27])) == bit_mask([27])]
+			Muon_fail27 = Muon[np.bitwise_and(Muon.trigger,bit_mask([27])) != bit_mask([27])]
 				
 			tau_pass27 = tau_pass27[ak.any(Jet_pass27.pfMET > 130, axis = 1)]
 			AK8Jet_pass27 = AK8Jet_pass27[ak.any(Jet_pass27.pfMET > 130, axis = 1)]
@@ -408,10 +412,10 @@ class TriggerStudies(processor.ProcessorABC):
 			
 			#Apply offline cuts
 			if (self.cut_num == 0):
-				tau_pass21 = tau_pass21[ak.any(Muon_fail27.nMu != 0, axis = 1)]
-				AK8Jet_pass21 = AK8Jet_pass21[ak.any(Muon_fail27.nMu != 0, axis = 1)]
-				Jet_pass21 = Jet_pass21[ak.any(Muon_fail27.nMu != 0, axis = 1)]
-				Muon_pass21 = Muon_pass21[ak.any(Muon_fail27.nMu != 0, axis = 1)]
+				tau_pass21 = tau_pass21[ak.any(Muon_fail27.nMu > 0, axis = 1)]
+				AK8Jet_pass21 = AK8Jet_pass21[ak.any(Muon_fail27.nMu > 0, axis = 1)]
+				Jet_pass21 = Jet_pass21[ak.any(Muon_fail27.nMu > 0, axis = 1)]
+				Muon_pass21 = Muon_pass21[ak.any(Muon_fail27.nMu > 0, axis = 1)]
 
 				tau_pass21 = tau_pass21[ak.any(Muon_pass21.pt > 52, axis = 1)]
 				AK8Jet_pass21 = AK8Jet_pass21[ak.any(Muon_pass21.pt > 52, axis = 1)]
@@ -448,8 +452,8 @@ class TriggerStudies(processor.ProcessorABC):
 			#if (self.signal):
 			#	print("Efficiency (AK8Jet Trigger): %f"%(ak.num(AK8Pt_Trigg_Arr,axis=0)/ak.num(AK8Pt_NoTrigg_Arr,axis=0)))
 			#AK8Jet_PreTrigger.fill(AK8Pt_NoTrigg_Arr, AK8SoftMass_NoTrigg_Arr)
-			AK8Jet_Trigger.fill(AK8Pt_Trigg_Arr, AK8SoftMass_Trigg_Arr)
-			eff_AK8Jet = AK8Jet_Trigger/AK8Jet_PreTrigger
+			#AK8Jet_Trigger.fill(AK8Pt_Trigg_Arr, AK8SoftMass_Trigg_Arr)
+			#eff_AK8Jet = AK8Jet_Trigger/AK8Jet_PreTrigger
 		
 		if (self.trigger_bit == 27):
 			Pt_PostTrigg_Arr = ak.ravel(tau.pt)
@@ -458,17 +462,17 @@ class TriggerStudies(processor.ProcessorABC):
 			# MET_Trigg.fill(ak.ravel(Jet.pfMET))
 			# MET_Trigg_Arr = ak.ravel(Jet.pfMET)
 			# #pre_triggernum = ak.num(MET_NoTrigg_Arr,axis=0)
-			# pre_triggernum = ak.num(Pt_PreTrigg_Arr,axis=0)
+			pre_triggernum = ak.num(Pt_PreTrigg_Arr,axis=0)
 			# print("Number = %d"%pre_triggernum)
 			# Pt_PostTrigg_Arr = ak.ravel(tau.pt)
 			# #post_triggernum = ak.num(MET_Trigg_Arr,axis=0)	
-			# post_triggernum = ak.num(Pt_PostTrigg_Arr,axis=0)
+			post_triggernum = ak.num(Pt_PostTrigg_Arr,axis=0)
 			# print("Number = %d"%post_triggernum)
 			#if (self.signal):	
 			#	print("Efficiency (HT+MET Trigger): %f"%(ak.num(MET_Trigg_Arr,axis=0)/ak.num(MET_NoTrigg_Arr,axis=0)))
-			Jet_PreTrigger.fill(MET_NoTrigg_Arr, HT_NoTrigg_Arr)
-			Jet_Trigger.fill(MET_Trigg_Arr, HT_Trigg_Arr)
-			eff_Jet = Jet_Trigger/Jet_PreTrigger
+			#Jet_PreTrigger.fill(MET_NoTrigg_Arr, HT_NoTrigg_Arr)
+			#Jet_Trigger.fill(MET_Trigg_Arr, HT_Trigg_Arr)
+			#eff_Jet = Jet_Trigger/Jet_PreTrigger
 
 		if (self.trigger_bit == 41):
 			pre_triggernum = ak.num(Pt_PreTrigg_Arr,axis=0)
